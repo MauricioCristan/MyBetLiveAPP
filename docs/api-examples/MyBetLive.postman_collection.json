@@ -1,0 +1,639 @@
+{
+  "info": {
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "name": "MyBetLive - NFL y diseno de interfaz",
+    "description": "Respuestas reales guardadas del 2 de octubre de 2026. Los ejemplos se pueden consultar sin enviar requests. API key y tokens vacios. Los UUID son de una instancia local en memoria."
+  },
+  "variable": [
+    {
+      "value": "http://127.0.0.1:8081",
+      "key": "baseUrl"
+    },
+    {
+      "value": "",
+      "key": "accessToken"
+    },
+    {
+      "value": "",
+      "key": "apiSportsKey"
+    },
+    {
+      "value": "2026-10-02",
+      "key": "date"
+    },
+    {
+      "value": "dfe4d7c2-10a3-43b8-8c75-83ff8b68c511",
+      "key": "eventId"
+    },
+    {
+      "value": "05e6558f-6ed8-421f-84b5-161a1ff380ec",
+      "key": "betId"
+    },
+    {
+      "value": "",
+      "key": "adminToken"
+    },
+    {
+      "key": "googleIdToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "googleNonce",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Backend - pantallas Android",
+      "item": [
+        {
+          "name": "Login local",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"password\": \"demo-change-me\",\r\n  \"username\": \"demo\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deportes y mercados",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/tracking/sports"
+          },
+          "response": [
+            {
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/v1/tracking/sports"
+              },
+              "body": "[{\"sport\":\"NFL\",\"enabled\":true,\"markets\":[\"MONEYLINE\",\"SPREAD\",\"TOTAL\",\"TEAM_TOTAL\",\"PLAYER_RUSHING_YARDS\",\"PLAYER_RECEIVING_YARDS\",\"PLAYER_RECEPTIONS\",\"PLAYER_PASSING_YARDS\",\"PLAYER_PASSING_TOUCHDOWNS\"]},{\"sport\":\"SOCCER\",\"enabled\":false,\"markets\":[]},{\"sport\":\"MLB\",\"enabled\":false,\"markets\":[]}]",
+              "code": 200,
+              "name": "Respuesta capturada 2026-10-02",
+              "header": [
+                {
+                  "value": "application/json",
+                  "key": "Content-Type"
+                }
+              ],
+              "status": "OK"
+            }
+          ]
+        },
+        {
+          "name": "Partidos por fecha",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/tracking/events?sport=NFL&date={{date}}"
+          },
+          "response": [
+            {
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/v1/tracking/events?sport=NFL&date={{date}}"
+              },
+              "body": "[\r\n  {\r\n    \"id\": \"a4be67a0-870c-4839-8ba5-0edba6ad8a73\",\r\n    \"event\": {\r\n      \"sport\": \"NFL\",\r\n      \"provider\": \"API_SPORTS_NFL\",\r\n      \"externalId\": \"21561\",\r\n      \"startsAt\": \"2026-10-02T00:15:00Z\",\r\n      \"home\": {\r\n        \"id\": \"9\",\r\n        \"name\": \"Cleveland Browns\"\r\n      },\r\n      \"away\": {\r\n        \"id\": \"22\",\r\n        \"name\": \"Pittsburgh Steelers\"\r\n      },\r\n      \"homeScore\": 27,\r\n      \"awayScore\": 24,\r\n      \"status\": \"FINAL\",\r\n      \"period\": \"FT\",\r\n      \"clock\": null,\r\n      \"observedAt\": \"2026-10-02T09:17:28.944699700Z\",\r\n      \"season\": \"2026\"\r\n    },\r\n    \"stale\": false\r\n  }\r\n]",
+              "code": 200,
+              "name": "Respuesta capturada 2026-10-02",
+              "header": [
+                {
+                  "value": "application/json",
+                  "key": "Content-Type"
+                }
+              ],
+              "status": "OK"
+            }
+          ]
+        },
+        {
+          "name": "Snapshot del partido",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/tracking/events/{{eventId}}"
+          },
+          "response": [
+            {
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/v1/tracking/events/{{eventId}}"
+              },
+              "body": "{\r\n  \"id\": \"a4be67a0-870c-4839-8ba5-0edba6ad8a73\",\r\n  \"event\": {\r\n    \"sport\": \"NFL\",\r\n    \"provider\": \"API_SPORTS_NFL\",\r\n    \"externalId\": \"21561\",\r\n    \"startsAt\": \"2026-10-02T00:15:00Z\",\r\n    \"home\": {\r\n      \"id\": \"9\",\r\n      \"name\": \"Cleveland Browns\"\r\n    },\r\n    \"away\": {\r\n      \"id\": \"22\",\r\n      \"name\": \"Pittsburgh Steelers\"\r\n    },\r\n    \"homeScore\": 27,\r\n    \"awayScore\": 24,\r\n    \"status\": \"FINAL\",\r\n    \"period\": \"FT\",\r\n    \"clock\": null,\r\n    \"observedAt\": \"2026-10-02T09:17:28.944699700Z\",\r\n    \"season\": \"2026\"\r\n  },\r\n  \"stale\": false\r\n}",
+              "code": 200,
+              "name": "Respuesta capturada 2026-10-02",
+              "header": [
+                {
+                  "value": "application/json",
+                  "key": "Content-Type"
+                }
+              ],
+              "status": "OK"
+            }
+          ]
+        },
+        {
+          "name": "Jugadores y mercados disponibles",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/tracking/events/{{eventId}}/players"
+          },
+          "response": [
+            {
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/v1/tracking/events/{{eventId}}/players"
+              },
+              "body": "[\r\n  {\r\n    \"id\": \"609\",\r\n    \"name\": \"Deshaun Watson\",\r\n    \"teamId\": \"9\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RUSHING_YARDS\",\r\n      \"PLAYER_PASSING_YARDS\",\r\n      \"PLAYER_PASSING_TOUCHDOWNS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/609.png\"\r\n  },\r\n  {\r\n    \"id\": \"16948\",\r\n    \"name\": \"Quinshon Judkins\",\r\n    \"teamId\": \"9\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RECEIVING_YARDS\",\r\n      \"PLAYER_RUSHING_YARDS\",\r\n      \"PLAYER_RECEPTIONS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/16948.png\"\r\n  },\r\n  {\r\n    \"id\": \"28956\",\r\n    \"name\": \"Jaleel McLaughlin\",\r\n    \"teamId\": \"9\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RUSHING_YARDS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/28956.png\"\r\n  },\r\n  {\r\n    \"id\": \"16483\",\r\n    \"name\": \"Raheim Sanders\",\r\n    \"teamId\": \"9\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RECEIVING_YARDS\",\r\n      \"PLAYER_RUSHING_YARDS\",\r\n      \"PLAYER_RECEPTIONS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/16483.png\"\r\n  },\r\n  {\r\n    \"id\": \"25545\",\r\n    \"name\": \"Denzel Boston\",\r\n    \"teamId\": \"9\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RECEIVING_YARDS\",\r\n      \"PLAYER_RECEPTIONS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/25545.png\"\r\n  },\r\n  {\r\n    \"id\": \"39201\",\r\n    \"name\": \"Kevin Concepcion\",\r\n    \"teamId\": \"9\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RECEIVING_YARDS\",\r\n      \"PLAYER_RECEPTIONS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/39201.png\"\r\n  },\r\n  {\r\n    \"id\": \"2009\",\r\n    \"name\": \"Jerry Jeudy\",\r\n    \"teamId\": \"9\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RECEIVING_YARDS\",\r\n      \"PLAYER_RECEPTIONS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/2009.png\"\r\n  },\r\n  {\r\n    \"id\": \"19667\",\r\n    \"name\": \"Harold Fannin Jr.\",\r\n    \"teamId\": \"9\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RECEIVING_YARDS\",\r\n      \"PLAYER_RECEPTIONS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/19667.png\"\r\n  },\r\n  {\r\n    \"id\": \"14106\",\r\n    \"name\": \"Isaiah Bond\",\r\n    \"teamId\": \"9\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RECEIVING_YARDS\",\r\n      \"PLAYER_RECEPTIONS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/14106.png\"\r\n  },\r\n  {\r\n    \"id\": \"1050\",\r\n    \"name\": \"Aaron Rodgers\",\r\n    \"teamId\": \"22\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_PASSING_TOUCHDOWNS\",\r\n      \"PLAYER_PASSING_YARDS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/1050.png\"\r\n  },\r\n  {\r\n    \"id\": \"1569\",\r\n    \"name\": \"Jaylen Warren\",\r\n    \"teamId\": \"22\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RECEIVING_YARDS\",\r\n      \"PLAYER_RUSHING_YARDS\",\r\n      \"PLAYER_RECEPTIONS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/1569.png\"\r\n  },\r\n  {\r\n    \"id\": \"1637\",\r\n    \"name\": \"Travis Homer\",\r\n    \"teamId\": \"22\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RUSHING_YARDS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/1637.png\"\r\n  },\r\n  {\r\n    \"id\": \"1645\",\r\n    \"name\": \"DK Metcalf\",\r\n    \"teamId\": \"22\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RECEIVING_YARDS\",\r\n      \"PLAYER_RECEPTIONS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/1645.png\"\r\n  },\r\n  {\r\n    \"id\": \"15124\",\r\n    \"name\": \"Roman Wilson\",\r\n    \"teamId\": \"22\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RECEIVING_YARDS\",\r\n      \"PLAYER_RECEPTIONS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/15124.png\"\r\n  },\r\n  {\r\n    \"id\": \"14507\",\r\n    \"name\": \"Darnell Washington\",\r\n    \"teamId\": \"22\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RECEIVING_YARDS\",\r\n      \"PLAYER_RECEPTIONS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/14507.png\"\r\n  },\r\n  {\r\n    \"id\": \"1580\",\r\n    \"name\": \"Pat Freiermuth\",\r\n    \"teamId\": \"22\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RECEIVING_YARDS\",\r\n      \"PLAYER_RECEPTIONS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/1580.png\"\r\n  },\r\n  {\r\n    \"id\": \"1501\",\r\n    \"name\": \"Michael Pittman Jr.\",\r\n    \"teamId\": \"22\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RECEIVING_YARDS\",\r\n      \"PLAYER_RECEPTIONS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/1501.png\"\r\n  },\r\n  {\r\n    \"id\": \"12500\",\r\n    \"name\": \"Germie Bernard\",\r\n    \"teamId\": \"22\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RECEIVING_YARDS\",\r\n      \"PLAYER_RECEPTIONS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/12500.png\"\r\n  },\r\n  {\r\n    \"id\": \"2243\",\r\n    \"name\": \"Ben Skowronek\",\r\n    \"teamId\": \"22\",\r\n    \"availableMarkets\": [\r\n      \"PLAYER_RECEIVING_YARDS\",\r\n      \"PLAYER_RECEPTIONS\"\r\n    ],\r\n    \"imageUrl\": \"https://media.api-sports.io/american-football/players/2243.png\"\r\n  }\r\n]",
+              "code": 200,
+              "name": "Respuesta capturada 2026-10-02",
+              "header": [
+                {
+                  "value": "application/json",
+                  "key": "Content-Type"
+                }
+              ],
+              "status": "OK"
+            }
+          ]
+        },
+        {
+          "name": "Mis seguimientos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/tracking/bets"
+          },
+          "response": [
+            {
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/v1/tracking/bets"
+              },
+              "body": "[\r\n  {\r\n    \"id\": \"0bcadfb2-27a0-4247-8a4b-e415703c31ad\",\r\n    \"eventId\": \"a4be67a0-870c-4839-8ba5-0edba6ad8a73\",\r\n    \"event\": {\r\n      \"sport\": \"NFL\",\r\n      \"provider\": \"API_SPORTS_NFL\",\r\n      \"externalId\": \"21561\",\r\n      \"startsAt\": \"2026-10-02T00:15:00Z\",\r\n      \"home\": {\r\n        \"id\": \"9\",\r\n        \"name\": \"Cleveland Browns\"\r\n      },\r\n      \"away\": {\r\n        \"id\": \"22\",\r\n        \"name\": \"Pittsburgh Steelers\"\r\n      },\r\n      \"homeScore\": 27,\r\n      \"awayScore\": 24,\r\n      \"status\": \"FINAL\",\r\n      \"period\": \"FT\",\r\n      \"clock\": null,\r\n      \"observedAt\": \"2026-10-02T09:17:28.944699700Z\",\r\n      \"season\": \"2026\"\r\n    },\r\n    \"market\": \"PLAYER_RECEPTIONS\",\r\n    \"selection\": \"OVER\",\r\n    \"line\": 4.5,\r\n    \"team\": null,\r\n    \"playerId\": \"1645\",\r\n    \"playerName\": \"DK Metcalf\",\r\n    \"playerImageUrl\": \"https://media.api-sports.io/american-football/players/1645.png\",\r\n    \"stake\": null,\r\n    \"decimalOdds\": null,\r\n    \"bookmaker\": null,\r\n    \"status\": \"WON\",\r\n    \"currentValue\": 5.0,\r\n    \"remaining\": 0.0,\r\n    \"updatedAt\": \"2026-10-02T09:17:29.470996Z\",\r\n    \"stale\": false\r\n  },\r\n  {\r\n    \"id\": \"81045c0e-6d30-4a34-b46f-20103fcad823\",\r\n    \"eventId\": \"a4be67a0-870c-4839-8ba5-0edba6ad8a73\",\r\n    \"event\": {\r\n      \"sport\": \"NFL\",\r\n      \"provider\": \"API_SPORTS_NFL\",\r\n      \"externalId\": \"21561\",\r\n      \"startsAt\": \"2026-10-02T00:15:00Z\",\r\n      \"home\": {\r\n        \"id\": \"9\",\r\n        \"name\": \"Cleveland Browns\"\r\n      },\r\n      \"away\": {\r\n        \"id\": \"22\",\r\n        \"name\": \"Pittsburgh Steelers\"\r\n      },\r\n      \"homeScore\": 27,\r\n      \"awayScore\": 24,\r\n      \"status\": \"FINAL\",\r\n      \"period\": \"FT\",\r\n      \"clock\": null,\r\n      \"observedAt\": \"2026-10-02T09:17:28.944699700Z\",\r\n      \"season\": \"2026\"\r\n    },\r\n    \"market\": \"PLAYER_PASSING_YARDS\",\r\n    \"selection\": \"OVER\",\r\n    \"line\": 267.5,\r\n    \"team\": null,\r\n    \"playerId\": \"609\",\r\n    \"playerName\": \"Deshaun Watson\",\r\n    \"playerImageUrl\": \"https://media.api-sports.io/american-football/players/609.png\",\r\n    \"stake\": null,\r\n    \"decimalOdds\": null,\r\n    \"bookmaker\": null,\r\n    \"status\": \"WON\",\r\n    \"currentValue\": 268.0,\r\n    \"remaining\": 0.0,\r\n    \"updatedAt\": \"2026-10-02T09:17:29.449986Z\",\r\n    \"stale\": false\r\n  },\r\n  {\r\n    \"id\": \"2d70eb85-99a5-4234-b960-34c53d74b147\",\r\n    \"eventId\": \"a4be67a0-870c-4839-8ba5-0edba6ad8a73\",\r\n    \"event\": {\r\n      \"sport\": \"NFL\",\r\n      \"provider\": \"API_SPORTS_NFL\",\r\n      \"externalId\": \"21561\",\r\n      \"startsAt\": \"2026-10-02T00:15:00Z\",\r\n      \"home\": {\r\n        \"id\": \"9\",\r\n        \"name\": \"Cleveland Browns\"\r\n      },\r\n      \"away\": {\r\n        \"id\": \"22\",\r\n        \"name\": \"Pittsburgh Steelers\"\r\n      },\r\n      \"homeScore\": 27,\r\n      \"awayScore\": 24,\r\n      \"status\": \"FINAL\",\r\n      \"period\": \"FT\",\r\n      \"clock\": null,\r\n      \"observedAt\": \"2026-10-02T09:17:28.944699700Z\",\r\n      \"season\": \"2026\"\r\n    },\r\n    \"market\": \"PLAYER_RUSHING_YARDS\",\r\n    \"selection\": \"OVER\",\r\n    \"line\": 92.5,\r\n    \"team\": null,\r\n    \"playerId\": \"1569\",\r\n    \"playerName\": \"Jaylen Warren\",\r\n    \"playerImageUrl\": \"https://media.api-sports.io/american-football/players/1569.png\",\r\n    \"stake\": null,\r\n    \"decimalOdds\": null,\r\n    \"bookmaker\": null,\r\n    \"status\": \"WON\",\r\n    \"currentValue\": 93.0,\r\n    \"remaining\": 0.0,\r\n    \"updatedAt\": \"2026-10-02T09:17:29.418993Z\",\r\n    \"stale\": false\r\n  },\r\n  {\r\n    \"id\": \"35d1e7aa-aab3-4e86-be48-5d99f320f542\",\r\n    \"eventId\": \"a4be67a0-870c-4839-8ba5-0edba6ad8a73\",\r\n    \"event\": {\r\n      \"sport\": \"NFL\",\r\n      \"provider\": \"API_SPORTS_NFL\",\r\n      \"externalId\": \"21561\",\r\n      \"startsAt\": \"2026-10-02T00:15:00Z\",\r\n      \"home\": {\r\n        \"id\": \"9\",\r\n        \"name\": \"Cleveland Browns\"\r\n      },\r\n      \"away\": {\r\n        \"id\": \"22\",\r\n        \"name\": \"Pittsburgh Steelers\"\r\n      },\r\n      \"homeScore\": 27,\r\n      \"awayScore\": 24,\r\n      \"status\": \"FINAL\",\r\n      \"period\": \"FT\",\r\n      \"clock\": null,\r\n      \"observedAt\": \"2026-10-02T09:17:28.944699700Z\",\r\n      \"season\": \"2026\"\r\n    },\r\n    \"market\": \"PLAYER_RECEIVING_YARDS\",\r\n    \"selection\": \"OVER\",\r\n    \"line\": 114.5,\r\n    \"team\": null,\r\n    \"playerId\": \"1645\",\r\n    \"playerName\": \"DK Metcalf\",\r\n    \"playerImageUrl\": \"https://media.api-sports.io/american-football/players/1645.png\",\r\n    \"stake\": null,\r\n    \"decimalOdds\": null,\r\n    \"bookmaker\": null,\r\n    \"status\": \"WON\",\r\n    \"currentValue\": 115.0,\r\n    \"remaining\": 0.0,\r\n    \"updatedAt\": \"2026-10-02T09:17:29.39499Z\",\r\n    \"stale\": false\r\n  },\r\n  {\r\n    \"id\": \"0b106066-5a85-4bac-aa17-0eea09fe94d7\",\r\n    \"eventId\": \"a4be67a0-870c-4839-8ba5-0edba6ad8a73\",\r\n    \"event\": {\r\n      \"sport\": \"NFL\",\r\n      \"provider\": \"API_SPORTS_NFL\",\r\n      \"externalId\": \"21561\",\r\n      \"startsAt\": \"2026-10-02T00:15:00Z\",\r\n      \"home\": {\r\n        \"id\": \"9\",\r\n        \"name\": \"Cleveland Browns\"\r\n      },\r\n      \"away\": {\r\n        \"id\": \"22\",\r\n        \"name\": \"Pittsburgh Steelers\"\r\n      },\r\n      \"homeScore\": 27,\r\n      \"awayScore\": 24,\r\n      \"status\": \"FINAL\",\r\n      \"period\": \"FT\",\r\n      \"clock\": null,\r\n      \"observedAt\": \"2026-10-02T09:17:28.944699700Z\",\r\n      \"season\": \"2026\"\r\n    },\r\n    \"market\": \"PLAYER_RECEPTIONS\",\r\n    \"selection\": \"OVER\",\r\n    \"line\": 5.0,\r\n    \"team\": null,\r\n    \"playerId\": \"1645\",\r\n    \"playerName\": \"DK Metcalf\",\r\n    \"playerImageUrl\": \"https://media.api-sports.io/american-football/players/1645.png\",\r\n    \"stake\": null,\r\n    \"decimalOdds\": null,\r\n    \"bookmaker\": null,\r\n    \"status\": \"PUSH\",\r\n    \"currentValue\": 5.0,\r\n    \"remaining\": 1.0,\r\n    \"updatedAt\": \"2026-10-02T09:17:29.363993Z\",\r\n    \"stale\": false\r\n  },\r\n  {\r\n    \"id\": \"a5932bc3-51e6-4f7d-9f55-d35638af70c9\",\r\n    \"eventId\": \"a4be67a0-870c-4839-8ba5-0edba6ad8a73\",\r\n    \"event\": {\r\n      \"sport\": \"NFL\",\r\n      \"provider\": \"API_SPORTS_NFL\",\r\n      \"externalId\": \"21561\",\r\n      \"startsAt\": \"2026-10-02T00:15:00Z\",\r\n      \"home\": {\r\n        \"id\": \"9\",\r\n        \"name\": \"Cleveland Browns\"\r\n      },\r\n      \"away\": {\r\n        \"id\": \"22\",\r\n        \"name\": \"Pittsburgh Steelers\"\r\n      },\r\n      \"homeScore\": 27,\r\n      \"awayScore\": 24,\r\n      \"status\": \"FINAL\",\r\n      \"period\": \"FT\",\r\n      \"clock\": null,\r\n      \"observedAt\": \"2026-10-02T09:17:28.944699700Z\",\r\n      \"season\": \"2026\"\r\n    },\r\n    \"market\": \"PLAYER_PASSING_TOUCHDOWNS\",\r\n    \"selection\": \"OVER\",\r\n    \"line\": 1.5,\r\n    \"team\": null,\r\n    \"playerId\": \"609\",\r\n    \"playerName\": \"Deshaun Watson\",\r\n    \"playerImageUrl\": \"https://media.api-sports.io/american-football/players/609.png\",\r\n    \"stake\": null,\r\n    \"decimalOdds\": null,\r\n    \"bookmaker\": null,\r\n    \"status\": \"LOST\",\r\n    \"currentValue\": 1.0,\r\n    \"remaining\": 1.0,\r\n    \"updatedAt\": \"2026-10-02T09:17:29.304998Z\",\r\n    \"stale\": false\r\n  }\r\n]",
+              "code": 200,
+              "name": "Respuesta capturada 2026-10-02",
+              "header": [
+                {
+                  "value": "application/json",
+                  "key": "Content-Type"
+                }
+              ],
+              "status": "OK"
+            }
+          ]
+        },
+        {
+          "name": "Mi plan",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/subscriptions/me"
+          },
+          "response": [
+            {
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/v1/subscriptions/me"
+              },
+              "body": "{\"plan\":{\"id\":\"99ad3d2f-d1f5-438a-ab09-c67778321823\",\"code\":\"FREE\",\"name\":\"Acceso base\",\"description\":\"Seguimiento NFL. Los beneficios de suscripción están por definir.\",\"published\":true,\"playProductId\":null,\"playBasePlanId\":null,\"maxActiveTrackers\":null,\"playerProps\":true,\"pushNotifications\":true,\"version\":0},\"access\":{\"maxActiveTrackers\":null,\"playerProps\":true,\"pushNotifications\":true},\"activeTrackers\":0,\"subscriptions\":[],\"availablePlans\":[{\"id\":\"99ad3d2f-d1f5-438a-ab09-c67778321823\",\"code\":\"FREE\",\"name\":\"Acceso base\",\"description\":\"Seguimiento NFL. Los beneficios de suscripción están por definir.\",\"published\":true,\"playProductId\":null,\"playBasePlanId\":null,\"maxActiveTrackers\":null,\"playerProps\":true,\"pushNotifications\":true,\"version\":0}],\"billingEnabled\":false,\"playAccountId\":\"012d81a27285bffe69c2443fdecff243443ea567be2043123f645374db025e04\"}",
+              "code": 200,
+              "name": "Respuesta capturada 2026-10-02",
+              "header": [
+                {
+                  "value": "application/json",
+                  "key": "Content-Type"
+                }
+              ],
+              "status": "OK"
+            }
+          ]
+        },
+        {
+          "name": "Registrar recepciones Over 4.5",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/tracking/bets",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"line\": 4.5,\r\n  \"market\": \"PLAYER_RECEPTIONS\",\r\n  \"selection\": \"OVER\",\r\n  \"playerId\": \"1645\",\r\n  \"eventId\": \"{{eventId}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Seguimiento creado en Android",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tracking/bets/{{betId}}",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": [
+            {
+              "name": "Captura real local - 2026-10-02",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/tracking/bets/{{betId}}",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\r\n  \"id\": \"0bcadfb2-27a0-4247-8a4b-e415703c31ad\",\r\n  \"eventId\": \"a4be67a0-870c-4839-8ba5-0edba6ad8a73\",\r\n  \"event\": {\r\n    \"sport\": \"NFL\",\r\n    \"provider\": \"API_SPORTS_NFL\",\r\n    \"externalId\": \"21561\",\r\n    \"startsAt\": \"2026-10-02T00:15:00Z\",\r\n    \"home\": {\r\n      \"id\": \"9\",\r\n      \"name\": \"Cleveland Browns\"\r\n    },\r\n    \"away\": {\r\n      \"id\": \"22\",\r\n      \"name\": \"Pittsburgh Steelers\"\r\n    },\r\n    \"homeScore\": 27,\r\n    \"awayScore\": 24,\r\n    \"status\": \"FINAL\",\r\n    \"period\": \"FT\",\r\n    \"clock\": null,\r\n    \"observedAt\": \"2026-10-02T09:17:28.944699700Z\",\r\n    \"season\": \"2026\"\r\n  },\r\n  \"market\": \"PLAYER_RECEPTIONS\",\r\n  \"selection\": \"OVER\",\r\n  \"line\": 4.5,\r\n  \"team\": null,\r\n  \"playerId\": \"1645\",\r\n  \"playerName\": \"DK Metcalf\",\r\n  \"playerImageUrl\": \"https://media.api-sports.io/american-football/players/1645.png\",\r\n  \"stake\": null,\r\n  \"decimalOdds\": null,\r\n  \"bookmaker\": null,\r\n  \"status\": \"WON\",\r\n  \"currentValue\": 5.0,\r\n  \"remaining\": 0.0,\r\n  \"updatedAt\": \"2026-10-02T09:17:29.470996Z\",\r\n  \"stale\": false\r\n}"
+            }
+          ]
+        },
+        {
+          "name": "Diagnostico ADMIN sin consulta al proveedor",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/admin/mybet/provider",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": [
+            {
+              "name": "Captura real local - 2026-10-02",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/admin/mybet/provider",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\r\n  \"provider\": \"API_SPORTS_NFL\",\r\n  \"quota\": {\r\n    \"provider\": \"API_SPORTS_NFL\",\r\n    \"configured\": true,\r\n    \"utcDate\": \"2026-10-02\",\r\n    \"dailyBudget\": 90,\r\n    \"localRequestsToday\": 6,\r\n    \"remoteDailyLimit\": 100,\r\n    \"remoteDailyRemaining\": 82,\r\n    \"minuteBudget\": 8,\r\n    \"localRequestsLastMinute\": 0,\r\n    \"remoteMinuteLimit\": 10,\r\n    \"remoteMinuteRemaining\": null,\r\n    \"pauseReason\": null,\r\n    \"retryAt\": null,\r\n    \"lastSuccessAt\": \"2026-10-02T08:00:16.808406400Z\",\r\n    \"lastError\": null\r\n  }\r\n}"
+            }
+          ]
+        },
+        {
+          "name": "Iniciar acceso con Google",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/auth/google/challenge",
+            "description": "Devuelve serverClientId y nonce de un solo uso. Requiere cliente OAuth Web configurado en el backend."
+          },
+          "response": [
+            {
+              "name": "Google pendiente de configuracion - 2026-10-02",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": "{{baseUrl}}/api/v1/auth/google/challenge",
+                "description": "Devuelve serverClientId y nonce de un solo uso. Requiere cliente OAuth Web configurado en el backend."
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\"success\":false,\"code\":\"GOOGLE_NOT_CONFIGURED\",\"message\":\"El acceso con Google aún no está activado\",\"status\":503,\"path\":\"/api/v1/auth/google/challenge\",\"timestamp\":\"2026-10-02T03:52:25.8309596-06:00\",\"errors\":null}"
+            }
+          ]
+        },
+        {
+          "name": "Acceder o registrarse con Google",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/auth/google",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idToken\": \"{{googleIdToken}}\",\n  \"nonce\": \"{{googleNonce}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Usa un ID token real obtenido con el serverClientId y nonce del desafio. No se incluyen credenciales ni respuestas con JWT."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "API-Sports - respuestas crudas del proveedor",
+      "item": [
+        {
+          "name": "Partido NFL",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-apisports-key",
+                "value": "{{apiSportsKey}}",
+                "type": "text"
+              }
+            ],
+            "url": "https://v1.american-football.api-sports.io/games?date={{date}}&league=1&timezone=UTC"
+          },
+          "response": [
+            {
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-apisports-key",
+                    "value": "{{apiSportsKey}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "https://v1.american-football.api-sports.io/games?date={{date}}&league=1&timezone=UTC"
+              },
+              "body": "{\"get\":\"games\",\"parameters\":{\"date\":\"2026-10-02\",\"league\":\"1\",\"timezone\":\"UTC\"},\"errors\":[],\"results\":1,\"response\":[{\"game\":{\"id\":21561,\"stage\":\"Regular Season\",\"week\":\"Week 4\",\"date\":{\"timezone\":\"UTC\",\"date\":\"2026-10-02\",\"time\":\"00:15\",\"timestamp\":1790900100},\"venue\":{\"name\":\"Huntington Bank Field\",\"city\":\"Cleveland\"},\"status\":{\"short\":\"FT\",\"long\":\"Finished\",\"timer\":null}},\"league\":{\"id\":1,\"name\":\"NFL\",\"season\":\"2026\",\"logo\":\"https:\\/\\/media.api-sports.io\\/american-football\\/leagues\\/1.png\",\"country\":{\"name\":\"USA\",\"code\":\"US\",\"flag\":\"https:\\/\\/media.api-sports.io\\/flags\\/us.svg\"}},\"teams\":{\"home\":{\"id\":9,\"name\":\"Cleveland Browns\",\"logo\":\"https:\\/\\/media.api-sports.io\\/american-football\\/teams\\/9.png\"},\"away\":{\"id\":22,\"name\":\"Pittsburgh Steelers\",\"logo\":\"https:\\/\\/media.api-sports.io\\/american-football\\/teams\\/22.png\"}},\"scores\":{\"home\":{\"quarter_1\":0,\"quarter_2\":21,\"quarter_3\":0,\"quarter_4\":6,\"overtime\":null,\"total\":27},\"away\":{\"quarter_1\":7,\"quarter_2\":3,\"quarter_3\":0,\"quarter_4\":14,\"overtime\":null,\"total\":24}}}]}\r\n",
+              "code": 200,
+              "name": "Respuesta capturada 2026-10-02",
+              "header": [
+                {
+                  "value": "application/json",
+                  "key": "Content-Type"
+                }
+              ],
+              "status": "OK"
+            }
+          ]
+        },
+        {
+          "name": "Estadisticas por jugador",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-apisports-key",
+                "value": "{{apiSportsKey}}",
+                "type": "text"
+              }
+            ],
+            "url": "https://v1.american-football.api-sports.io/games/statistics/players?id=21561"
+          },
+          "response": [
+            {
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-apisports-key",
+                    "value": "{{apiSportsKey}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "https://v1.american-football.api-sports.io/games/statistics/players?id=21561"
+              },
+              "body": "{\"get\":\"games\\/statistics\\/players\",\"parameters\":{\"id\":\"21561\"},\"errors\":[],\"results\":2,\"response\":[{\"team\":{\"id\":9,\"name\":\"Cleveland Browns\",\"logo\":\"https:\\/\\/media.api-sports.io\\/american-football\\/teams\\/9.png\"},\"groups\":[{\"name\":\"Passing\",\"players\":[{\"player\":{\"id\":609,\"name\":\"Deshaun Watson\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/609.png\"},\"statistics\":[{\"name\":\"comp att\",\"value\":\"24\\/33\"},{\"name\":\"yards\",\"value\":\"268\"},{\"name\":\"average\",\"value\":\"8.1\"},{\"name\":\"passing touch downs\",\"value\":\"1\"},{\"name\":\"interceptions\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"2-8\"},{\"name\":\"rating\",\"value\":\"53.0\"},{\"name\":\"two pt\",\"value\":\"0\"}]}]},{\"name\":\"Rushing\",\"players\":[{\"player\":{\"id\":16948,\"name\":\"Quinshon Judkins\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/16948.png\"},\"statistics\":[{\"name\":\"total rushes\",\"value\":\"17\"},{\"name\":\"yards\",\"value\":\"53\"},{\"name\":\"average\",\"value\":\"3.1\"},{\"name\":\"rushing touch downs\",\"value\":\"1\"},{\"name\":\"longest rush\",\"value\":\"9\"},{\"name\":\"two pt\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":null},{\"name\":\"exp return td\",\"value\":null}]},{\"player\":{\"id\":28956,\"name\":\"Jaleel McLaughlin\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/28956.png\"},\"statistics\":[{\"name\":\"total rushes\",\"value\":\"1\"},{\"name\":\"yards\",\"value\":\"28\"},{\"name\":\"average\",\"value\":\"28.0\"},{\"name\":\"rushing touch downs\",\"value\":\"1\"},{\"name\":\"longest rush\",\"value\":\"28\"},{\"name\":\"two pt\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":null},{\"name\":\"exp return td\",\"value\":null}]},{\"player\":{\"id\":609,\"name\":\"Deshaun Watson\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/609.png\"},\"statistics\":[{\"name\":\"total rushes\",\"value\":\"7\"},{\"name\":\"yards\",\"value\":\"22\"},{\"name\":\"average\",\"value\":\"3.1\"},{\"name\":\"rushing touch downs\",\"value\":\"0\"},{\"name\":\"longest rush\",\"value\":\"21\"},{\"name\":\"two pt\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":null},{\"name\":\"exp return td\",\"value\":null}]},{\"player\":{\"id\":16483,\"name\":\"Raheim Sanders\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/16483.png\"},\"statistics\":[{\"name\":\"total rushes\",\"value\":\"2\"},{\"name\":\"yards\",\"value\":\"9\"},{\"name\":\"average\",\"value\":\"4.5\"},{\"name\":\"rushing touch downs\",\"value\":\"0\"},{\"name\":\"longest rush\",\"value\":\"6\"},{\"name\":\"two pt\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":null},{\"name\":\"exp return td\",\"value\":null}]}]},{\"name\":\"Receiving\",\"players\":[{\"player\":{\"id\":25545,\"name\":\"Denzel Boston\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/25545.png\"},\"statistics\":[{\"name\":\"targets\",\"value\":\"7\"},{\"name\":\"total receptions\",\"value\":\"4\"},{\"name\":\"yards\",\"value\":\"89\"},{\"name\":\"average\",\"value\":\"22.3\"},{\"name\":\"receiving touch downs\",\"value\":\"0\"},{\"name\":\"longest reception\",\"value\":\"60\"},{\"name\":\"two pt\",\"value\":\"0\"}]},{\"player\":{\"id\":39201,\"name\":\"Kevin Concepcion\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/39201.png\"},\"statistics\":[{\"name\":\"targets\",\"value\":\"8\"},{\"name\":\"total receptions\",\"value\":\"5\"},{\"name\":\"yards\",\"value\":\"64\"},{\"name\":\"average\",\"value\":\"12.8\"},{\"name\":\"receiving touch downs\",\"value\":\"0\"},{\"name\":\"longest reception\",\"value\":\"25\"},{\"name\":\"two pt\",\"value\":\"0\"}]},{\"player\":{\"id\":16948,\"name\":\"Quinshon Judkins\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/16948.png\"},\"statistics\":[{\"name\":\"targets\",\"value\":\"7\"},{\"name\":\"total receptions\",\"value\":\"6\"},{\"name\":\"yards\",\"value\":\"43\"},{\"name\":\"average\",\"value\":\"7.2\"},{\"name\":\"receiving touch downs\",\"value\":\"0\"},{\"name\":\"longest reception\",\"value\":\"12\"},{\"name\":\"two pt\",\"value\":\"0\"}]},{\"player\":{\"id\":2009,\"name\":\"Jerry Jeudy\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/2009.png\"},\"statistics\":[{\"name\":\"targets\",\"value\":\"3\"},{\"name\":\"total receptions\",\"value\":\"3\"},{\"name\":\"yards\",\"value\":\"36\"},{\"name\":\"average\",\"value\":\"12.0\"},{\"name\":\"receiving touch downs\",\"value\":\"0\"},{\"name\":\"longest reception\",\"value\":\"17\"},{\"name\":\"two pt\",\"value\":\"0\"}]},{\"player\":{\"id\":19667,\"name\":\"Harold Fannin Jr.\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/19667.png\"},\"statistics\":[{\"name\":\"targets\",\"value\":\"5\"},{\"name\":\"total receptions\",\"value\":\"3\"},{\"name\":\"yards\",\"value\":\"27\"},{\"name\":\"average\",\"value\":\"9.0\"},{\"name\":\"receiving touch downs\",\"value\":\"1\"},{\"name\":\"longest reception\",\"value\":\"13\"},{\"name\":\"two pt\",\"value\":\"0\"}]},{\"player\":{\"id\":16483,\"name\":\"Raheim Sanders\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/16483.png\"},\"statistics\":[{\"name\":\"targets\",\"value\":\"2\"},{\"name\":\"total receptions\",\"value\":\"2\"},{\"name\":\"yards\",\"value\":\"7\"},{\"name\":\"average\",\"value\":\"3.5\"},{\"name\":\"receiving touch downs\",\"value\":\"0\"},{\"name\":\"longest reception\",\"value\":\"5\"},{\"name\":\"two pt\",\"value\":\"0\"}]},{\"player\":{\"id\":14106,\"name\":\"Isaiah Bond\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/14106.png\"},\"statistics\":[{\"name\":\"targets\",\"value\":\"1\"},{\"name\":\"total receptions\",\"value\":\"1\"},{\"name\":\"yards\",\"value\":\"2\"},{\"name\":\"average\",\"value\":\"2.0\"},{\"name\":\"receiving touch downs\",\"value\":\"0\"},{\"name\":\"longest reception\",\"value\":\"2\"},{\"name\":\"two pt\",\"value\":\"0\"}]}]},{\"name\":\"Fumbles\",\"players\":[{\"player\":{\"id\":609,\"name\":\"Deshaun Watson\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/609.png\"},\"statistics\":[{\"name\":\"total\",\"value\":\"2\"},{\"name\":\"lost\",\"value\":\"1\"},{\"name\":\"rec\",\"value\":\"1\"},{\"name\":\"rec td\",\"value\":\"0\"}]}]},{\"name\":\"Interceptions\",\"players\":[{\"player\":{\"id\":672,\"name\":\"Denzel Ward\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/672.png\"},\"statistics\":[{\"name\":\"total interceptions\",\"value\":\"1\"},{\"name\":\"yards\",\"value\":\"0\"},{\"name\":\"intercepted touch downs\",\"value\":\"0\"}]},{\"player\":{\"id\":675,\"name\":\"Grant Delpit\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/675.png\"},\"statistics\":[{\"name\":\"total interceptions\",\"value\":\"1\"},{\"name\":\"yards\",\"value\":\"0\"},{\"name\":\"intercepted touch downs\",\"value\":\"0\"}]}]},{\"name\":\"Defensive\",\"players\":[{\"player\":{\"id\":19606,\"name\":\"Carson Schwesinger\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/19606.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"9\"},{\"name\":\"unassisted tackles\",\"value\":\"3\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":123,\"name\":\"Tyson Campbell\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/123.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"7\"},{\"name\":\"unassisted tackles\",\"value\":\"6\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"1\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":675,\"name\":\"Grant Delpit\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/675.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"6\"},{\"name\":\"unassisted tackles\",\"value\":\"4\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"1\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":14331,\"name\":\"Ronnie Hickman\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/14331.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"5\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"1\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":672,\"name\":\"Denzel Ward\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/672.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"4\"},{\"name\":\"unassisted tackles\",\"value\":\"3\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"1\"},{\"name\":\"qb hts\",\"value\":\"1\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":1893,\"name\":\"Maliek Collins\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1893.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"4\"},{\"name\":\"unassisted tackles\",\"value\":\"2\"},{\"name\":\"sacks\",\"value\":\"1\"},{\"name\":\"tfl\",\"value\":\"2\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"1\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":25697,\"name\":\"Adin Huntington\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/25697.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"4\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"1\"},{\"name\":\"tfl\",\"value\":\"1\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"3\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":10647,\"name\":\"Emmanuel McNeilWarren\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/10647.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"4\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"2\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":959,\"name\":\"Quincy Williams\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/959.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"4\"},{\"name\":\"unassisted tackles\",\"value\":\"0\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"1\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":11557,\"name\":\"Isaiah McGuire\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/11557.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"3\"},{\"name\":\"unassisted tackles\",\"value\":\"2\"},{\"name\":\"sacks\",\"value\":\"1\"},{\"name\":\"tfl\",\"value\":\"1\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"1\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":22110,\"name\":\"Myles Harden\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/22110.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"3\"},{\"name\":\"unassisted tackles\",\"value\":\"2\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":2119,\"name\":\"Sam Williams\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/2119.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"2\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"1\"},{\"name\":\"tfl\",\"value\":\"1\"},{\"name\":\"passes defended\",\"value\":\"1\"},{\"name\":\"qb hts\",\"value\":\"2\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":134,\"name\":\"Daniel Thomas\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/134.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"2\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":7580,\"name\":\"Jared Verse\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/7580.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"2\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"1\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":14951,\"name\":\"Donovan McMillon\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/14951.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"2\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":14298,\"name\":\"Michael Hall Jr.\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/14298.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"1\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"1\"},{\"name\":\"tfl\",\"value\":\"1\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"1\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":15993,\"name\":\"Mekhi Blackmon\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/15993.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"1\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":9442,\"name\":\"Blake Whiteheart\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/9442.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"1\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":6389,\"name\":\"Malachi Corley\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/6389.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"1\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":25545,\"name\":\"Denzel Boston\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/25545.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"1\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":25383,\"name\":\"Easton MascarenasArnold\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/25383.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"1\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":865,\"name\":\"Derek Barnett\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/865.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"0\"},{\"name\":\"unassisted tackles\",\"value\":\"0\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"1\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]}]},{\"name\":\"Kick_returns\",\"players\":[{\"player\":{\"id\":16483,\"name\":\"Raheim Sanders\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/16483.png\"},\"statistics\":[{\"name\":\"total\",\"value\":\"3\"},{\"name\":\"yards\",\"value\":\"66\"},{\"name\":\"average\",\"value\":\"22.0\"},{\"name\":\"lg\",\"value\":\"26\"},{\"name\":\"td\",\"value\":null},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"}]},{\"player\":{\"id\":6389,\"name\":\"Malachi Corley\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/6389.png\"},\"statistics\":[{\"name\":\"total\",\"value\":\"1\"},{\"name\":\"yards\",\"value\":\"33\"},{\"name\":\"average\",\"value\":\"33.0\"},{\"name\":\"lg\",\"value\":\"33\"},{\"name\":\"td\",\"value\":null},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"}]}]},{\"name\":\"Punt_returns\",\"players\":[{\"player\":{\"id\":39201,\"name\":\"Kevin Concepcion\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/39201.png\"},\"statistics\":[{\"name\":\"total\",\"value\":\"2\"},{\"name\":\"yards\",\"value\":\"10\"},{\"name\":\"average\",\"value\":\"5.0\"},{\"name\":\"lg\",\"value\":\"10\"},{\"name\":\"td\",\"value\":\"0\"}]}]},{\"name\":\"Kicking\",\"players\":[{\"player\":{\"id\":24720,\"name\":\"Andre Szmyt\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/24720.png\"},\"statistics\":[{\"name\":\"field goals\",\"value\":\"2\\/2\"},{\"name\":\"pct\",\"value\":\"100.0\"},{\"name\":\"long\",\"value\":\"56\"},{\"name\":\"extra point\",\"value\":\"3\\/3\"},{\"name\":\"points\",\"value\":\"9\"},{\"name\":\"field goals from 1 19 yards\",\"value\":\"0\"},{\"name\":\"field goals from 20 29 yards\",\"value\":\"0\"},{\"name\":\"field goals from 30 39 yards\",\"value\":\"0\"},{\"name\":\"field goals from 40 49 yards\",\"value\":\"0\"},{\"name\":\"field goals from 50 yards\",\"value\":\"0\"}]}]},{\"name\":\"Punting\",\"players\":[{\"player\":{\"id\":680,\"name\":\"Corey Bojorquez\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/680.png\"},\"statistics\":[{\"name\":\"total\",\"value\":\"4\"},{\"name\":\"yards\",\"value\":\"251\"},{\"name\":\"average\",\"value\":\"62.8\"},{\"name\":\"touchbacks\",\"value\":\"1\"},{\"name\":\"in20\",\"value\":\"1\"},{\"name\":\"lg\",\"value\":\"81\"}]}]}]},{\"team\":{\"id\":22,\"name\":\"Pittsburgh Steelers\",\"logo\":\"https:\\/\\/media.api-sports.io\\/american-football\\/teams\\/22.png\"},\"groups\":[{\"name\":\"Passing\",\"players\":[{\"player\":{\"id\":1050,\"name\":\"Aaron Rodgers\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1050.png\"},\"statistics\":[{\"name\":\"comp att\",\"value\":\"22\\/40\"},{\"name\":\"yards\",\"value\":\"299\"},{\"name\":\"average\",\"value\":\"7.5\"},{\"name\":\"passing touch downs\",\"value\":\"3\"},{\"name\":\"interceptions\",\"value\":\"2\"},{\"name\":\"sacks\",\"value\":\"5-30\"},{\"name\":\"rating\",\"value\":\"49.0\"},{\"name\":\"two pt\",\"value\":\"0\"}]}]},{\"name\":\"Rushing\",\"players\":[{\"player\":{\"id\":1569,\"name\":\"Jaylen Warren\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1569.png\"},\"statistics\":[{\"name\":\"total rushes\",\"value\":\"17\"},{\"name\":\"yards\",\"value\":\"93\"},{\"name\":\"average\",\"value\":\"5.5\"},{\"name\":\"rushing touch downs\",\"value\":\"0\"},{\"name\":\"longest rush\",\"value\":\"24\"},{\"name\":\"two pt\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":null},{\"name\":\"exp return td\",\"value\":null}]},{\"player\":{\"id\":1637,\"name\":\"Travis Homer\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1637.png\"},\"statistics\":[{\"name\":\"total rushes\",\"value\":\"2\"},{\"name\":\"yards\",\"value\":\"-1\"},{\"name\":\"average\",\"value\":\"-0.5\"},{\"name\":\"rushing touch downs\",\"value\":\"0\"},{\"name\":\"longest rush\",\"value\":\"2\"},{\"name\":\"two pt\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":null},{\"name\":\"exp return td\",\"value\":null}]}]},{\"name\":\"Receiving\",\"players\":[{\"player\":{\"id\":1645,\"name\":\"DK Metcalf\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1645.png\"},\"statistics\":[{\"name\":\"targets\",\"value\":\"9\"},{\"name\":\"total receptions\",\"value\":\"5\"},{\"name\":\"yards\",\"value\":\"115\"},{\"name\":\"average\",\"value\":\"23.0\"},{\"name\":\"receiving touch downs\",\"value\":\"0\"},{\"name\":\"longest reception\",\"value\":\"43\"},{\"name\":\"two pt\",\"value\":\"0\"}]},{\"player\":{\"id\":15124,\"name\":\"Roman Wilson\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/15124.png\"},\"statistics\":[{\"name\":\"targets\",\"value\":\"6\"},{\"name\":\"total receptions\",\"value\":\"3\"},{\"name\":\"yards\",\"value\":\"74\"},{\"name\":\"average\",\"value\":\"24.7\"},{\"name\":\"receiving touch downs\",\"value\":\"1\"},{\"name\":\"longest reception\",\"value\":\"49\"},{\"name\":\"two pt\",\"value\":\"0\"}]},{\"player\":{\"id\":1569,\"name\":\"Jaylen Warren\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1569.png\"},\"statistics\":[{\"name\":\"targets\",\"value\":\"6\"},{\"name\":\"total receptions\",\"value\":\"3\"},{\"name\":\"yards\",\"value\":\"33\"},{\"name\":\"average\",\"value\":\"11.0\"},{\"name\":\"receiving touch downs\",\"value\":\"0\"},{\"name\":\"longest reception\",\"value\":\"13\"},{\"name\":\"two pt\",\"value\":\"0\"}]},{\"player\":{\"id\":14507,\"name\":\"Darnell Washington\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/14507.png\"},\"statistics\":[{\"name\":\"targets\",\"value\":\"5\"},{\"name\":\"total receptions\",\"value\":\"3\"},{\"name\":\"yards\",\"value\":\"27\"},{\"name\":\"average\",\"value\":\"9.0\"},{\"name\":\"receiving touch downs\",\"value\":\"1\"},{\"name\":\"longest reception\",\"value\":\"21\"},{\"name\":\"two pt\",\"value\":\"0\"}]},{\"player\":{\"id\":1580,\"name\":\"Pat Freiermuth\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1580.png\"},\"statistics\":[{\"name\":\"targets\",\"value\":\"5\"},{\"name\":\"total receptions\",\"value\":\"3\"},{\"name\":\"yards\",\"value\":\"17\"},{\"name\":\"average\",\"value\":\"5.7\"},{\"name\":\"receiving touch downs\",\"value\":\"1\"},{\"name\":\"longest reception\",\"value\":\"9\"},{\"name\":\"two pt\",\"value\":\"0\"}]},{\"player\":{\"id\":1501,\"name\":\"Michael Pittman Jr.\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1501.png\"},\"statistics\":[{\"name\":\"targets\",\"value\":\"4\"},{\"name\":\"total receptions\",\"value\":\"2\"},{\"name\":\"yards\",\"value\":\"15\"},{\"name\":\"average\",\"value\":\"7.5\"},{\"name\":\"receiving touch downs\",\"value\":\"0\"},{\"name\":\"longest reception\",\"value\":\"9\"},{\"name\":\"two pt\",\"value\":\"0\"}]},{\"player\":{\"id\":12500,\"name\":\"Germie Bernard\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/12500.png\"},\"statistics\":[{\"name\":\"targets\",\"value\":\"2\"},{\"name\":\"total receptions\",\"value\":\"2\"},{\"name\":\"yards\",\"value\":\"11\"},{\"name\":\"average\",\"value\":\"5.5\"},{\"name\":\"receiving touch downs\",\"value\":\"0\"},{\"name\":\"longest reception\",\"value\":\"6\"},{\"name\":\"two pt\",\"value\":\"0\"}]},{\"player\":{\"id\":2243,\"name\":\"Ben Skowronek\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/2243.png\"},\"statistics\":[{\"name\":\"targets\",\"value\":\"2\"},{\"name\":\"total receptions\",\"value\":\"1\"},{\"name\":\"yards\",\"value\":\"7\"},{\"name\":\"average\",\"value\":\"7.0\"},{\"name\":\"receiving touch downs\",\"value\":\"0\"},{\"name\":\"longest reception\",\"value\":\"7\"},{\"name\":\"two pt\",\"value\":\"0\"}]}]},{\"name\":\"Fumbles\",\"players\":[{\"player\":{\"id\":1615,\"name\":\"T.J. Watt\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1615.png\"},\"statistics\":[{\"name\":\"total\",\"value\":\"0\"},{\"name\":\"lost\",\"value\":\"0\"},{\"name\":\"rec\",\"value\":\"1\"},{\"name\":\"rec td\",\"value\":\"0\"}]}]},{\"name\":\"Interceptions\",\"players\":[{\"player\":{\"id\":15444,\"name\":\"Robert SpearsJennings\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/15444.png\"},\"statistics\":[{\"name\":\"total interceptions\",\"value\":\"1\"},{\"name\":\"yards\",\"value\":\"0\"},{\"name\":\"intercepted touch downs\",\"value\":\"0\"}]}]},{\"name\":\"Defensive\",\"players\":[{\"player\":{\"id\":15874,\"name\":\"Payton Wilson\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/15874.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"9\"},{\"name\":\"unassisted tackles\",\"value\":\"7\"},{\"name\":\"sacks\",\"value\":\"1\"},{\"name\":\"tfl\",\"value\":\"1\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"1\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":15444,\"name\":\"Robert SpearsJennings\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/15444.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"7\"},{\"name\":\"unassisted tackles\",\"value\":\"6\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"2\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":1187,\"name\":\"Jaquan Brisker\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1187.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"7\"},{\"name\":\"unassisted tackles\",\"value\":\"4\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":1598,\"name\":\"Cameron Heyward\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1598.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"7\"},{\"name\":\"unassisted tackles\",\"value\":\"3\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"1\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"1\"}]},{\"player\":{\"id\":347,\"name\":\"Patrick Queen\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/347.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"5\"},{\"name\":\"unassisted tackles\",\"value\":\"3\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":17814,\"name\":\"Yahya Black\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/17814.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"5\"},{\"name\":\"unassisted tackles\",\"value\":\"2\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":1615,\"name\":\"T.J. Watt\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1615.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"4\"},{\"name\":\"unassisted tackles\",\"value\":\"4\"},{\"name\":\"sacks\",\"value\":\"1\"},{\"name\":\"tfl\",\"value\":\"2\"},{\"name\":\"passes defended\",\"value\":\"1\"},{\"name\":\"qb hts\",\"value\":\"2\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"1\"}]},{\"player\":{\"id\":14564,\"name\":\"Daylen Everette\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/14564.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"3\"},{\"name\":\"unassisted tackles\",\"value\":\"3\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"1\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":2215,\"name\":\"Asante Samuel Jr.\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/2215.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"3\"},{\"name\":\"unassisted tackles\",\"value\":\"2\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"1\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":16301,\"name\":\"Keeanu Benton\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/16301.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"3\"},{\"name\":\"unassisted tackles\",\"value\":\"2\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":1318,\"name\":\"Cole Holcomb\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1318.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"3\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":9062,\"name\":\"Lew Nichols III\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/9062.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"2\"},{\"name\":\"unassisted tackles\",\"value\":\"2\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":16319,\"name\":\"Nick Herbig\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/16319.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"2\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":2192,\"name\":\"Sebastian Joseph-Day\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/2192.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"2\"},{\"name\":\"unassisted tackles\",\"value\":\"0\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":14295,\"name\":\"Jack Sawyer\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/14295.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"2\"},{\"name\":\"unassisted tackles\",\"value\":\"0\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"1\"},{\"name\":\"qb hts\",\"value\":\"1\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":2296,\"name\":\"Jalen Ramsey\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/2296.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"1\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":1501,\"name\":\"Michael Pittman Jr.\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1501.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"1\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":1606,\"name\":\"Alex Highsmith\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1606.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"1\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"1\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":15124,\"name\":\"Roman Wilson\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/15124.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"1\"},{\"name\":\"unassisted tackles\",\"value\":\"1\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"0\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]},{\"player\":{\"id\":1768,\"name\":\"Jamel Dean\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1768.png\"},\"statistics\":[{\"name\":\"tackles\",\"value\":\"1\"},{\"name\":\"unassisted tackles\",\"value\":\"0\"},{\"name\":\"sacks\",\"value\":\"0\"},{\"name\":\"tfl\",\"value\":\"0\"},{\"name\":\"passes defended\",\"value\":\"1\"},{\"name\":\"qb hts\",\"value\":\"0\"},{\"name\":\"interceptions for touch downs\",\"value\":\"0\"},{\"name\":\"blocked kicks\",\"value\":\"0\"},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"},{\"name\":\"ff\",\"value\":\"0\"}]}]},{\"name\":\"Kick_returns\",\"players\":[{\"player\":{\"id\":17783,\"name\":\"Kaden Wetjen\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/17783.png\"},\"statistics\":[{\"name\":\"total\",\"value\":\"4\"},{\"name\":\"yards\",\"value\":\"96\"},{\"name\":\"average\",\"value\":\"24.0\"},{\"name\":\"lg\",\"value\":\"27\"},{\"name\":\"td\",\"value\":null},{\"name\":\"kick return td\",\"value\":\"0\"},{\"name\":\"exp return td\",\"value\":\"0\"}]}]},{\"name\":\"Punt_returns\",\"players\":[{\"player\":{\"id\":17783,\"name\":\"Kaden Wetjen\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/17783.png\"},\"statistics\":[{\"name\":\"total\",\"value\":\"2\"},{\"name\":\"yards\",\"value\":\"30\"},{\"name\":\"average\",\"value\":\"15.0\"},{\"name\":\"lg\",\"value\":\"15\"},{\"name\":\"td\",\"value\":\"0\"}]}]},{\"name\":\"Kicking\",\"players\":[{\"player\":{\"id\":1630,\"name\":\"Chris Boswell\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1630.png\"},\"statistics\":[{\"name\":\"field goals\",\"value\":\"1\\/2\"},{\"name\":\"pct\",\"value\":\"50.0\"},{\"name\":\"long\",\"value\":\"31\"},{\"name\":\"extra point\",\"value\":\"1\\/1\"},{\"name\":\"points\",\"value\":\"4\"},{\"name\":\"field goals from 1 19 yards\",\"value\":\"0\"},{\"name\":\"field goals from 20 29 yards\",\"value\":\"0\"},{\"name\":\"field goals from 30 39 yards\",\"value\":\"0\"},{\"name\":\"field goals from 40 49 yards\",\"value\":\"0\"},{\"name\":\"field goals from 50 yards\",\"value\":\"0\"}]}]},{\"name\":\"Punting\",\"players\":[{\"player\":{\"id\":1921,\"name\":\"Cameron Johnston\",\"image\":\"https:\\/\\/media.api-sports.io\\/american-football\\/players\\/1921.png\"},\"statistics\":[{\"name\":\"total\",\"value\":\"5\"},{\"name\":\"yards\",\"value\":\"259\"},{\"name\":\"average\",\"value\":\"51.8\"},{\"name\":\"touchbacks\",\"value\":\"1\"},{\"name\":\"in20\",\"value\":\"3\"},{\"name\":\"lg\",\"value\":\"62\"}]}]}]}]}\r\n",
+              "code": 200,
+              "name": "Respuesta capturada 2026-10-02",
+              "header": [
+                {
+                  "value": "application/json",
+                  "key": "Content-Type"
+                }
+              ],
+              "status": "OK"
+            }
+          ]
+        },
+        {
+          "name": "Cobertura NFL",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-apisports-key",
+                "value": "{{apiSportsKey}}",
+                "type": "text"
+              }
+            ],
+            "url": "https://v1.american-football.api-sports.io/leagues?id=1"
+          },
+          "response": [
+            {
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-apisports-key",
+                    "value": "{{apiSportsKey}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "https://v1.american-football.api-sports.io/leagues?id=1"
+              },
+              "body": "{\"get\":\"leagues\",\"parameters\":{\"id\":\"1\"},\"errors\":[],\"results\":1,\"response\":[{\"league\":{\"id\":1,\"name\":\"NFL\",\"logo\":\"https:\\/\\/media.api-sports.io\\/american-football\\/leagues\\/1.png\"},\"country\":{\"name\":\"USA\",\"code\":\"US\",\"flag\":\"https:\\/\\/media.api-sports.io\\/flags\\/us.svg\"},\"seasons\":[{\"year\":2026,\"start\":\"2026-08-07\",\"end\":\"2027-02-14\",\"current\":true,\"coverage\":{\"games\":{\"events\":true,\"statisitcs\":{\"teams\":true,\"players\":true}},\"statistics\":{\"season\":{\"players\":true}},\"players\":true,\"injuries\":true,\"standings\":true}},{\"year\":2025,\"start\":\"2025-08-01\",\"end\":\"2026-02-08\",\"current\":false,\"coverage\":{\"games\":{\"events\":true,\"statisitcs\":{\"teams\":true,\"players\":true}},\"statistics\":{\"season\":{\"players\":true}},\"players\":true,\"injuries\":false,\"standings\":true}},{\"year\":2024,\"start\":\"2024-08-02\",\"end\":\"2025-02-09\",\"current\":false,\"coverage\":{\"games\":{\"events\":true,\"statisitcs\":{\"teams\":true,\"players\":true}},\"statistics\":{\"season\":{\"players\":true}},\"players\":true,\"injuries\":false,\"standings\":true}},{\"year\":2023,\"start\":\"2023-08-04\",\"end\":\"2024-02-11\",\"current\":false,\"coverage\":{\"games\":{\"events\":true,\"statisitcs\":{\"teams\":true,\"players\":true}},\"statistics\":{\"season\":{\"players\":true}},\"players\":true,\"injuries\":false,\"standings\":true}},{\"year\":2022,\"start\":\"2022-08-05\",\"end\":\"2023-02-12\",\"current\":false,\"coverage\":{\"games\":{\"events\":true,\"statisitcs\":{\"teams\":true,\"players\":true}},\"statistics\":{\"season\":{\"players\":true}},\"players\":true,\"injuries\":false,\"standings\":true}},{\"year\":2021,\"start\":\"2021-08-12\",\"end\":\"2022-02-13\",\"current\":false,\"coverage\":{\"games\":{\"events\":true,\"statisitcs\":{\"teams\":true,\"players\":true}},\"statistics\":{\"season\":{\"players\":false}},\"players\":true,\"injuries\":false,\"standings\":true}},{\"year\":2020,\"start\":\"2020-09-13\",\"end\":\"2021-02-07\",\"current\":false,\"coverage\":{\"games\":{\"events\":true,\"statisitcs\":{\"teams\":true,\"players\":true}},\"statistics\":{\"season\":{\"players\":false}},\"players\":true,\"injuries\":false,\"standings\":true}},{\"year\":2019,\"start\":\"2019-08-08\",\"end\":\"2020-02-02\",\"current\":false,\"coverage\":{\"games\":{\"events\":true,\"statisitcs\":{\"teams\":true,\"players\":true}},\"statistics\":{\"season\":{\"players\":false}},\"players\":true,\"injuries\":false,\"standings\":true}},{\"year\":2018,\"start\":\"2018-08-09\",\"end\":\"2019-02-03\",\"current\":false,\"coverage\":{\"games\":{\"events\":true,\"statisitcs\":{\"teams\":true,\"players\":true}},\"statistics\":{\"season\":{\"players\":false}},\"players\":true,\"injuries\":false,\"standings\":true}},{\"year\":2017,\"start\":\"2017-08-09\",\"end\":\"2018-02-04\",\"current\":false,\"coverage\":{\"games\":{\"events\":true,\"statisitcs\":{\"teams\":true,\"players\":true}},\"statistics\":{\"season\":{\"players\":false}},\"players\":true,\"injuries\":false,\"standings\":true}},{\"year\":2016,\"start\":\"2016-08-12\",\"end\":\"2017-02-05\",\"current\":false,\"coverage\":{\"games\":{\"events\":true,\"statisitcs\":{\"teams\":true,\"players\":true}},\"statistics\":{\"season\":{\"players\":false}},\"players\":true,\"injuries\":false,\"standings\":true}},{\"year\":2015,\"start\":\"2015-08-13\",\"end\":\"2016-02-07\",\"current\":false,\"coverage\":{\"games\":{\"events\":false,\"statisitcs\":{\"teams\":false,\"players\":false}},\"statistics\":{\"season\":{\"players\":false}},\"players\":false,\"injuries\":false,\"standings\":true}},{\"year\":2014,\"start\":\"2014-08-07\",\"end\":\"2015-02-01\",\"current\":false,\"coverage\":{\"games\":{\"events\":false,\"statisitcs\":{\"teams\":false,\"players\":false}},\"statistics\":{\"season\":{\"players\":false}},\"players\":false,\"injuries\":false,\"standings\":true}},{\"year\":2013,\"start\":\"2013-08-08\",\"end\":\"2014-02-02\",\"current\":false,\"coverage\":{\"games\":{\"events\":false,\"statisitcs\":{\"teams\":false,\"players\":false}},\"statistics\":{\"season\":{\"players\":false}},\"players\":false,\"injuries\":false,\"standings\":true}},{\"year\":2012,\"start\":\"2012-08-09\",\"end\":\"2013-02-03\",\"current\":false,\"coverage\":{\"games\":{\"events\":false,\"statisitcs\":{\"teams\":false,\"players\":false}},\"statistics\":{\"season\":{\"players\":false}},\"players\":false,\"injuries\":false,\"standings\":true}},{\"year\":2011,\"start\":\"2011-08-12\",\"end\":\"2012-02-05\",\"current\":false,\"coverage\":{\"games\":{\"events\":false,\"statisitcs\":{\"teams\":false,\"players\":false}},\"statistics\":{\"season\":{\"players\":false}},\"players\":false,\"injuries\":false,\"standings\":true}},{\"year\":2010,\"start\":\"2010-08-12\",\"end\":\"2011-02-06\",\"current\":false,\"coverage\":{\"games\":{\"events\":false,\"statisitcs\":{\"teams\":false,\"players\":false}},\"statistics\":{\"season\":{\"players\":false}},\"players\":false,\"injuries\":false,\"standings\":true}}]}]}\r\n",
+              "code": 200,
+              "name": "Respuesta capturada 2026-10-02",
+              "header": [
+                {
+                  "value": "application/json",
+                  "key": "Content-Type"
+                }
+              ],
+              "status": "OK"
+            }
+          ]
+        },
+        {
+          "name": "Roster - ejemplo de restriccion Free",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-apisports-key",
+                "value": "{{apiSportsKey}}",
+                "type": "text"
+              }
+            ],
+            "url": "https://v1.american-football.api-sports.io/players?team=9&season=2026"
+          },
+          "response": [
+            {
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-apisports-key",
+                    "value": "{{apiSportsKey}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "https://v1.american-football.api-sports.io/players?team=9&season=2026"
+              },
+              "body": "{\"get\":\"players\",\"parameters\":{\"team\":\"9\",\"season\":\"2026\"},\"errors\":{\"plan\":\"Free plans do not have access to this season, try from 2022 to 2024.\"},\"results\":0,\"paging\":{\"current\":1,\"total\":1},\"response\":[]}\r\n",
+              "code": 200,
+              "name": "Respuesta capturada 2026-10-02",
+              "header": [
+                {
+                  "value": "application/json",
+                  "key": "Content-Type"
+                }
+              ],
+              "status": "OK"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

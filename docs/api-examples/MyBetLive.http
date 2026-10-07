@@ -1,0 +1,82 @@
+@googleIdToken =
+@googleNonce =
+@backend = http://127.0.0.1:8081
+@accessToken = PEGA_EL_ACCESS_TOKEN_DEL_LOGIN
+@adminToken = PEGA_EL_ACCESS_TOKEN_ADMIN
+@date = 2026-10-02
+@eventId = PEGA_EL_UUID_INTERNO_DEL_EVENTO
+@betId = PEGA_EL_UUID_DEL_SEGUIMIENTO
+@apiSportsKey = PEGA_LA_CLAVE_SOLO_PARA_PRUEBAS_DEL_PROVEEDOR
+
+### Login cliente local
+POST {{backend}}/api/v1/auth/login
+Content-Type: application/json
+
+{"username":"demo","password":"demo-change-me"}
+
+### Deportes y mercados
+GET {{backend}}/api/v1/tracking/sports
+Authorization: Bearer {{accessToken}}
+
+### Partidos de una fecha UTC
+GET {{backend}}/api/v1/tracking/events?sport=NFL&date={{date}}
+Authorization: Bearer {{accessToken}}
+
+### Snapshot de un partido
+GET {{backend}}/api/v1/tracking/events/{{eventId}}
+Authorization: Bearer {{accessToken}}
+
+### Jugadores y estadísticas que pueden seleccionarse
+GET {{backend}}/api/v1/tracking/events/{{eventId}}/players
+Authorization: Bearer {{accessToken}}
+
+### Registrar recepción Over 4.5 de DK Metcalf para el evento capturado
+POST {{backend}}/api/v1/tracking/bets
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{"eventId":"{{eventId}}","market":"PLAYER_RECEPTIONS","selection":"OVER","line":4.5,"playerId":"1645"}
+
+### Mis seguimientos
+GET {{backend}}/api/v1/tracking/bets
+Authorization: Bearer {{accessToken}}
+
+### Un seguimiento
+GET {{backend}}/api/v1/tracking/bets/{{betId}}
+Authorization: Bearer {{accessToken}}
+
+### Plan y permisos
+GET {{backend}}/api/v1/subscriptions/me
+Authorization: Bearer {{accessToken}}
+
+### Diagnóstico para ADMIN, sin llamada al proveedor
+GET {{backend}}/api/v1/admin/mybet/provider
+Authorization: Bearer {{adminToken}}
+
+### API-Sports: catálogo crudo, consume cuota al ejecutarse
+GET https://v1.american-football.api-sports.io/games?date={{date}}&league=1&timezone=UTC
+x-apisports-key: {{apiSportsKey}}
+
+### API-Sports: estadísticas crudas del evento capturado
+GET https://v1.american-football.api-sports.io/games/statistics/players?id=21561
+x-apisports-key: {{apiSportsKey}}
+
+### API-Sports: cobertura NFL
+GET https://v1.american-football.api-sports.io/leagues?id=1
+x-apisports-key: {{apiSportsKey}}
+
+### API-Sports: ejemplo de recurso restringido por el plan Free
+GET https://v1.american-football.api-sports.io/players?team=9&season=2026
+x-apisports-key: {{apiSportsKey}}
+
+### Iniciar acceso Google (cliente OAuth Web requerido)
+POST {{baseUrl}}/api/v1/auth/google/challenge
+
+### Acceder o registrar cliente Google (variables sin credenciales)
+POST {{baseUrl}}/api/v1/auth/google
+Content-Type: application/json
+
+{
+  "idToken": "{{googleIdToken}}",
+  "nonce": "{{googleNonce}}"
+}

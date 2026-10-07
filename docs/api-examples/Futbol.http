@@ -1,0 +1,76 @@
+@baseUrl = http://127.0.0.1:8081
+@accessToken =
+@adminToken =
+@apiSportsKey =
+@date = 2026-10-02
+@soccerEventId = UUID_DEL_CATALOGO_SOCCER
+@leagueId = 72
+@leagueVersion = 0
+
+### Catálogo de deportes
+GET {{baseUrl}}/api/v1/tracking/sports
+Authorization: Bearer {{accessToken}}
+
+### Partidos de ligas habilitadas (jornada UTC)
+GET {{baseUrl}}/api/v1/tracking/events?sport=SOCCER&date={{date}}
+Authorization: Bearer {{accessToken}}
+
+### Jugadores y fotos del partido
+GET {{baseUrl}}/api/v1/tracking/events/{{soccerEventId}}/players
+Authorization: Bearer {{accessToken}}
+
+### Seguimiento informativo de goles, 90 minutos más compensación
+POST {{baseUrl}}/api/v1/tracking/bets
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{"eventId":"{{soccerEventId}}","market":"PLAYER_GOALS","selection":"OVER","line":0.5,"playerId":"197038"}
+
+### Login de administrador local (no guardar tokens en capturas)
+POST {{baseUrl}}/api/v1/auth/login
+Content-Type: application/json
+
+{"username":"admin-demo","password":"admin-demo-change-me"}
+
+### Ligas configuradas; lectura local sin consumir API-Football
+GET {{baseUrl}}/api/v1/admin/mybet/soccer/leagues
+Authorization: Bearer {{adminToken}}
+
+### Buscar ligas (3–60 caracteres); caché de 24 horas
+GET {{baseUrl}}/api/v1/admin/mybet/soccer/search?search=Serie%20B
+Authorization: Bearer {{adminToken}}
+
+### Agregar resultado del proveedor (409 si ya existe)
+POST {{baseUrl}}/api/v1/admin/mybet/soccer/leagues
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"id":72,"enabled":true}
+
+### Deshabilitar nuevos seguimientos y conservar existentes
+# Obtener version actual con GET /soccer/leagues antes de editar.
+PUT {{baseUrl}}/api/v1/admin/mybet/soccer/leagues/{{leagueId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"enabled":false,"version":{{leagueVersion}}}
+
+### Cuota local, no consume una consulta externa
+GET {{baseUrl}}/api/v1/admin/mybet/provider?sport=SOCCER
+Authorization: Bearer {{adminToken}}
+
+### Comprobar cuenta con API-Football
+POST {{baseUrl}}/api/v1/admin/mybet/provider/check?sport=SOCCER
+Authorization: Bearer {{adminToken}}
+
+### Proveedor crudo: jornada (consume cuota al ejecutarse)
+GET https://v3.football.api-sports.io/fixtures?date={{date}}&timezone=UTC
+x-apisports-key: {{apiSportsKey}}
+
+### Proveedor crudo: estadísticas y fotos (consume cuota)
+GET https://v3.football.api-sports.io/fixtures/players?fixture=1520908
+x-apisports-key: {{apiSportsKey}}
+
+### Proveedor crudo: status (no publicar datos de la cuenta)
+GET https://v3.football.api-sports.io/status
+x-apisports-key: {{apiSportsKey}}

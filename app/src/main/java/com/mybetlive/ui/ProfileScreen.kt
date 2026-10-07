@@ -1,0 +1,133 @@
+package com.mybetlive.ui
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.activity.compose.BackHandler
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.mybetlive.data.*
+import java.time.*
+import java.time.format.DateTimeFormatter
+@Composable internal fun ProfileScreen(state:AppState,prices:Map<String,StorePrice>,buy:(Plan)->Unit,restore:()->Unit,manage:()->Unit,
+ onLogout:()->Unit,onNotifications:()->Unit){
+ val subscription=state.subscription
+ val advertising=com.mybetlive.ads.LocalAdsController.current
+ var page by rememberSaveable { mutableStateOf("profile") }
+ val listState=rememberLazyListState()
+ LaunchedEffect(page) { listState.scrollToItem(0) }
+ BackHandler(page != "profile") { page="profile" }
+ LazyColumn(Modifier.fillMaxSize().testTag("profile-list"),state=listState,contentPadding=PaddingValues(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)){
+  item {
+   if(page!="profile") TextButton(onClick={page="profile"}){Text("‹ Volver a Perfil")}
+   Text(when(page){"plan"->"Mi plan";"plans"->"Planes";"subscription"->"Mi suscripción";else->"Perfil"},fontSize=26.sp,fontWeight=FontWeight.Bold)
+  }
+  if(page=="profile") {
+  item {
+   Card {Row(Modifier.fillMaxWidth().padding(20.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(14.dp)){
+    PlayerAvatar(null,size=44.dp)
+    Column {Text(state.username,fontSize=19.sp,fontWeight=FontWeight.SemiBold);Text("Tu cuenta MyBetLive",color=Muted,fontSize=12.sp)}
+   }}
+  }
+  }
+  if(page in listOf("profile","plan")) {
+  item{
+   Card{Column(Modifier.fillMaxWidth().padding(20.dp),verticalArrangement=Arrangement.spacedBy(10.dp)){
+    Text("Mi plan",fontSize=17.sp,fontWeight=FontWeight.Bold)
+    if(subscription==null){Text("No se pudo consultar tu plan. Actualiza para reintentar.")}
+    else {
+     Text(subscription.plan.name,fontSize=20.sp,fontWeight=FontWeight.SemiBold)
+     Text("${subscription.activeTrackers} / ${subscription.access.maxActiveTrackers?.toString()?:"sin límite"} seguimientos activos")
+     if(page=="profile") {
+      Text("Props de jugadores: ${if(subscription.access.playerProps)"incluidos" else "no incluidos"}")
+      Text("Notificaciones: ${if(subscription.access.pushNotifications)"incluidas" else "no incluidas"}")
+     }
+    }
+    if(page=="profile") TextButton(onClick={page="plan"}){Text("Ver mi plan")}
+    else if(subscription!=null){PlanBenefits(subscription);TextButton(onClick={page="plans"}){Text("Ver otros planes")}}
+   }}
+  }
+  }
+  if(page=="profile") item {
+   Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+    OutlinedButton(onClick={page="plans"},modifier=Modifier.weight(1f)){Text("Planes")}
+    OutlinedButton(onClick={page="subscription"},modifier=Modifier.weight(1f)){Text("Mi suscripción")}
+   }
+  }
+  if(subscription!=null){
+   if(page in listOf("profile","plan")) item {PlanUsage(subscription)}
+   if(page in listOf("profile","subscription")) {
+   if(page=="subscription" && subscription.subscriptions.none{it.active}) item {
+    Text("Sin suscripción vigente. Conservas el acceso de ${subscription.plan.name}.")
+    if(subscription.subscriptions.isNotEmpty())Text("Tus seguimientos guardados se conservan. Los permisos actuales se aplican al crear nuevas selecciones.",color=Muted)
+   }
+   items(subscription.subscriptions.filter{it.active},key={it.id}){s->
+    Card{Column(Modifier.fillMaxWidth().padding(20.dp),verticalArrangement=Arrangement.spacedBy(8.dp)){
+     Text(s.plan.name,fontWeight=FontWeight.SemiBold)
+     Text(if(s.source=="MANUAL")"Acceso concedido por administración" else when(s.state){
+      "CANCELED"->"Cancelada · acceso hasta el vencimiento";"IN_GRACE_PERIOD"->"Pago en período de gracia";else->"Suscripción de Google Play"
+     })
+     Text("Vence: "+runCatching{Instant.parse(s.expiresAt).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("dd MMM yyyy · HH:mm"))}.getOrDefault(s.expiresAt))
+    }}
+   }
+   }
+   if(page in listOf("profile","plans","subscription")) {
+   item{
+    if(!subscription.billingEnabled)Text("Las suscripciones estarán disponibles cuando se definan los planes y se habiliten las compras.")
+    else {
+     Row(horizontalArrangement=Arrangement.spacedBy(8.dp)){
+      OutlinedButton(onClick=restore,enabled=!state.busy){Text("Restaurar compras")}
+      TextButton(onClick=manage){Text("Gestionar")}
+     }
+    }
+    state.billingMessage?.let{Text(it,modifier=Modifier.padding(top=12.dp),color=MaterialTheme.colorScheme.secondary)}
+   }
+   }
+   if(page=="plans" && subscription.availablePlans.none{it.code!="FREE"}) item {
+    Card {Column(Modifier.fillMaxWidth().padding(20.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
+     Text("Nuevos planes próximamente",fontSize=21.sp,fontWeight=FontWeight.Bold)
+     Text("Cuando estén disponibles, aquí verás sus beneficios y precio. Puedes continuar usando tu plan actual.",color=Muted)
+     Button(onClick={},enabled=false){Text("Suscripción aún no disponible")}
+    }}
+   }
+   if(page=="plans") {
+   items(subscription.availablePlans.filter{it.code!="FREE"},key={it.id}){plan->
+    val price=prices[plan.id]
+    val ownsPlay=subscription.subscriptions.any{it.active&&it.source=="GOOGLE_PLAY"}
+    Card{Column(Modifier.fillMaxWidth().padding(20.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
+     Text(plan.name,fontSize=22.sp,fontWeight=FontWeight.Bold)
+     if(plan.description.isNotBlank())Text(plan.description)
+     Text("${plan.maxActiveTrackers?.toString()?:"Sin límite de"} seguimientos activos")
+     if(plan.playerProps)Text("Props de jugadores incluidos")
+     if(plan.pushNotifications)Text("Notificaciones incluidas")
+     if(price!=null){
+      Text("${price.price} / ${price.period}",fontSize=23.sp,fontWeight=FontWeight.Bold)
+      Text(if(price.autoRenewing)"Renovación automática. Puedes cancelar en Google Play." else "Acceso por ${price.period}.",fontSize=12.sp)
+     }
+     Button(onClick={buy(plan)},enabled=subscription.billingEnabled&&price!=null&&!state.busy&&!ownsPlay&&!state.offline,modifier=Modifier.fillMaxWidth()){
+      Text(if(ownsPlay)"Gestiona tu suscripción actual" else if(price==null)"Próximamente" else "Suscribirme con Google Play")
+     }
+    }}
+   }
+   }
+  }
+  if(page=="profile") {
+  item {
+   Card {Column(Modifier.fillMaxWidth().padding(20.dp),verticalArrangement=Arrangement.spacedBy(10.dp)){
+    Text("Notificaciones",fontWeight=FontWeight.Bold)
+    Text("Administra permisos y avisos en este dispositivo.",color=Muted,fontSize=13.sp)
+    OutlinedButton(onClick=onNotifications,modifier=Modifier.fillMaxWidth()){Text("Configurar notificaciones")}
+   }}
+  }
+  if(advertising?.privacyRequired==true) item { OutlinedButton(onClick=advertising::privacyOptions,modifier=Modifier.fillMaxWidth()){Text("Privacidad de anuncios")} }
+  item {OutlinedButton(onClick=onLogout,enabled=!state.busy,modifier=Modifier.fillMaxWidth()){Text("Cerrar sesión")}}
+  }
+ }
+}

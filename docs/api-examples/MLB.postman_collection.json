@@ -1,0 +1,790 @@
+{
+  "info": {
+    "description": "Capturas reales para inspeccionar sin requests. Claves/tokens vacíos; status sanitizado. UUID y fechas son temporales. Cuatro mercados de equipo, juego completo con entradas extra; no hay props/fotos individuales MLB. Los ejemplos no colocan apuestas ni activan compras. Los probes de endpoints ausentes son evidencia de capacidad, no funciones de la app.",
+    "name": "MyBetLive - MLB y carreras",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "request": {
+        "header": [
+          {
+            "value": "Bearer {{accessToken}}",
+            "key": "Authorization",
+            "type": "text"
+          }
+        ],
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/tracking/sports"
+      },
+      "name": "Deportes y mercados",
+      "response": [
+        {
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "code": 200,
+          "status": "OK",
+          "name": "Captura 2026-10-02",
+          "body": "[\r\n  {\r\n    \"sport\": \"NFL\",\r\n    \"enabled\": true,\r\n    \"markets\": [\r\n      \"MONEYLINE\",\r\n      \"SPREAD\",\r\n      \"TOTAL\",\r\n      \"TEAM_TOTAL\",\r\n      \"PLAYER_RUSHING_YARDS\",\r\n      \"PLAYER_RECEIVING_YARDS\",\r\n      \"PLAYER_RECEPTIONS\",\r\n      \"PLAYER_PASSING_YARDS\",\r\n      \"PLAYER_PASSING_TOUCHDOWNS\"\r\n    ]\r\n  },\r\n  {\r\n    \"sport\": \"SOCCER\",\r\n    \"enabled\": true,\r\n    \"markets\": [\r\n      \"MONEYLINE\",\r\n      \"SPREAD\",\r\n      \"TOTAL\",\r\n      \"TEAM_TOTAL\",\r\n      \"PLAYER_GOALS\",\r\n      \"PLAYER_ASSISTS\",\r\n      \"PLAYER_SHOTS\",\r\n      \"PLAYER_SHOTS_ON_TARGET\"\r\n    ]\r\n  },\r\n  {\r\n    \"sport\": \"MLB\",\r\n    \"enabled\": true,\r\n    \"markets\": [\r\n      \"MONEYLINE\",\r\n      \"SPREAD\",\r\n      \"TOTAL\",\r\n      \"TEAM_TOTAL\"\r\n    ]\r\n  }\r\n]",
+          "_postman_previewlanguage": "json",
+          "originalRequest": {
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization",
+                "type": "text"
+              }
+            ],
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tracking/sports"
+          }
+        }
+      ]
+    },
+    {
+      "request": {
+        "header": [
+          {
+            "value": "Bearer {{accessToken}}",
+            "key": "Authorization",
+            "type": "text"
+          }
+        ],
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/tracking/events?sport=MLB&date={{date}}"
+      },
+      "name": "Jornada MLB terminada",
+      "response": [
+        {
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "code": 200,
+          "status": "OK",
+          "name": "Captura 2026-10-02",
+          "body": "[\r\n  {\r\n    \"id\": \"1bd185e5-14ed-47c5-9e38-3c527fc273c4\",\r\n    \"event\": {\r\n      \"sport\": \"MLB\",\r\n      \"provider\": \"API_SPORTS_MLB\",\r\n      \"externalId\": \"189823\",\r\n      \"startsAt\": \"2026-10-02T00:00:00Z\",\r\n      \"home\": {\r\n        \"id\": \"3\",\r\n        \"name\": \"Atlanta Braves\"\r\n      },\r\n      \"away\": {\r\n        \"id\": \"27\",\r\n        \"name\": \"Philadelphia Phillies\"\r\n      },\r\n      \"homeScore\": 6,\r\n      \"awayScore\": 2,\r\n      \"status\": \"FINAL\",\r\n      \"period\": \"FT\",\r\n      \"clock\": \"Final\",\r\n      \"observedAt\": \"2026-10-02T19:57:57.978859100Z\",\r\n      \"season\": \"2026\",\r\n      \"leagueId\": \"1\",\r\n      \"leagueName\": \"MLB\",\r\n      \"leagueCountry\": \"USA\"\r\n    },\r\n    \"stale\": false\r\n  }\r\n]",
+          "_postman_previewlanguage": "json",
+          "originalRequest": {
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization",
+                "type": "text"
+              }
+            ],
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tracking/events?sport=MLB&date={{date}}"
+          }
+        }
+      ]
+    },
+    {
+      "request": {
+        "header": [
+          {
+            "value": "Bearer {{accessToken}}",
+            "key": "Authorization",
+            "type": "text"
+          }
+        ],
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/tracking/events?sport=MLB&date=2026-10-03"
+      },
+      "name": "Jornada MLB programada",
+      "response": [
+        {
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "code": 200,
+          "status": "OK",
+          "name": "Captura 2026-10-02",
+          "body": "[\r\n  {\r\n    \"id\": \"6d6e69e9-aa4c-4082-9797-fe415dd3c631\",\r\n    \"event\": {\r\n      \"sport\": \"MLB\",\r\n      \"provider\": \"API_SPORTS_MLB\",\r\n      \"externalId\": \"189824\",\r\n      \"startsAt\": \"2026-10-03T17:00:00Z\",\r\n      \"home\": {\r\n        \"id\": \"9\",\r\n        \"name\": \"Cleveland Guardians\"\r\n      },\r\n      \"away\": {\r\n        \"id\": \"7\",\r\n        \"name\": \"Chicago White Sox\"\r\n      },\r\n      \"homeScore\": null,\r\n      \"awayScore\": null,\r\n      \"status\": \"SCHEDULED\",\r\n      \"period\": \"NS\",\r\n      \"clock\": null,\r\n      \"observedAt\": \"2026-10-02T19:57:58.165116300Z\",\r\n      \"season\": \"2026\",\r\n      \"leagueId\": \"1\",\r\n      \"leagueName\": \"MLB\",\r\n      \"leagueCountry\": \"USA\"\r\n    },\r\n    \"stale\": false\r\n  },\r\n  {\r\n    \"id\": \"9ec14794-3bc4-4937-8142-ec65a73af290\",\r\n    \"event\": {\r\n      \"sport\": \"MLB\",\r\n      \"provider\": \"API_SPORTS_MLB\",\r\n      \"externalId\": \"189833\",\r\n      \"startsAt\": \"2026-10-03T20:00:00Z\",\r\n      \"home\": {\r\n        \"id\": \"18\",\r\n        \"name\": \"Los Angeles Dodgers\"\r\n      },\r\n      \"away\": {\r\n        \"id\": \"3\",\r\n        \"name\": \"Atlanta Braves\"\r\n      },\r\n      \"homeScore\": null,\r\n      \"awayScore\": null,\r\n      \"status\": \"SCHEDULED\",\r\n      \"period\": \"NS\",\r\n      \"clock\": null,\r\n      \"observedAt\": \"2026-10-02T19:57:58.165116300Z\",\r\n      \"season\": \"2026\",\r\n      \"leagueId\": \"1\",\r\n      \"leagueName\": \"MLB\",\r\n      \"leagueCountry\": \"USA\"\r\n    },\r\n    \"stale\": false\r\n  },\r\n  {\r\n    \"id\": \"823e332f-4b24-46ff-a8fb-71082d57fb69\",\r\n    \"event\": {\r\n      \"sport\": \"MLB\",\r\n      \"provider\": \"API_SPORTS_MLB\",\r\n      \"externalId\": \"189825\",\r\n      \"startsAt\": \"2026-10-03T22:30:00Z\",\r\n      \"home\": {\r\n        \"id\": \"34\",\r\n        \"name\": \"Tampa Bay Rays\"\r\n      },\r\n      \"away\": {\r\n        \"id\": \"25\",\r\n        \"name\": \"New York Yankees\"\r\n      },\r\n      \"homeScore\": null,\r\n      \"awayScore\": null,\r\n      \"status\": \"SCHEDULED\",\r\n      \"period\": \"NS\",\r\n      \"clock\": null,\r\n      \"observedAt\": \"2026-10-02T19:57:58.165116300Z\",\r\n      \"season\": \"2026\",\r\n      \"leagueId\": \"1\",\r\n      \"leagueName\": \"MLB\",\r\n      \"leagueCountry\": \"USA\"\r\n    },\r\n    \"stale\": false\r\n  }\r\n]",
+          "_postman_previewlanguage": "json",
+          "originalRequest": {
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization",
+                "type": "text"
+              }
+            ],
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tracking/events?sport=MLB&date=2026-10-03"
+          }
+        }
+      ]
+    },
+    {
+      "request": {
+        "header": [
+          {
+            "value": "Bearer {{accessToken}}",
+            "key": "Authorization",
+            "type": "text"
+          },
+          {
+            "value": "application/json",
+            "key": "Content-Type",
+            "type": "text"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          },
+          "raw": "{\"selection\":\"HOME\",\"eventId\":\"{{mlbEventId}}\",\"market\":\"MONEYLINE\"}"
+        },
+        "url": "{{baseUrl}}/api/v1/tracking/bets"
+      },
+      "name": "MONEYLINE HOME  - WON",
+      "response": [
+        {
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "code": 201,
+          "status": "Created",
+          "name": "Captura 2026-10-02",
+          "body": "{\r\n  \"id\": \"2ed95450-ec16-417e-8397-2ecfc3e6814b\",\r\n  \"eventId\": \"1bd185e5-14ed-47c5-9e38-3c527fc273c4\",\r\n  \"event\": {\r\n    \"sport\": \"MLB\",\r\n    \"provider\": \"API_SPORTS_MLB\",\r\n    \"externalId\": \"189823\",\r\n    \"startsAt\": \"2026-10-02T00:00:00Z\",\r\n    \"home\": {\r\n      \"id\": \"3\",\r\n      \"name\": \"Atlanta Braves\"\r\n    },\r\n    \"away\": {\r\n      \"id\": \"27\",\r\n      \"name\": \"Philadelphia Phillies\"\r\n    },\r\n    \"homeScore\": 6,\r\n    \"awayScore\": 2,\r\n    \"status\": \"FINAL\",\r\n    \"period\": \"FT\",\r\n    \"clock\": \"Final\",\r\n    \"observedAt\": \"2026-10-02T19:57:57.978859100Z\",\r\n    \"season\": \"2026\",\r\n    \"leagueId\": \"1\",\r\n    \"leagueName\": \"MLB\",\r\n    \"leagueCountry\": \"USA\"\r\n  },\r\n  \"market\": \"MONEYLINE\",\r\n  \"selection\": \"HOME\",\r\n  \"line\": null,\r\n  \"team\": null,\r\n  \"playerId\": null,\r\n  \"playerName\": null,\r\n  \"playerImageUrl\": null,\r\n  \"stake\": null,\r\n  \"decimalOdds\": null,\r\n  \"bookmaker\": null,\r\n  \"status\": \"WON\",\r\n  \"currentValue\": 4,\r\n  \"remaining\": null,\r\n  \"updatedAt\": \"2026-10-02T19:57:58.272121900Z\",\r\n  \"stale\": false\r\n}",
+          "_postman_previewlanguage": "json",
+          "originalRequest": {
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization",
+                "type": "text"
+              },
+              {
+                "value": "application/json",
+                "key": "Content-Type",
+                "type": "text"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\"selection\":\"HOME\",\"eventId\":\"{{mlbEventId}}\",\"market\":\"MONEYLINE\"}"
+            },
+            "url": "{{baseUrl}}/api/v1/tracking/bets"
+          }
+        }
+      ]
+    },
+    {
+      "request": {
+        "header": [
+          {
+            "value": "Bearer {{accessToken}}",
+            "key": "Authorization",
+            "type": "text"
+          },
+          {
+            "value": "application/json",
+            "key": "Content-Type",
+            "type": "text"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          },
+          "raw": "{\"selection\":\"HOME\",\"eventId\":\"{{mlbEventId}}\",\"line\":-1.5,\"market\":\"SPREAD\"}"
+        },
+        "url": "{{baseUrl}}/api/v1/tracking/bets"
+      },
+      "name": "SPREAD HOME -1.5 - WON",
+      "response": [
+        {
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "code": 201,
+          "status": "Created",
+          "name": "Captura 2026-10-02",
+          "body": "{\r\n  \"id\": \"5cef5aef-c9e4-4122-8d34-a9cfe16db403\",\r\n  \"eventId\": \"1bd185e5-14ed-47c5-9e38-3c527fc273c4\",\r\n  \"event\": {\r\n    \"sport\": \"MLB\",\r\n    \"provider\": \"API_SPORTS_MLB\",\r\n    \"externalId\": \"189823\",\r\n    \"startsAt\": \"2026-10-02T00:00:00Z\",\r\n    \"home\": {\r\n      \"id\": \"3\",\r\n      \"name\": \"Atlanta Braves\"\r\n    },\r\n    \"away\": {\r\n      \"id\": \"27\",\r\n      \"name\": \"Philadelphia Phillies\"\r\n    },\r\n    \"homeScore\": 6,\r\n    \"awayScore\": 2,\r\n    \"status\": \"FINAL\",\r\n    \"period\": \"FT\",\r\n    \"clock\": \"Final\",\r\n    \"observedAt\": \"2026-10-02T19:57:57.978859100Z\",\r\n    \"season\": \"2026\",\r\n    \"leagueId\": \"1\",\r\n    \"leagueName\": \"MLB\",\r\n    \"leagueCountry\": \"USA\"\r\n  },\r\n  \"market\": \"SPREAD\",\r\n  \"selection\": \"HOME\",\r\n  \"line\": -1.5,\r\n  \"team\": null,\r\n  \"playerId\": null,\r\n  \"playerName\": null,\r\n  \"playerImageUrl\": null,\r\n  \"stake\": null,\r\n  \"decimalOdds\": null,\r\n  \"bookmaker\": null,\r\n  \"status\": \"WON\",\r\n  \"currentValue\": 4,\r\n  \"remaining\": null,\r\n  \"updatedAt\": \"2026-10-02T19:57:58.330119200Z\",\r\n  \"stale\": false\r\n}",
+          "_postman_previewlanguage": "json",
+          "originalRequest": {
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization",
+                "type": "text"
+              },
+              {
+                "value": "application/json",
+                "key": "Content-Type",
+                "type": "text"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\"selection\":\"HOME\",\"eventId\":\"{{mlbEventId}}\",\"line\":-1.5,\"market\":\"SPREAD\"}"
+            },
+            "url": "{{baseUrl}}/api/v1/tracking/bets"
+          }
+        }
+      ]
+    },
+    {
+      "request": {
+        "header": [
+          {
+            "value": "Bearer {{accessToken}}",
+            "key": "Authorization",
+            "type": "text"
+          },
+          {
+            "value": "application/json",
+            "key": "Content-Type",
+            "type": "text"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          },
+          "raw": "{\"selection\":\"OVER\",\"eventId\":\"{{mlbEventId}}\",\"line\":7.5,\"market\":\"TOTAL\"}"
+        },
+        "url": "{{baseUrl}}/api/v1/tracking/bets"
+      },
+      "name": "TOTAL OVER 7.5 - WON",
+      "response": [
+        {
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "code": 201,
+          "status": "Created",
+          "name": "Captura 2026-10-02",
+          "body": "{\r\n  \"id\": \"22bbb643-d90a-4c35-ae18-5a492e135d62\",\r\n  \"eventId\": \"1bd185e5-14ed-47c5-9e38-3c527fc273c4\",\r\n  \"event\": {\r\n    \"sport\": \"MLB\",\r\n    \"provider\": \"API_SPORTS_MLB\",\r\n    \"externalId\": \"189823\",\r\n    \"startsAt\": \"2026-10-02T00:00:00Z\",\r\n    \"home\": {\r\n      \"id\": \"3\",\r\n      \"name\": \"Atlanta Braves\"\r\n    },\r\n    \"away\": {\r\n      \"id\": \"27\",\r\n      \"name\": \"Philadelphia Phillies\"\r\n    },\r\n    \"homeScore\": 6,\r\n    \"awayScore\": 2,\r\n    \"status\": \"FINAL\",\r\n    \"period\": \"FT\",\r\n    \"clock\": \"Final\",\r\n    \"observedAt\": \"2026-10-02T19:57:57.978859100Z\",\r\n    \"season\": \"2026\",\r\n    \"leagueId\": \"1\",\r\n    \"leagueName\": \"MLB\",\r\n    \"leagueCountry\": \"USA\"\r\n  },\r\n  \"market\": \"TOTAL\",\r\n  \"selection\": \"OVER\",\r\n  \"line\": 7.5,\r\n  \"team\": null,\r\n  \"playerId\": null,\r\n  \"playerName\": null,\r\n  \"playerImageUrl\": null,\r\n  \"stake\": null,\r\n  \"decimalOdds\": null,\r\n  \"bookmaker\": null,\r\n  \"status\": \"WON\",\r\n  \"currentValue\": 8,\r\n  \"remaining\": 0,\r\n  \"updatedAt\": \"2026-10-02T19:57:58.353119400Z\",\r\n  \"stale\": false\r\n}",
+          "_postman_previewlanguage": "json",
+          "originalRequest": {
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization",
+                "type": "text"
+              },
+              {
+                "value": "application/json",
+                "key": "Content-Type",
+                "type": "text"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\"selection\":\"OVER\",\"eventId\":\"{{mlbEventId}}\",\"line\":7.5,\"market\":\"TOTAL\"}"
+            },
+            "url": "{{baseUrl}}/api/v1/tracking/bets"
+          }
+        }
+      ]
+    },
+    {
+      "request": {
+        "header": [
+          {
+            "value": "Bearer {{accessToken}}",
+            "key": "Authorization",
+            "type": "text"
+          },
+          {
+            "value": "application/json",
+            "key": "Content-Type",
+            "type": "text"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          },
+          "raw": "{\"selection\":\"OVER\",\"eventId\":\"{{mlbEventId}}\",\"line\":8,\"market\":\"TOTAL\"}"
+        },
+        "url": "{{baseUrl}}/api/v1/tracking/bets"
+      },
+      "name": "TOTAL OVER 8 - PUSH",
+      "response": [
+        {
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "code": 201,
+          "status": "Created",
+          "name": "Captura 2026-10-02",
+          "body": "{\r\n  \"id\": \"53a888a3-8a3f-40b9-b2b9-b2f662ef250c\",\r\n  \"eventId\": \"1bd185e5-14ed-47c5-9e38-3c527fc273c4\",\r\n  \"event\": {\r\n    \"sport\": \"MLB\",\r\n    \"provider\": \"API_SPORTS_MLB\",\r\n    \"externalId\": \"189823\",\r\n    \"startsAt\": \"2026-10-02T00:00:00Z\",\r\n    \"home\": {\r\n      \"id\": \"3\",\r\n      \"name\": \"Atlanta Braves\"\r\n    },\r\n    \"away\": {\r\n      \"id\": \"27\",\r\n      \"name\": \"Philadelphia Phillies\"\r\n    },\r\n    \"homeScore\": 6,\r\n    \"awayScore\": 2,\r\n    \"status\": \"FINAL\",\r\n    \"period\": \"FT\",\r\n    \"clock\": \"Final\",\r\n    \"observedAt\": \"2026-10-02T19:57:57.978859100Z\",\r\n    \"season\": \"2026\",\r\n    \"leagueId\": \"1\",\r\n    \"leagueName\": \"MLB\",\r\n    \"leagueCountry\": \"USA\"\r\n  },\r\n  \"market\": \"TOTAL\",\r\n  \"selection\": \"OVER\",\r\n  \"line\": 8,\r\n  \"team\": null,\r\n  \"playerId\": null,\r\n  \"playerName\": null,\r\n  \"playerImageUrl\": null,\r\n  \"stake\": null,\r\n  \"decimalOdds\": null,\r\n  \"bookmaker\": null,\r\n  \"status\": \"PUSH\",\r\n  \"currentValue\": 8,\r\n  \"remaining\": 1,\r\n  \"updatedAt\": \"2026-10-02T19:57:58.372120200Z\",\r\n  \"stale\": false\r\n}",
+          "_postman_previewlanguage": "json",
+          "originalRequest": {
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization",
+                "type": "text"
+              },
+              {
+                "value": "application/json",
+                "key": "Content-Type",
+                "type": "text"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\"selection\":\"OVER\",\"eventId\":\"{{mlbEventId}}\",\"line\":8,\"market\":\"TOTAL\"}"
+            },
+            "url": "{{baseUrl}}/api/v1/tracking/bets"
+          }
+        }
+      ]
+    },
+    {
+      "request": {
+        "header": [
+          {
+            "value": "Bearer {{accessToken}}",
+            "key": "Authorization",
+            "type": "text"
+          },
+          {
+            "value": "application/json",
+            "key": "Content-Type",
+            "type": "text"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          },
+          "raw": "{\"team\":\"AWAY\",\"selection\":\"OVER\",\"eventId\":\"{{mlbEventId}}\",\"line\":2.5,\"market\":\"TEAM_TOTAL\"}"
+        },
+        "url": "{{baseUrl}}/api/v1/tracking/bets"
+      },
+      "name": "TEAM_TOTAL OVER 2.5 - LOST",
+      "response": [
+        {
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "code": 201,
+          "status": "Created",
+          "name": "Captura 2026-10-02",
+          "body": "{\r\n  \"id\": \"c525a54f-d432-4ae6-aa31-481bd718f46f\",\r\n  \"eventId\": \"1bd185e5-14ed-47c5-9e38-3c527fc273c4\",\r\n  \"event\": {\r\n    \"sport\": \"MLB\",\r\n    \"provider\": \"API_SPORTS_MLB\",\r\n    \"externalId\": \"189823\",\r\n    \"startsAt\": \"2026-10-02T00:00:00Z\",\r\n    \"home\": {\r\n      \"id\": \"3\",\r\n      \"name\": \"Atlanta Braves\"\r\n    },\r\n    \"away\": {\r\n      \"id\": \"27\",\r\n      \"name\": \"Philadelphia Phillies\"\r\n    },\r\n    \"homeScore\": 6,\r\n    \"awayScore\": 2,\r\n    \"status\": \"FINAL\",\r\n    \"period\": \"FT\",\r\n    \"clock\": \"Final\",\r\n    \"observedAt\": \"2026-10-02T19:57:57.978859100Z\",\r\n    \"season\": \"2026\",\r\n    \"leagueId\": \"1\",\r\n    \"leagueName\": \"MLB\",\r\n    \"leagueCountry\": \"USA\"\r\n  },\r\n  \"market\": \"TEAM_TOTAL\",\r\n  \"selection\": \"OVER\",\r\n  \"line\": 2.5,\r\n  \"team\": \"AWAY\",\r\n  \"playerId\": null,\r\n  \"playerName\": null,\r\n  \"playerImageUrl\": null,\r\n  \"stake\": null,\r\n  \"decimalOdds\": null,\r\n  \"bookmaker\": null,\r\n  \"status\": \"LOST\",\r\n  \"currentValue\": 2,\r\n  \"remaining\": 1,\r\n  \"updatedAt\": \"2026-10-02T19:57:58.390120800Z\",\r\n  \"stale\": false\r\n}",
+          "_postman_previewlanguage": "json",
+          "originalRequest": {
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization",
+                "type": "text"
+              },
+              {
+                "value": "application/json",
+                "key": "Content-Type",
+                "type": "text"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\"team\":\"AWAY\",\"selection\":\"OVER\",\"eventId\":\"{{mlbEventId}}\",\"line\":2.5,\"market\":\"TEAM_TOTAL\"}"
+            },
+            "url": "{{baseUrl}}/api/v1/tracking/bets"
+          }
+        }
+      ]
+    },
+    {
+      "request": {
+        "header": [
+          {
+            "value": "Bearer {{accessToken}}",
+            "key": "Authorization",
+            "type": "text"
+          }
+        ],
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/tracking/events/{{mlbEventId}}/players"
+      },
+      "name": "Capacidad: jugadores no disponibles",
+      "response": [
+        {
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "code": 503,
+          "status": "Service Unavailable",
+          "name": "Captura 2026-10-02",
+          "body": "{\r\n  \"success\": false,\r\n  \"code\": \"MLB_PLAYER_DATA_UNAVAILABLE\",\r\n  \"message\": \"API-Baseball no ofrece jugadores ni estadísticas individuales; MLB admite mercados de equipo\",\r\n  \"status\": 503,\r\n  \"path\": \"/api/v1/tracking/events/1bd185e5-14ed-47c5-9e38-3c527fc273c4/players\",\r\n  \"timestamp\": \"2026-10-02T13:57:58.4091279-06:00\",\r\n  \"errors\": null\r\n}",
+          "_postman_previewlanguage": "json",
+          "originalRequest": {
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization",
+                "type": "text"
+              }
+            ],
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tracking/events/{{mlbEventId}}/players"
+          }
+        }
+      ]
+    },
+    {
+      "request": {
+        "header": [
+          {
+            "value": "Bearer {{adminToken}}",
+            "key": "Authorization",
+            "type": "text"
+          }
+        ],
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/admin/mybet/provider?sport=MLB"
+      },
+      "name": "Diagnostico local MLB",
+      "response": [
+        {
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "code": 200,
+          "status": "OK",
+          "name": "Captura 2026-10-02",
+          "body": "{\r\n  \"provider\": \"API_SPORTS_MLB\",\r\n  \"quota\": {\r\n    \"provider\": \"API_SPORTS_MLB\",\r\n    \"configured\": true,\r\n    \"utcDate\": \"2026-10-02\",\r\n    \"dailyBudget\": 90,\r\n    \"localRequestsToday\": 2,\r\n    \"remoteDailyLimit\": 100,\r\n    \"remoteDailyRemaining\": 92,\r\n    \"minuteBudget\": 8,\r\n    \"localRequestsLastMinute\": 2,\r\n    \"remoteMinuteLimit\": 10,\r\n    \"remoteMinuteRemaining\": 8,\r\n    \"pauseReason\": null,\r\n    \"retryAt\": null,\r\n    \"lastSuccessAt\": \"2026-10-02T19:57:58.165116300Z\",\r\n    \"lastError\": null\r\n  }\r\n}",
+          "_postman_previewlanguage": "json",
+          "originalRequest": {
+            "header": [
+              {
+                "value": "Bearer {{adminToken}}",
+                "key": "Authorization",
+                "type": "text"
+              }
+            ],
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/admin/mybet/provider?sport=MLB"
+          }
+        }
+      ]
+    },
+    {
+      "request": {
+        "header": [
+          {
+            "value": "Bearer {{adminToken}}",
+            "key": "Authorization",
+            "type": "text"
+          }
+        ],
+        "method": "POST",
+        "url": "{{baseUrl}}/api/v1/admin/mybet/provider/check?sport=MLB"
+      },
+      "name": "Comprobar cuenta MLB",
+      "response": []
+    },
+    {
+      "request": {
+        "header": [
+          {
+            "value": "{{apiSportsKey}}",
+            "key": "x-apisports-key",
+            "type": "text"
+          }
+        ],
+        "method": "GET",
+        "url": "https://v1.baseball.api-sports.io/games?date={{date}}&timezone=UTC"
+      },
+      "name": "Proveedor: jornada cruda (consume cuota)",
+      "response": [
+        {
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "code": 200,
+          "status": "OK",
+          "name": "Captura 2026-10-02",
+          "body": "{\"get\":\"games\",\"parameters\":{\"date\":\"2026-10-02\",\"timezone\":\"UTC\"},\"errors\":[],\"results\":5,\"response\":[{\"id\":189823,\"date\":\"2026-10-02T00:00:00+00:00\",\"time\":\"00:00\",\"timestamp\":1790899200,\"timezone\":\"UTC\",\"week\":\"Final\",\"status\":{\"long\":\"Finished\",\"short\":\"FT\"},\"country\":{\"id\":1,\"name\":\"USA\",\"code\":\"US\",\"flag\":\"https:\\/\\/media.api-sports.io\\/flags\\/us.svg\"},\"league\":{\"id\":1,\"name\":\"MLB\",\"type\":\"League\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/leagues\\/1.png\",\"season\":2026},\"teams\":{\"home\":{\"id\":3,\"name\":\"Atlanta Braves\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/teams\\/3.png\"},\"away\":{\"id\":27,\"name\":\"Philadelphia Phillies\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/teams\\/27.png\"}},\"scores\":{\"home\":{\"hits\":6,\"errors\":0,\"innings\":{\"1\":3,\"2\":0,\"3\":0,\"4\":2,\"5\":0,\"6\":0,\"7\":1,\"8\":0,\"9\":null,\"extra\":null},\"total\":6},\"away\":{\"hits\":6,\"errors\":0,\"innings\":{\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":0,\"6\":1,\"7\":0,\"8\":1,\"9\":0,\"extra\":null},\"total\":2}}},{\"id\":181038,\"date\":\"2026-10-02T09:00:00+00:00\",\"time\":\"09:00\",\"timestamp\":1790931600,\"timezone\":\"UTC\",\"week\":null,\"status\":{\"long\":\"Finished\",\"short\":\"FT\"},\"country\":{\"id\":2,\"name\":\"Japan\",\"code\":\"JP\",\"flag\":\"https:\\/\\/media.api-sports.io\\/flags\\/jp.svg\"},\"league\":{\"id\":2,\"name\":\"NPB\",\"type\":\"League\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/leagues\\/2.png\",\"season\":2026},\"teams\":{\"home\":{\"id\":55,\"name\":\"Chiba Lotte Marines\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/teams\\/55.png\"},\"away\":{\"id\":57,\"name\":\"Fukuoka S. Hawks\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/teams\\/57.png\"}},\"scores\":{\"home\":{\"hits\":9,\"errors\":0,\"innings\":{\"1\":0,\"2\":0,\"3\":0,\"4\":1,\"5\":0,\"6\":0,\"7\":0,\"8\":2,\"9\":0,\"extra\":null},\"total\":3},\"away\":{\"hits\":7,\"errors\":0,\"innings\":{\"1\":1,\"2\":0,\"3\":0,\"4\":0,\"5\":0,\"6\":0,\"7\":0,\"8\":0,\"9\":3,\"extra\":null},\"total\":4}}},{\"id\":187532,\"date\":\"2026-10-02T09:00:00+00:00\",\"time\":\"09:00\",\"timestamp\":1790931600,\"timezone\":\"UTC\",\"week\":null,\"status\":{\"long\":\"Finished\",\"short\":\"FT\"},\"country\":{\"id\":2,\"name\":\"Japan\",\"code\":\"JP\",\"flag\":\"https:\\/\\/media.api-sports.io\\/flags\\/jp.svg\"},\"league\":{\"id\":2,\"name\":\"NPB\",\"type\":\"League\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/leagues\\/2.png\",\"season\":2026},\"teams\":{\"home\":{\"id\":64,\"name\":\"Yakult Swallows\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/teams\\/64.png\"},\"away\":{\"id\":66,\"name\":\"Yomiuri Giants\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/teams\\/66.png\"}},\"scores\":{\"home\":{\"hits\":13,\"errors\":1,\"innings\":{\"1\":0,\"2\":0,\"3\":1,\"4\":0,\"5\":0,\"6\":0,\"7\":0,\"8\":4,\"9\":null,\"extra\":null},\"total\":5},\"away\":{\"hits\":2,\"errors\":0,\"innings\":{\"1\":0,\"2\":1,\"3\":0,\"4\":0,\"5\":0,\"6\":0,\"7\":0,\"8\":0,\"9\":0,\"extra\":null},\"total\":1}}},{\"id\":184232,\"date\":\"2026-10-02T10:35:00+00:00\",\"time\":\"10:35\",\"timestamp\":1790937300,\"timezone\":\"UTC\",\"week\":null,\"status\":{\"long\":\"Finished\",\"short\":\"FT\"},\"country\":{\"id\":22,\"name\":\"Taiwan\",\"code\":\"TW\",\"flag\":\"https:\\/\\/media.api-sports.io\\/flags\\/tw.svg\"},\"league\":{\"id\":29,\"name\":\"CPBL\",\"type\":\"League\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/leagues\\/29.png\",\"season\":2026},\"teams\":{\"home\":{\"id\":349,\"name\":\"Fubon Guardians\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/teams\\/349.png\"},\"away\":{\"id\":569,\"name\":\"Wei Chuan Dragons\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/teams\\/569.png\"}},\"scores\":{\"home\":{\"hits\":5,\"errors\":0,\"innings\":{\"1\":0,\"2\":1,\"3\":0,\"4\":0,\"5\":0,\"6\":0,\"7\":0,\"8\":0,\"9\":0,\"extra\":0},\"total\":1},\"away\":{\"hits\":4,\"errors\":2,\"innings\":{\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":1,\"6\":0,\"7\":0,\"8\":0,\"9\":0,\"extra\":1},\"total\":2}}},{\"id\":184238,\"date\":\"2026-10-02T10:35:00+00:00\",\"time\":\"10:35\",\"timestamp\":1790937300,\"timezone\":\"UTC\",\"week\":null,\"status\":{\"long\":\"Finished\",\"short\":\"FT\"},\"country\":{\"id\":22,\"name\":\"Taiwan\",\"code\":\"TW\",\"flag\":\"https:\\/\\/media.api-sports.io\\/flags\\/tw.svg\"},\"league\":{\"id\":29,\"name\":\"CPBL\",\"type\":\"League\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/leagues\\/29.png\",\"season\":2026},\"teams\":{\"home\":{\"id\":915,\"name\":\"TSG Hawks\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/teams\\/915.png\"},\"away\":{\"id\":482,\"name\":\"Rakuten Monkeys\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/teams\\/482.png\"}},\"scores\":{\"home\":{\"hits\":10,\"errors\":null,\"innings\":{\"1\":0,\"2\":0,\"3\":2,\"4\":1,\"5\":0,\"6\":1,\"7\":0,\"8\":3,\"9\":null,\"extra\":null},\"total\":7},\"away\":{\"hits\":10,\"errors\":null,\"innings\":{\"1\":0,\"2\":0,\"3\":1,\"4\":0,\"5\":0,\"6\":1,\"7\":1,\"8\":0,\"9\":0,\"extra\":null},\"total\":3}}}]}",
+          "_postman_previewlanguage": "json",
+          "originalRequest": {
+            "header": [
+              {
+                "value": "{{apiSportsKey}}",
+                "key": "x-apisports-key",
+                "type": "text"
+              }
+            ],
+            "method": "GET",
+            "url": "https://v1.baseball.api-sports.io/games?date={{date}}&timezone=UTC"
+          }
+        }
+      ]
+    },
+    {
+      "request": {
+        "header": [
+          {
+            "value": "{{apiSportsKey}}",
+            "key": "x-apisports-key",
+            "type": "text"
+          }
+        ],
+        "method": "GET",
+        "url": "https://v1.baseball.api-sports.io/status"
+      },
+      "name": "Proveedor: status sanitizado",
+      "response": [
+        {
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "code": 200,
+          "status": "OK",
+          "name": "Captura 2026-10-02",
+          "body": "{\r\n  \"httpStatus\": 200,\r\n  \"errors\": [],\r\n  \"subscription\": {\r\n    \"plan\": \"Free\",\r\n    \"end\": \"2027-01-15T18:00:00-06:00\",\r\n    \"active\": true\r\n  },\r\n  \"requests\": {\r\n    \"current\": 0,\r\n    \"limit_day\": 100\r\n  }\r\n}",
+          "_postman_previewlanguage": "json",
+          "originalRequest": {
+            "header": [
+              {
+                "value": "{{apiSportsKey}}",
+                "key": "x-apisports-key",
+                "type": "text"
+              }
+            ],
+            "method": "GET",
+            "url": "https://v1.baseball.api-sports.io/status"
+          }
+        }
+      ]
+    },
+    {
+      "request": {
+        "header": [
+          {
+            "value": "{{apiSportsKey}}",
+            "key": "x-apisports-key",
+            "type": "text"
+          }
+        ],
+        "method": "GET",
+        "url": "https://v1.baseball.api-sports.io/leagues?search=MLB"
+      },
+      "name": "Proveedor: MLB y Spring Training",
+      "response": [
+        {
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "code": 200,
+          "status": "OK",
+          "name": "Captura 2026-10-02",
+          "body": "{\"get\":\"leagues\",\"parameters\":{\"search\":\"MLB\"},\"errors\":[],\"results\":2,\"response\":[{\"id\":1,\"name\":\"MLB\",\"type\":\"League\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/leagues\\/1.png\",\"country\":{\"id\":1,\"name\":\"USA\",\"code\":\"US\",\"flag\":\"https:\\/\\/media.api-sports.io\\/flags\\/us.svg\"},\"seasons\":[{\"season\":2020,\"current\":false,\"start\":\"2020-02-21\",\"end\":\"2020-10-26\"},{\"season\":2019,\"current\":false,\"start\":\"2019-02-25\",\"end\":\"2019-10-31\"},{\"season\":2018,\"current\":false,\"start\":\"2018-02-26\",\"end\":\"2018-10-29\"},{\"season\":2017,\"current\":false,\"start\":\"2017-03-02\",\"end\":\"2017-11-02\"},{\"season\":2016,\"current\":false,\"start\":\"2016-03-10\",\"end\":\"2016-11-03\"},{\"season\":2015,\"current\":false,\"start\":\"2015-03-07\",\"end\":\"2015-11-02\"},{\"season\":2021,\"current\":false,\"start\":\"2021-02-28\",\"end\":\"2021-11-03\"},{\"season\":2022,\"current\":false,\"start\":\"2022-02-26\",\"end\":\"2022-11-06\"},{\"season\":2010,\"current\":false,\"start\":\"2010-03-12\",\"end\":\"2010-11-01\"},{\"season\":2011,\"current\":false,\"start\":\"2011-03-08\",\"end\":\"2011-10-29\"},{\"season\":2012,\"current\":false,\"start\":\"2012-03-12\",\"end\":\"2012-10-29\"},{\"season\":2013,\"current\":false,\"start\":\"2013-02-27\",\"end\":\"2013-10-31\"},{\"season\":2014,\"current\":false,\"start\":\"2014-02-28\",\"end\":\"2014-10-30\"},{\"season\":2023,\"current\":false,\"start\":\"2023-02-24\",\"end\":\"2023-11-02\"},{\"season\":2024,\"current\":false,\"start\":\"2024-02-22\",\"end\":\"2024-10-31\"},{\"season\":2025,\"current\":false,\"start\":\"2025-03-18\",\"end\":\"2025-11-01\"},{\"season\":2026,\"current\":true,\"start\":\"2026-03-26\",\"end\":\"2026-10-08\"}]},{\"id\":71,\"name\":\"MLB - Spring Training\",\"type\":\"League\",\"logo\":\"https:\\/\\/media.api-sports.io\\/baseball\\/leagues\\/71.png\",\"country\":{\"id\":1,\"name\":\"USA\",\"code\":\"US\",\"flag\":\"https:\\/\\/media.api-sports.io\\/flags\\/us.svg\"},\"seasons\":[{\"season\":2025,\"current\":false,\"start\":\"2025-02-20\",\"end\":\"2025-03-26\"},{\"season\":2026,\"current\":false,\"start\":\"2026-02-20\",\"end\":\"2026-03-25\"},{\"season\":2027,\"current\":false,\"start\":\"2027-02-19\",\"end\":\"2027-03-18\"}]}]}",
+          "_postman_previewlanguage": "json",
+          "originalRequest": {
+            "header": [
+              {
+                "value": "{{apiSportsKey}}",
+                "key": "x-apisports-key",
+                "type": "text"
+              }
+            ],
+            "method": "GET",
+            "url": "https://v1.baseball.api-sports.io/leagues?search=MLB"
+          }
+        }
+      ]
+    },
+    {
+      "request": {
+        "header": [
+          {
+            "value": "{{apiSportsKey}}",
+            "key": "x-apisports-key",
+            "type": "text"
+          }
+        ],
+        "method": "GET",
+        "url": "https://v1.baseball.api-sports.io/players?team=3&season=2026"
+      },
+      "name": "Proveedor: players no existe (no ejecutar en app)",
+      "response": [
+        {
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "code": 200,
+          "status": "OK",
+          "name": "Captura 2026-10-02",
+          "body": "{\"get\":\"players\",\"parameters\":{\"team\":\"3\",\"season\":\"2026\"},\"errors\":{\"endpoint\":\"This endpoint do not exist.\"},\"results\":0,\"response\":[]}",
+          "_postman_previewlanguage": "json",
+          "originalRequest": {
+            "header": [
+              {
+                "value": "{{apiSportsKey}}",
+                "key": "x-apisports-key",
+                "type": "text"
+              }
+            ],
+            "method": "GET",
+            "url": "https://v1.baseball.api-sports.io/players?team=3&season=2026"
+          }
+        }
+      ]
+    },
+    {
+      "request": {
+        "header": [
+          {
+            "value": "{{apiSportsKey}}",
+            "key": "x-apisports-key",
+            "type": "text"
+          }
+        ],
+        "method": "GET",
+        "url": "https://v1.baseball.api-sports.io/games/statistics/players?id=189823"
+      },
+      "name": "Proveedor: stats de jugador no existe",
+      "response": [
+        {
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "code": 200,
+          "status": "OK",
+          "name": "Captura 2026-10-02",
+          "body": "{\"get\":\"games\",\"parameters\":{\"id\":\"189823\"},\"errors\":{\"endpoint\":\"This endpoint do not exist.\"},\"results\":0,\"response\":[]}",
+          "_postman_previewlanguage": "json",
+          "originalRequest": {
+            "header": [
+              {
+                "value": "{{apiSportsKey}}",
+                "key": "x-apisports-key",
+                "type": "text"
+              }
+            ],
+            "method": "GET",
+            "url": "https://v1.baseball.api-sports.io/games/statistics/players?id=189823"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8081"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "adminToken",
+      "value": ""
+    },
+    {
+      "key": "apiSportsKey",
+      "value": ""
+    },
+    {
+      "key": "date",
+      "value": "2026-10-02"
+    },
+    {
+      "key": "mlbEventId",
+      "value": "1bd185e5-14ed-47c5-9e38-3c527fc273c4"
+    }
+  ]
+}

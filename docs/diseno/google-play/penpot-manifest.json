@@ -1,0 +1,104 @@
+{
+  "fileId": "71b39894-c9c5-81cd-8008-bc366032f6eb",
+  "pageId": "f4f0eaf2-2ed8-8083-8008-c07c057ff13f",
+  "pageName": "06 · Google Play",
+  "pieces": [
+    {
+      "id": "f4f0eaf2-2ed8-8083-8008-c07d03e284d2",
+      "name": "00 · Icono Google Play · 512×512",
+      "width": 512,
+      "height": 512,
+      "export": {
+        "type": "png",
+        "scale": 1,
+        "suffix": "",
+        "skipChildren": false
+      }
+    },
+    {
+      "id": "f4f0eaf2-2ed8-8083-8008-c07d043ffa42",
+      "name": "00 · Banner Google Play · 1024×500",
+      "width": 1024,
+      "height": 500,
+      "export": {
+        "type": "png",
+        "scale": 1,
+        "suffix": "",
+        "skipChildren": false
+      }
+    },
+    {
+      "id": "f4f0eaf2-2ed8-8083-8008-c07d04fa13fa",
+      "name": "01 · Sigue tus selecciones · 1080×1920",
+      "width": 1080,
+      "height": 1920,
+      "export": {
+        "type": "png",
+        "scale": 1,
+        "suffix": "",
+        "skipChildren": false
+      }
+    },
+    {
+      "id": "f4f0eaf2-2ed8-8083-8008-c07d0c6aa2bf",
+      "name": "02 · Cuatro deportes · 1080×1920",
+      "width": 1080,
+      "height": 1920,
+      "export": {
+        "type": "png",
+        "scale": 1,
+        "suffix": "",
+        "skipChildren": false
+      }
+    },
+    {
+      "id": "f4f0eaf2-2ed8-8083-8008-c07d595951cd",
+      "name": "03 · Mercados · 1080×1920",
+      "width": 1080,
+      "height": 1920,
+      "export": {
+        "type": "png",
+        "scale": 1,
+        "suffix": "",
+        "skipChildren": false
+      }
+    },
+    {
+      "id": "f4f0eaf2-2ed8-8083-8008-c07d60fabcee",
+      "name": "04 · Props de jugadores · 1080×1920",
+      "width": 1080,
+      "height": 1920,
+      "export": {
+        "type": "png",
+        "scale": 1,
+        "suffix": "",
+        "skipChildren": false
+      }
+    },
+    {
+      "id": "f4f0eaf2-2ed8-8083-8008-c07d65ab16d6",
+      "name": "05 · Notificaciones activas · 1080×1920",
+      "width": 1080,
+      "height": 1920,
+      "export": {
+        "type": "png",
+        "scale": 1,
+        "suffix": "",
+        "skipChildren": false
+      }
+    },
+    {
+      "id": "f4f0eaf2-2ed8-8083-8008-c07d6b13166e",
+      "name": "06 · Conoce Premium · 1080×1920",
+      "width": 1080,
+      "height": 1920,
+      "export": {
+        "type": "png",
+        "scale": 1,
+        "suffix": "",
+        "skipChildren": false
+      }
+    }
+  ],
+  "temporary": 0
+}
