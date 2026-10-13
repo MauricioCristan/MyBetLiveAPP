@@ -12,6 +12,7 @@ class SoccerSelectionTest {
     @Test fun soccerMarginUsesGoalsAndItsSportIconInput() {
         val progress=betProgress("SOCCER","SPREAD","HOME",1.0,-0.5,"LIVE_WINNING")!!
         assertEquals("SOCCER",progress.sport);assertTrue(progress.caption.contains("goles"));assertEquals(-1.0,progress.start,0.001)
-        assertEquals(ProgressTone.MUTED,betProgress("SOCCER","MONEYLINE","DRAW",0.0,null,"WON",true)!!.tone)
+        assertEquals(ProgressTone.GREEN,betProgress("SOCCER","MONEYLINE","DRAW",0.0,null,"WON",true)!!.tone)
+        assertEquals(ProgressTone.MUTED,betProgress("SOCCER","MONEYLINE","DRAW",0.0,null,"LIVE_WINNING",true)!!.tone)
     }
 }

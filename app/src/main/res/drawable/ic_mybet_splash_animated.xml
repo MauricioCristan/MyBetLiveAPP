@@ -1,0 +1,5 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_mybet_splash_pieces">
+    <target android:name="white_piece" android:animation="@animator/startup_white_piece" />
+    <target android:name="green_piece" android:animation="@animator/startup_green_piece" />
+</animated-vector>

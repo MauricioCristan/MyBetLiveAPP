@@ -26,6 +26,8 @@ import com.mybetlive.BuildConfig
 import com.mybetlive.R
 import com.mybetlive.auth.googleIdToken
 import com.mybetlive.data.*
+import com.mybetlive.application.propLineError
+import com.mybetlive.application.propCondition
 import java.time.*
 import java.time.format.DateTimeFormatter
 
@@ -49,44 +51,43 @@ fun MyBetLiveApp(state: AppState, model: TrackingViewModel, prices: Map<String,S
     buy: (Plan) -> Unit, restore: () -> Unit, manage: () -> Unit) {
     MyBetLiveTheme {
         Surface(Modifier.fillMaxSize(), color = Ink) {
-            if (!state.loggedIn) LoginScreen(state, model) else Dashboard(state, model, prices, buy, restore, manage)
+            if(state.emailLink!=null)EmailLinkScreen(state,model)
+            else if (!state.loggedIn) LoginScreen(state, model) else Dashboard(state, model, prices, buy, restore, manage)
         }
     }
 }
 
 @Composable private fun LoginScreen(state: AppState, model: TrackingViewModel) {
     val context = LocalContext.current
-    var url by rememberSaveable { mutableStateOf(if (BuildConfig.DEBUG) "http://127.0.0.1:8081" else "") }
-    var username by rememberSaveable { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var googleAttempt by remember { mutableStateOf(false) }
-    Column(Modifier.fillMaxSize().safeDrawingPadding().imePadding().verticalScroll(rememberScrollState()).padding(28.dp),
-        verticalArrangement = Arrangement.spacedBy(18.dp)) {
-        Spacer(Modifier.height(46.dp))
-        BrandLogo(height = 52.dp)
-        Text("Tu apuesta.\nCada jugada.", fontSize = 38.sp, lineHeight = 43.sp, fontWeight = FontWeight.Bold)
-        Text("Sigue el marcador y el progreso de tus apuestas NFL, de fútbol y MLB en un solo lugar.", color = Muted)
-        Spacer(Modifier.height(12.dp))
-        OutlinedTextField(url, { url = it }, label = { Text("URL del backend") }, singleLine = true, modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri))
-        OutlinedButton(onClick = { googleAttempt = true; model.loginGoogle(url) { googleIdToken(context, it) } },
+    var url by rememberSaveable { mutableStateOf(state.authUrl ?: BuildConfig.AUTH_BACKEND_URL) }
+    var mode by rememberSaveable { mutableStateOf(EmailFormMode.LOGIN) }
+    fun changeMode(next:EmailFormMode) { model.clearEmailFeedback(); mode=next }
+    androidx.activity.compose.BackHandler(enabled=mode!=EmailFormMode.LOGIN&&!state.busy) { changeMode(EmailFormMode.LOGIN) }
+    LaunchedEffect(state.authUrl){state.authUrl?.let{url=it}}
+    Column(Modifier.fillMaxSize().safeDrawingPadding().imePadding().verticalScroll(rememberScrollState()).padding(horizontal=24.dp,vertical=24.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        BrandLogo(height = 34.dp)
+        Spacer(Modifier.height(6.dp))
+        LocalizedText(when(mode){EmailFormMode.LOGIN->"Inicia sesión";EmailFormMode.REGISTER->"Crear cuenta";EmailFormMode.FORGOT->"Recuperar contraseña"}, fontSize = 28.sp, lineHeight = 34.sp, fontWeight = FontWeight.Bold)
+        if(mode==EmailFormMode.LOGIN) {
+        LocalizedText("Sigue tus picks en tiempo real.", color = Muted, fontSize=14.sp)
+        OutlinedButton(onClick = { model.clearEmailFeedback();model.loginGoogle(url) { googleIdToken(context, it) } },
             enabled = !state.busy && url.isNotBlank(), modifier = Modifier.fillMaxWidth().heightIn(min = 54.dp),
             shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White, contentColor = Color(0xFF1F1F1F))) {
             Icon(painterResource(R.drawable.ic_google), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(20.dp))
             Spacer(Modifier.width(12.dp))
-            Text("Continuar con Google")
+            LocalizedText("Continuar con Google")
         }
-        if (googleAttempt) state.error?.let { Text(it, color = Red) }
-        Text("Si es tu primera vez, crearemos tu cuenta al continuar con Google.", color = Muted, fontSize = 12.sp)
-        Text("O usa tu usuario y contraseña", color = Muted, fontSize = 12.sp)
-        OutlinedTextField(username, { username = it }, label = { Text("Usuario") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(password, { password = it }, label = { Text("Contraseña") }, singleLine = true,
-            visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password), modifier = Modifier.fillMaxWidth())
-        if (!googleAttempt) state.error?.let { Text(it, color = Red) }
-        Button(onClick = { googleAttempt = false; model.login(url, username, password) }, enabled = !state.busy && username.isNotBlank() && password.isNotBlank() && url.isNotBlank(),
-            modifier = Modifier.fillMaxWidth().height(54.dp)) { Text(if (state.busy) "Conectando…" else "Entrar") }
-        Text("Registra apuestas que ya realizaste. Los resultados se basan en datos deportivos y pueden diferir de la liquidación del casino.", color = Muted, fontSize = 12.sp)
-        if (BuildConfig.DEBUG) Text("Demo local: activa el perfil demo del backend y entra con demo / demo-change-me.", color = Muted, fontSize = 12.sp)
+        Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
+            HorizontalDivider(Modifier.weight(1f),color=Muted.copy(alpha=.25f))
+            LocalizedText("O entra con tu correo",color=Muted,fontSize=12.sp)
+            HorizontalDivider(Modifier.weight(1f),color=Muted.copy(alpha=.25f))
+        }
+        }
+        key(mode) { EmailAccountForm(state,model,url,mode,::changeMode) }
+        if(mode==EmailFormMode.LOGIN) {
+        LocalizedText("Registra apuestas que ya realizaste. Los resultados se basan en datos deportivos y pueden diferir de la liquidación del casino.", color = Muted, fontSize = 11.sp,lineHeight=16.sp)
+        }
     }
 }
 
@@ -97,29 +98,34 @@ fun MyBetLiveApp(state: AppState, model: TrackingViewModel, prices: Map<String,S
     var savedMessage by remember { mutableStateOf(false) }
     DashboardScreen(state, prices, onRefresh = model::refresh, onSport = model::selectSport,
         onDate = model::date, onOpenEvent = { eventId = it }, onDelete = model::delete,
-        onLogout = model::logout, buy = buy, restore = restore, manage = manage, createdBet = createdBet,
-        onUnpin = model::unpin, onPin = model::pin)
-    state.events.find { it.id == eventId }?.let { event ->
+        onLogout = model::logout, buy = buy, restore = restore, manage = manage, createdBet = createdBet)
+    LaunchedEffect(eventId, state.events) {
+        if(eventId != null && state.events.none { it.id == eventId && it.event.canStartTracking() }) eventId = null
+    }
+    state.events.find { it.id == eventId && it.event.canStartTracking() }?.let { event ->
         CreateBetDialog(event, state, model, onDismiss = { eventId = null },
             onSaved = { bet -> eventId = null; createdBet = bet; savedMessage = true })
     }
-    if(savedMessage) AlertDialog(onDismissRequest={savedMessage=false},title={Text("Seguimiento guardado")},
-        text={Text(createdBet?.title().orEmpty())},confirmButton={TextButton(onClick={savedMessage=false}){Text("Ver seguimientos")}})
+    if(savedMessage) AlertDialog(onDismissRequest={savedMessage=false},title={LocalizedText("Seguimiento guardado")},
+        text={LocalizedText(createdBet?.title().orEmpty())},confirmButton={TextButton(onClick={savedMessage=false}){LocalizedText("Ver seguimientos")}})
 }
 
 @Composable internal fun Scoreboard(event: EventSnapshot) {
+    val now by produceState(java.time.Instant.now(),event.status,event.startsAt){
+        if(event.status=="SCHEDULED")while(true){kotlinx.coroutines.delay(30_000);value=java.time.Instant.now()}
+    }
     val label = when(event.status) {
-        "FINAL" -> "Finalizado"; "SCHEDULED" -> "Por comenzar"; "LIVE" -> "En juego · ${event.period} ${event.clock.orEmpty()}"
+        "FINAL" -> "Finalizado"; "SCHEDULED" -> event.scheduledLabel(now); "LIVE" -> "En juego · ${event.period} ${event.clock.orEmpty()}"
         "CANCELLED" -> "Cancelado"; "POSTPONED" -> "Pospuesto"; else -> "Estado por confirmar"
     }
-    event.leagueName?.takeIf { it.isNotBlank() }?.let { Text(listOfNotNull(it,event.leagueCountry).joinToString(" · "), color = Muted, fontSize = 12.sp) }
-    Text("${sportLabel(event.sport)} · $label", color = if (event.status == "LIVE") Green else Muted, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+    event.leagueName?.takeIf { it.isNotBlank() }?.let { LocalizedText(listOfNotNull(it,event.leagueCountry).joinToString(" · "), color = Muted, fontSize = 12.sp) }
+    LocalizedText("${sportLabel(event.sport)} · $label", color = if (event.status == "LIVE") Green else Muted, fontSize = 12.sp, fontWeight = FontWeight.Bold)
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         listOf(event.home to event.homeScore, event.away to event.awayScore).forEach { (team, score) ->
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
                 TeamLogo(team)
-                Text(team.name, modifier = Modifier.weight(1f), fontWeight = FontWeight.SemiBold)
-                Text(score?.toString() ?: "—", fontSize = 26.sp, fontWeight = FontWeight.Bold)
+                LocalizedText(team.name, modifier = Modifier.weight(1f), fontWeight = FontWeight.SemiBold)
+                LocalizedText(score?.toString() ?: "—", fontSize = 26.sp, fontWeight = FontWeight.Bold)
             }
         }
     }
@@ -130,10 +136,10 @@ fun MyBetLiveApp(state: AppState, model: TrackingViewModel, prices: Map<String,S
     var expanded by remember { mutableStateOf(false) }
     Box {
         OutlinedButton(onClick = { expanded = true }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
-            Text("$label: ${options.find { it.first == value }?.second ?: "Seleccionar"}", modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp))
+            LocalizedText("$label: ${options.find { it.first == value }?.second ?: "Seleccionar"}", modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp))
         }
         DropdownMenu(expanded, { expanded = false }) {
-            options.forEach { (id, text) -> DropdownMenuItem(text = { Text(text) }, onClick = { onSelected(id); expanded = false }) }
+            options.forEach { (id, text) -> DropdownMenuItem(text = { LocalizedText(text) }, onClick = { onSelected(id); expanded = false }) }
         }
     }
 }
@@ -147,12 +153,12 @@ fun MyBetLiveApp(state: AppState, model: TrackingViewModel, prices: Map<String,S
             Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 PlayerAvatar(selected?.imageUrl, size = 42.dp)
-                Text("Jugador: ${selected?.name ?: "Seleccionar"}", modifier = Modifier.weight(1f))
+                LocalizedText("Jugador: ${selected?.name ?: "Seleccionar"}", modifier = Modifier.weight(1f))
             }
         }
         DropdownMenu(expanded, { expanded = false }, modifier = Modifier.heightIn(max = 320.dp)) {
             players.forEach { player ->
-                DropdownMenuItem(text = { Text(player.name) }, leadingIcon = { PlayerAvatar(player.imageUrl, size = 36.dp) },
+                DropdownMenuItem(text = { LocalizedText(player.name) }, leadingIcon = { PlayerAvatar(player.imageUrl, size = 36.dp) },
                     onClick = { onSelected(player.id); expanded = false })
             }
         }
@@ -161,7 +167,10 @@ fun MyBetLiveApp(state: AppState, model: TrackingViewModel, prices: Map<String,S
 
 @Composable private fun CreateBetDialog(event: EventView, state: AppState, model: TrackingViewModel, onDismiss: () -> Unit, onSaved: (BetView) -> Unit) {
     var market by rememberSaveable(event.id) { mutableStateOf("MONEYLINE") }
-    var selection by rememberSaveable(event.id, market) { mutableStateOf(if (market == "MONEYLINE" || market == "SPREAD") "HOME" else "OVER") }
+    var selection by rememberSaveable(event.id, market) { mutableStateOf(when(market){"MONEYLINE","SPREAD","RESULT_3WAY"->"HOME";"DOUBLE_CHANCE"->"HOME_DRAW";"BOTH_TEAMS_SCORE","CORRECT_SCORE","OVERTIME"->"YES";else->"OVER"}) }
+    var scope by rememberSaveable(event.id,market) { mutableStateOf(if(event.event.sport=="NHL")hockeyScopes(market).first() else "MATCH") }
+    var scoreHome by rememberSaveable(event.id,market) { mutableStateOf("0") }
+    var scoreAway by rememberSaveable(event.id,market) { mutableStateOf("0") }
     var line by rememberSaveable(event.id, market) { mutableStateOf("") }
     var team by rememberSaveable(event.id) { mutableStateOf("HOME") }
     var playerId by rememberSaveable(event.id, market) { mutableStateOf("") }
@@ -183,39 +192,42 @@ fun MyBetLiveApp(state: AppState, model: TrackingViewModel, prices: Map<String,S
     val parsedLine = line.replace(',', '.').toDoubleOrNull()?.takeIf { it.isFinite() }
     val parsedStake = stake.replace(',', '.').toDoubleOrNull()?.takeIf { it.isFinite() }
     val parsedOdds = odds.replace(',', '.').toDoubleOrNull()?.takeIf { it.isFinite() }
-    val valid = (market == "MONEYLINE" || parsedLine != null && (market == "SPREAD" || parsedLine >= 0) &&
-        (event.event.sport !in listOf("SOCCER", "MLB", "NBA") || (parsedLine * 2) % 1.0 == 0.0)) &&
+    val lineRule=state.sports.find { it.sport==event.event.sport }?.lineRules?.get(market)
+    val needsLine=needsMarketLine(market)
+    val lineError=if(needsLine&&line.isNotBlank())propLineError(line,lineRule) else null
+    val valid = (!needsLine || parsedLine != null && (market == "SPREAD" || parsedLine >= 0) &&
+        (event.event.sport !in listOf("SOCCER", "MLB", "NBA", "NHL") || (parsedLine * 2) % 1.0 == 0.0) && lineRule!=null && lineError==null) &&
         (!isPlayer || players.any { it.id == playerId }) &&
         (stake.isBlank() || parsedStake != null && parsedStake > 0) && (odds.isBlank() || parsedOdds != null && parsedOdds > 1)
     Dialog(onDismissRequest = { if (!state.busy) onDismiss() }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(Modifier.fillMaxSize(), color = Ink) {
             Column(Modifier.safeDrawingPadding().imePadding().verticalScroll(rememberScrollState()).padding(24.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                    Text("Nuevo seguimiento", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                    TextButton(onClick = onDismiss, enabled = !state.busy) { Text("Cerrar") }
+                    LocalizedText("Nuevo seguimiento", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                    TextButton(onClick = onDismiss, enabled = !state.busy) { LocalizedText("Cerrar") }
                 }
                 Scoreboard(event.event)
                 if(subscription!=null) PlanUsage(subscription)
-                state.rewardMessage?.let { Text(it,color=Green,fontSize=13.sp) }
-                state.error?.let { Text(it,color=Red) }
+                state.rewardMessage?.let { LocalizedText(it,color=Green,fontSize=13.sp) }
+                state.error?.let { LocalizedText(it,color=Red) }
                 if(showPlans) {
-                    Text("Planes disponibles",fontSize=22.sp,fontWeight=FontWeight.Bold)
+                    LocalizedText("Planes disponibles",fontSize=22.sp,fontWeight=FontWeight.Bold)
                     subscription?.availablePlans?.forEach { plan ->
                         Card { Column(Modifier.fillMaxWidth().padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
-                            Text(plan.name,fontWeight=FontWeight.Bold)
-                            Text("${plan.maxActiveTrackers?.toString() ?: "Sin límite de"} seguimientos activos")
-                            Text("Props ${if(plan.playerProps) "incluidas" else "no incluidas"} · notificaciones ${if(plan.pushNotifications) "incluidas" else "no incluidas"}")
+                            LocalizedText(plan.name,fontWeight=FontWeight.Bold)
+                            LocalizedText("${plan.maxActiveTrackers?.toString() ?: "Sin límite de"} seguimientos activos")
+                            LocalizedText("Props ${if(plan.playerProps) "incluidas" else "no incluidas"} · notificaciones ${if(plan.pushNotifications) "incluidas" else "no incluidas"}")
                         } }
                     }
-                    Text("Consulta Perfil → Planes para revisar disponibilidad y condiciones.",color=Muted,fontSize=13.sp)
-                    OutlinedButton(onClick={showPlans=false;showLockedProps=false}){Text("Volver al partido")}
+                    LocalizedText("Consulta Perfil → Planes para revisar disponibilidad y condiciones.",color=Muted,fontSize=13.sp)
+                    OutlinedButton(onClick={showPlans=false;showLockedProps=false}){LocalizedText("Volver al partido")}
                 } else if(reachedLimit) {
                     if(subscription?.reward?.eligible==true&&rewardUnit!=null&&advertising!=null){
                         Card{Column(Modifier.fillMaxWidth().padding(18.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
-                            Text("Desbloquea 1 seguimiento extra",fontWeight=FontWeight.Bold)
-                            Text("Completa un anuncio para añadir otro seguimiento de equipos. Máximo uno extra activo; continuará hasta que termine. Tienes 24 horas para usar la recompensa.",color=Muted)
+                            LocalizedText("Desbloquea 1 seguimiento extra",fontWeight=FontWeight.Bold)
+                            LocalizedText("Completa un anuncio para añadir otro seguimiento de equipos. Máximo uno extra activo; continuará hasta que termine. Tienes 24 horas para usar la recompensa.",color=Muted)
                             Button(onClick={model.watchReward(advertising::watchReward)},enabled=!state.busy&&advertising.ready,modifier=Modifier.fillMaxWidth()){
-                                Text(if(state.busy) "Procesando anuncio…" else if(!advertising.ready) "Preparando anuncios…" else "Ver anuncio y desbloquear")
+                                LocalizedText(if(state.busy) "Procesando anuncio…" else if(!advertising.ready) "Preparando anuncios…" else "Ver anuncio y desbloquear")
                             }
                         }}
                     }
@@ -225,53 +237,71 @@ fun MyBetLiveApp(state: AppState, model: TrackingViewModel, prices: Map<String,S
                     AccessGate("Props de jugadores", "Tu plan no incluye nuevas props. Puedes seguir ML, totales y hándicap del equipo.",
                         onPlans={showPlans=true},onContinue={showLockedProps=false})
                 } else {
-                if (event.event.status == "FINAL") Text("Partido finalizado · puedes registrar tu apuesta y consultar su resultado.", color = Muted, fontSize = 12.sp)
-                Text("¿Qué quieres seguir?", fontWeight = FontWeight.SemiBold)
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    listOf("RESULT" to "Resultado", "TOTAL" to "Totales", "PLAYER" to "Jugadores").forEach { (group, label) ->
-                        val options = markets.filter { marketGroup(it) == group }
-                        val propsLocked = group=="PLAYER" && subscription?.access?.playerProps==false &&
-                            state.sports.find{it.sport==event.event.sport}?.markets?.any{it.startsWith("PLAYER_")}==true
-                        if (options.isEmpty() && !propsLocked) return@forEach
-                        FilterChip(selected = marketGroup(market) == group, onClick = { if(propsLocked) showLockedProps=true else options.firstOrNull()?.let { market = it } },
-                            enabled = (options.isNotEmpty() || propsLocked) && !state.busy, label = { Text(if(propsLocked) "$label · Premium" else label) })
-                    }
-                }
-                Choice("Mercado", market, markets.filter { marketGroup(it) == marketGroup(market) }
-                    .map { it to marketLabel(it,event.event.sport) }) { market = it }
+                LocalizedText("¿Qué quieres seguir?", fontWeight = FontWeight.SemiBold)
+                val propsLocked = subscription?.access?.playerProps==false &&
+                    state.sports.find{it.sport==event.event.sport}?.markets?.any{it.startsWith("PLAYER_")}==true
+                val groups = listOf("RESULT" to "Resultado", "TOTAL" to "Totales", "PLAYER" to "Jugadores")
+                    .filter { (group, _) -> markets.any { marketGroup(it)==group } || group=="PLAYER" && propsLocked }
+                    .map { (group,label) -> group to if(group=="PLAYER" && propsLocked) "$label · Premium" else label }
+                ScrollableChoices(marketGroup(market), groups, { group ->
+                    if(group=="PLAYER" && propsLocked) showLockedProps=true
+                    else markets.firstOrNull { marketGroup(it)==group }?.let { market=it }
+                }, enabled=!state.busy, tagPrefix="tracking-type")
+                LocalizedText("Mercado", fontWeight=FontWeight.SemiBold)
+                ScrollableChoices(market, markets.filter { marketGroup(it) == marketGroup(market) }
+                    .map { it to marketLabel(it,event.event.sport) }, { market=it },
+                    enabled=!state.busy, tagPrefix="tracking-market")
                 val sides = listOf("HOME" to event.event.home.name, "AWAY" to event.event.away.name)
-                val selections = if(event.event.sport == "SOCCER" && market == "MONEYLINE") sides + ("DRAW" to "Empate") else sides
-                Choice("Selección", selection, if (market in listOf("MONEYLINE", "SPREAD")) selections else listOf("OVER" to "Más de (Over)", "UNDER" to "Menos de (Under)")) { selection = it }
+                if(event.event.sport=="NHL")Choice("Alcance",scope,hockeyScopes(market).map { it to hockeyScopeLabel(it) }){scope=it}
+                val selections = when {
+                    market=="RESULT_3WAY" || event.event.sport == "SOCCER" && market == "MONEYLINE" -> sides + ("DRAW" to "Empate")
+                    market=="DOUBLE_CHANCE" -> listOf("HOME_DRAW" to "${event.event.home.name} o empate","AWAY_DRAW" to "${event.event.away.name} o empate","HOME_AWAY" to "Cualquiera gana · sin empate")
+                    market in listOf("BOTH_TEAMS_SCORE","OVERTIME") -> listOf("YES" to "Sí","NO" to "No")
+                    market=="CORRECT_SCORE" -> emptyList()
+                    market in listOf("MONEYLINE","SPREAD") -> sides
+                    else -> listOf("OVER" to "Más de (Over)","UNDER" to "Menos de (Under)")
+                }
+                if(selections.isNotEmpty()) {
+                    LocalizedText("Selección", fontWeight=FontWeight.SemiBold)
+                    ScrollableChoices(selection,selections,{selection=it},enabled=!state.busy,tagPrefix="tracking-selection")
+                }
+                if(market=="CORRECT_SCORE") {
+                    val goals=(0..20).map { it.toString() to it.toString() }
+                    Choice("Goles · ${event.event.home.name}",scoreHome,goals){scoreHome=it}
+                    Choice("Goles · ${event.event.away.name}",scoreAway,goals){scoreAway=it}
+                }
                 if (market == "TEAM_TOTAL") Choice("Equipo", team, sides) { team = it }
                 if (isPlayer) {
-                    PlayerChoice(playerId, players) { playerId = it }
-                    if (players.isEmpty()) Text(if (state.busy) "Cargando jugadores…" else "Aún no hay jugadores con datos para esta estadística.", color = Muted)
+                    PlayerChoice(playerId, players) { if(playerId!=it){playerId=it;line=""} }
+                    if (players.isEmpty()) LocalizedText(if (state.busy) "Cargando jugadores…" else if(market=="PLAYER_SAVES") "Aún no hay porteros con datos de atajadas disponibles." else "Aún no hay jugadores con datos para esta estadística.", color = Muted)
                 }
-                if (market != "MONEYLINE") OutlinedTextField(line, { line = it }, label = { Text(if (market == "SPREAD") "Hándicap (ej. -1.5)" else if(event.event.sport == "MLB") "Carreras (ej. 7.5)" else if(event.event.sport == "SOCCER") "Línea (ej. 2.5)" else "Línea (ej. 34.5)") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal), singleLine = true, modifier = Modifier.fillMaxWidth())
-                if(event.event.sport in listOf("SOCCER", "MLB", "NBA") && parsedLine != null && (parsedLine * 2) % 1.0 != 0.0)
-                    Text("Usa una línea entera o media: 1, 1.5, 2, 2.5…",color=Red,fontSize=12.sp)
-                val draft = CreateBet(event.id, market, selection, if (market == "MONEYLINE") null else parsedLine,
-                    if (market == "TEAM_TOTAL") team else null, if (isPlayer) playerId else null, parsedStake, parsedOdds, bookmaker.takeIf { it.isNotBlank() })
+                if(needsLine) {
+                    key(event.id,market) {LineWheel(lineRule,line,{line=it},enabled=!state.busy)}
+                    lineError?.let {LocalizedText(it,color=Red,fontSize=12.sp)}
+                }
+                val draft = CreateBet(event.id, market, selection, if (needsLine) parsedLine else null,
+                    if (market == "TEAM_TOTAL") team else null, if (isPlayer) playerId else null, parsedStake, parsedOdds, bookmaker.takeIf { it.isNotBlank() },scope,if(market=="CORRECT_SCORE")"$scoreHome-$scoreAway" else null)
                 Card(shape = RoundedCornerShape(14.dp), modifier = Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text("Tu selección", color = Muted, fontSize = 12.sp)
+                        LocalizedText("Tu selección", color = Muted, fontSize = 12.sp)
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             val selectedPlayer = players.find { it.id == playerId }
                             if (isPlayer && selectedPlayer != null) PlayerAvatar(selectedPlayer.imageUrl)
-                            Text(draft.title(event.event, selectedPlayer?.name), fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+                            LocalizedText(draft.title(event.event, selectedPlayer?.name), fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
                         }
+                        if(market!="MONEYLINE"&&market!="SPREAD"&&lineError==null&&line.isNotBlank())propCondition(line,selection)?.let {LocalizedText(it,color=Muted,fontSize=12.sp)}
                     }
                 }
-                TextButton(onClick = { showDetails = !showDetails }) { Text(if (showDetails) "Ocultar datos opcionales" else "Añadir monto, momio o casino") }
+                TextButton(onClick = { showDetails = !showDetails }) { LocalizedText(if (showDetails) "Ocultar datos opcionales" else "Añadir monto, momio o casino") }
                 if (showDetails) {
-                    OutlinedTextField(stake, { stake = it }, label = { Text("Monto · opcional") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal), singleLine = true, modifier = Modifier.fillMaxWidth())
-                    OutlinedTextField(odds, { odds = it }, label = { Text("Momio decimal · opcional (1.72)") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal), singleLine = true, modifier = Modifier.fillMaxWidth())
-                    OutlinedTextField(bookmaker, { if (it.length <= 80) bookmaker = it }, label = { Text("Casino · opcional") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+                    OutlinedTextField(stake, { stake = it }, label = { LocalizedText("Monto · opcional") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal), singleLine = true, modifier = Modifier.fillMaxWidth())
+                    OutlinedTextField(odds, { odds = it }, label = { LocalizedText("Momio decimal · opcional (1.72)") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal), singleLine = true, modifier = Modifier.fillMaxWidth())
+                    OutlinedTextField(bookmaker, { if (it.length <= 80) bookmaker = it }, label = { LocalizedText("Casino · opcional") }, singleLine = true, modifier = Modifier.fillMaxWidth())
                 }
                 Button(onClick = { model.create(draft, onSaved) },
-                    enabled = valid && !state.busy, modifier = Modifier.fillMaxWidth().height(54.dp)) { Text(if (state.busy) "Guardando…" else "Guardar seguimiento") }
-                Text(when(event.event.sport) {
+                    enabled = valid && !state.busy, modifier = Modifier.fillMaxWidth().height(54.dp)) { LocalizedText(if (state.busy) "Guardando…" else "Guardar seguimiento") }
+                LocalizedText(when(event.event.sport) {
+                    "NHL" -> "${hockeyScopeLabel(scope)}. El partido completo usa el marcador oficial, incluido el gol decisivo del shootout. Los períodos y los 60 minutos excluyen prórroga y shootout. Revisa las reglas de tu apuesta."
                     "SOCCER" -> "Se evalúan 90 minutos más compensación, sin prórroga ni penales. Se admiten líneas enteras o medias; revisa las reglas de tu apuesta."
                     "MLB" -> "Juego completo, incluidas entradas extra; sin condición de pitcher ni mercados de primeras entradas. Finales abreviados o datos incompletos esperan revisión. API-Baseball no ofrece props de jugadores."
                     else -> "El seguimiento usa el resultado del partido completo, incluido tiempo extra. Revisa que coincida con las reglas de tu apuesta."
@@ -283,8 +313,16 @@ fun MyBetLiveApp(state: AppState, model: TrackingViewModel, prices: Map<String,S
 }
 private fun marketGroup(market: String) = when {
     market.startsWith("PLAYER_") -> "PLAYER"
-    market == "TOTAL" || market == "TEAM_TOTAL" -> "TOTAL"
+    market == "TOTAL" || market == "TEAM_TOTAL" || market.startsWith("TOTAL_") -> "TOTAL"
     else -> "RESULT"
 }
-internal fun kickoff(value: String) = runCatching { Instant.parse(value).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("dd MMM · HH:mm")) }.getOrDefault(value)
-internal fun updatedTime(value: String) = runCatching { Instant.parse(value).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("dd MMM · HH:mm")) }.getOrDefault("—")
+internal fun kickoff(value: String,localValue: String? = null) = runCatching {
+    val format=DateTimeFormatter.ofPattern("dd MMM · HH:mm")
+    if(localValue!=null) java.time.OffsetDateTime.parse(localValue).format(format)
+    else Instant.parse(value).atZone(ZoneId.systemDefault()).format(format)
+}.getOrDefault(value)
+internal fun updatedTime(value: String,localValue: String? = null) = runCatching {
+    val format=DateTimeFormatter.ofPattern("dd MMM · HH:mm")
+    if(localValue!=null) java.time.OffsetDateTime.parse(localValue).format(format)
+    else Instant.parse(value).atZone(ZoneId.systemDefault()).format(format)
+}.getOrDefault("—")

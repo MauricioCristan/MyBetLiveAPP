@@ -58,3 +58,15 @@ Conservar fuentes, recursos de marca, pruebas, scripts reproducibles y Gradle Wr
 La bóveda Obsidian, respuestas crudas de APIs, informes personalizados y capturas de verificaciones se conservan localmente y están excluidos del repositorio. Los ejemplos HTTP/Postman utilizan variables que cada desarrollador completa en su entorno.
 
 El paquete de imágenes promocionales se documenta en [Google Play](docs/diseno/google-play/LEEME.md); sus vistas son ilustrativas y deben contrastarse con la versión distribuida antes de publicar.
+
+## Jornadas y zona horaria
+
+Android envía el ID IANA del dispositivo, por ejemplo `America/Monterrey`, en `timezone`. `GET /api/v1/tracking/calendar` devuelve el día actual de esa zona calculado por el servidor. “Hoy” sigue ese calendario; una fecha histórica elegida explícitamente se conserva al cambiar de día o zona.
+
+`GET /api/v1/tracking/events?sport=MLB&date=2026-10-07&timezone=America/Monterrey` devuelve los encuentros cuyo inicio cae entre las dos medianoches locales. El backend consulta y comparte las particiones UTC necesarias, con límites exclusivos y días de 23/25 horas cuando corresponda. El intervalo de seguimiento automático sigue agrupado por deporte/fecha UTC.
+
+Los timestamps originales siguen siendo instantes UTC. Los campos opcionales `localStartsAt` y `localUpdatedAt` se convierten al responder, sin cambiar la base ni asociar un evento a la zona de un cliente. Android usa esos valores para mostrar horarios correctos incluso con reglas horarias antiguas del sistema. Sin `timezone`, el API conserva la jornada UTC para clientes anteriores.
+
+Props, totales y hándicaps usan una rueda vertical con opciones `lineRules` del backend por deporte y mercado. Se puede elegir entre enteras y medios, deslizar con ajuste al centro o tocar una opción. Cambiar el formato requiere elegir de nuevo; mientras se desplaza o faltan metadatos, guardar permanece bloqueado. Los hándicaps admiten valores negativos. El servidor valida los mismos límites antes de consultar jugadores o consumir un espacio de seguimiento.
+
+Los seguimientos liquidados pasan a Historial, ordenados por su última actualización. Activos y Anclados muestran el último resultado del deporte seleccionado con acceso al detalle. Un resultado final guardado conserva Ganada/Perdida/Push/Cancelada aunque el dispositivo esté sin conexión; los estados en vivo siguen marcándose como provisionales o desactualizados.

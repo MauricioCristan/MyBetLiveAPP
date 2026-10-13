@@ -1,0 +1,261 @@
+{
+  "fileId": "71b39894-c9c5-81cd-8008-bc366032f6eb",
+  "pages": [
+    {
+      "id": "e79d62b1-69f4-801f-8008-c1ad023f6f2f",
+      "name": "09 · Web admin"
+    },
+    {
+      "id": "e79d62b1-69f4-801f-8008-c1b0e2d16b16",
+      "name": "10 · Web admin móvil"
+    }
+  ],
+  "counts": {
+    "desktop": 25,
+    "mobile": 7
+  },
+  "screens": [
+    {
+      "key": "dashboard",
+      "id": "e79d62b1-69f4-801f-8008-c1ad3a3122c9",
+      "name": "01 / Dashboard administrativo",
+      "width": 1440,
+      "height": 1240
+    },
+    {
+      "key": "clients",
+      "id": "e79d62b1-69f4-801f-8008-c1adb540e316",
+      "name": "02 / Clientes / Lista",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "operations",
+      "id": "e79d62b1-69f4-801f-8008-c1adbd0d1be1",
+      "name": "12 / Operación de APIs / Proveedores",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "subscriptions",
+      "id": "e79d62b1-69f4-801f-8008-c1adfa896388",
+      "name": "04 / Suscripciones / Lista",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "sports",
+      "id": "e79d62b1-69f4-801f-8008-c1ae00661621",
+      "name": "06 / Deportes / Catálogo",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "leagues",
+      "id": "e79d62b1-69f4-801f-8008-c1ae0a62dda8",
+      "name": "08 / Ligas / Catálogo",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "client-form",
+      "id": "e79d62b1-69f4-801f-8008-c1ae4f8621bc",
+      "name": "03 / Clientes / Crear y editar",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "sport-form",
+      "id": "e79d62b1-69f4-801f-8008-c1ae539f76e6",
+      "name": "07 / Deportes / Crear y editar",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "league-form",
+      "id": "e79d62b1-69f4-801f-8008-c1ae5972a9fe",
+      "name": "09 / Ligas / Crear y editar",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "subscription-detail",
+      "id": "e79d62b1-69f4-801f-8008-c1af36a25673",
+      "name": "05a / Suscripción / Detalle",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "subscription-form",
+      "id": "e79d62b1-69f4-801f-8008-c1af3c01498e",
+      "name": "05b / Suscripciones / Acceso manual",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "plans",
+      "id": "e79d62b1-69f4-801f-8008-c1af44792c24",
+      "name": "10 / Planes / Publicados y borradores",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "plan-form",
+      "id": "e79d62b1-69f4-801f-8008-c1afaf3fa18f",
+      "name": "11 / Planes / Editar beneficios",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "operation-detail",
+      "id": "e79d62b1-69f4-801f-8008-c1afb5736ef0",
+      "name": "13 / Operación / MLB / Editar",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "ads",
+      "id": "e79d62b1-69f4-801f-8008-c1afbebdccbe",
+      "name": "14 / Publicidad / Free y recompensas",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "login",
+      "id": "e79d62b1-69f4-801f-8008-c1b027d9d605",
+      "name": "00 / Acceso administrativo",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "provider-confirm",
+      "id": "e79d62b1-69f4-801f-8008-c1b029b36ca4",
+      "name": "15 / Proveedor / Confirmación de cambio",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "saved",
+      "id": "e79d62b1-69f4-801f-8008-c1b02ecdfd06",
+      "name": "16 / Sistema / Guardado, carga y error",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "client-create",
+      "id": "e79d62b1-69f4-801f-8008-c1b07e4b95f2",
+      "name": "17 / Clientes / Crear",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "sport-create",
+      "id": "e79d62b1-69f4-801f-8008-c1b07e86dcd4",
+      "name": "18 / Deportes / Crear borrador",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "plan-create",
+      "id": "e79d62b1-69f4-801f-8008-c1b07ec15785",
+      "name": "19 / Planes / Crear borrador",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "league-edit",
+      "id": "e79d62b1-69f4-801f-8008-c1b07f071ee4",
+      "name": "20 / Ligas / Editar",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "mobile-dashboard",
+      "id": "e79d62b1-69f4-801f-8008-c1b0e34519f8",
+      "name": "01 / Móvil / Dashboard",
+      "width": 390,
+      "height": 1120
+    },
+    {
+      "key": "mobile-clients",
+      "id": "e79d62b1-69f4-801f-8008-c1b0e4e94436",
+      "name": "02 / Móvil / Clientes",
+      "width": 390,
+      "height": 1120
+    },
+    {
+      "key": "mobile-operations",
+      "id": "e79d62b1-69f4-801f-8008-c1b0e6c2f12c",
+      "name": "03 / Móvil / Proveedores y consumo",
+      "width": 390,
+      "height": 1230
+    },
+    {
+      "key": "mobile-settings",
+      "id": "e79d62b1-69f4-801f-8008-c1b10ebefb40",
+      "name": "04 / Móvil / Editar proveedor MLB",
+      "width": 390,
+      "height": 1260
+    },
+    {
+      "key": "mobile-menu",
+      "id": "e79d62b1-69f4-801f-8008-c1b110d3ee66",
+      "name": "05 / Móvil / Navegación administrativa",
+      "width": 390,
+      "height": 930.0000000000001
+    },
+    {
+      "key": "operation-nba",
+      "id": "e79d62b1-69f4-801f-8008-c1b2c5be669f",
+      "name": "21 / Operación / NBA / Editar",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "operation-nfl",
+      "id": "e79d62b1-69f4-801f-8008-c1b2c70da349",
+      "name": "21 / Operación / NFL / Editar",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "operation-soccer",
+      "id": "e79d62b1-69f4-801f-8008-c1b2c8425869",
+      "name": "21 / Operación / SOCCER / Editar",
+      "width": 1440,
+      "height": 1040
+    },
+    {
+      "key": "mobile-settings-nba",
+      "id": "e79d62b1-69f4-801f-8008-c1b2cbc643e5",
+      "name": "06 / Móvil / Configuración NBA",
+      "width": 390,
+      "height": 1386
+    },
+    {
+      "key": "mobile-settings-nfl",
+      "id": "e79d62b1-69f4-801f-8008-c1b2cc2ea58f",
+      "name": "06 / Móvil / Configuración NFL",
+      "width": 390,
+      "height": 1386
+    }
+  ],
+  "flows": [
+    {
+      "name": "Web admin · Proveedores"
+    },
+    {
+      "name": "Web admin · Navegación"
+    },
+    {
+      "name": "Web admin · Acceso"
+    },
+    {
+      "name": "Web admin móvil · Navegación"
+    }
+  ],
+  "qa": {
+    "issues": [],
+    "illustrativeData": true
+  }
+}

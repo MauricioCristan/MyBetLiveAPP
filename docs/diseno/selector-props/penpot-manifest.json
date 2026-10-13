@@ -1,0 +1,203 @@
+{
+  "fileId": "71b39894-c9c5-81cd-8008-bc366032f6eb",
+  "pageId": "3637abe7-4f8f-800b-8008-c16042307cfc",
+  "pageName": "07 · Selector de líneas",
+  "screens": [
+    {
+      "key": "goals-empty",
+      "id": "3637abe7-4f8f-800b-8008-c161092f50ef",
+      "name": "App / 01 · Goles / Sin elegir",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "goals-over",
+      "id": "3637abe7-4f8f-800b-8008-c1610b6d58d6",
+      "name": "App / 02 · Goles / Over 0.5",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "goals-under",
+      "id": "3637abe7-4f8f-800b-8008-c1610d8bd9e5",
+      "name": "App / 03 · Goles / Under 0.5",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "goals-over-2_5",
+      "id": "3637abe7-4f8f-800b-8008-c1614f1ea50b",
+      "name": "App / 04 · Goles / Over 2.5",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "goals-under-2_5",
+      "id": "3637abe7-4f8f-800b-8008-c16150c99ec1",
+      "name": "App / 05 · Goles / Under 2.5",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "goals-all",
+      "id": "3637abe7-4f8f-800b-8008-c161aeeaab84",
+      "name": "App / 06 · Goles / Lista completa",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "shots",
+      "id": "3637abe7-4f8f-800b-8008-c161b2204700",
+      "name": "App / 07 · Fútbol / Tiros",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "nba",
+      "id": "3637abe7-4f8f-800b-8008-c161b4d2f826",
+      "name": "App / 08 · NBA / Puntos",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "nfl",
+      "id": "3637abe7-4f8f-800b-8008-c161b8195be1",
+      "name": "App / 09 · NFL / Yardas de pase",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "nfl-all",
+      "id": "3637abe7-4f8f-800b-8008-c16203f05647",
+      "name": "App / 10 · NFL / Todas las líneas",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "nfl-ranges",
+      "id": "3637abe7-4f8f-800b-8008-c16207ddee18",
+      "name": "App / 11 · NFL / Rango de yardas",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "goals-integers",
+      "id": "3637abe7-4f8f-800b-8008-c1620a5e39ba",
+      "name": "App / 12 · Goles / Enteras",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "goals-over-1",
+      "id": "3637abe7-4f8f-800b-8008-c1621075632d",
+      "name": "App / 13 · Goles / Línea entera",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "review",
+      "id": "3637abe7-4f8f-800b-8008-c162b67a6506",
+      "name": "App / 14 · Revisar / Over 0.5 goles",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "review-nfl",
+      "id": "3637abe7-4f8f-800b-8008-c162b8927772",
+      "name": "App / 15 · Revisar / NFL",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "review-under",
+      "id": "3637abe7-4f8f-800b-8008-c162bb16bb78",
+      "name": "App / 16 · Revisar / Under 0.5 goles",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "review-over-2_5",
+      "id": "3637abe7-4f8f-800b-8008-c162be17fbdc",
+      "name": "App / 17 · Revisar / Over 2.5 goles",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "review-under-2_5",
+      "id": "3637abe7-4f8f-800b-8008-c162c1a5d6d5",
+      "name": "App / 18 · Revisar / Under 2.5 goles",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "review-over-1",
+      "id": "3637abe7-4f8f-800b-8008-c162c5d26e16",
+      "name": "App / 19 · Revisar / Línea entera",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "shots-all",
+      "id": "3637abe7-4f8f-800b-8008-c16307b414fc",
+      "name": "App / 20 · Tiros / Más opciones",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "nba-all",
+      "id": "3637abe7-4f8f-800b-8008-c1630cbffce7",
+      "name": "App / 21 · NBA / Más opciones",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "saved",
+      "id": "3637abe7-4f8f-800b-8008-c1631348c6fb",
+      "name": "App / 22 · Seguimiento guardado",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "no-options",
+      "id": "3637abe7-4f8f-800b-8008-c16314be088b",
+      "name": "App / 23 · Sin opciones disponibles",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "nfl-223",
+      "id": "3637abe7-4f8f-800b-8008-c163fdd768c3",
+      "name": "App / 24 · NFL / Over 223.5",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "nfl-all-200",
+      "id": "3637abe7-4f8f-800b-8008-c164010ff46e",
+      "name": "App / 25 · NFL / Rango 200–249",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "review-nfl-223",
+      "id": "3637abe7-4f8f-800b-8008-c16408751407",
+      "name": "App / 26 · Revisar / NFL 223.5",
+      "width": 390,
+      "height": 920
+    }
+  ],
+  "flows": [
+    {
+      "name": "Prop / Goles · elegir y guardar",
+      "start": "3637abe7-4f8f-800b-8008-c161092f50ef"
+    },
+    {
+      "name": "Prop / NFL · línea exacta",
+      "start": "3637abe7-4f8f-800b-8008-c161b8195be1"
+    }
+  ],
+  "checks": {
+    "missingDestinations": [],
+    "containment": []
+  }
+}

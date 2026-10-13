@@ -38,7 +38,7 @@ import com.mybetlive.data.MySubscription
                 val column = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(16), dp(12), dp(16), dp(12)); setBackgroundColor(Color.rgb(23,35,46)) }
                 root.addView(column, android.view.ViewGroup.LayoutParams(-1,-2))
                 fun label(value: String?, size: Float) = TextView(ctx).apply { text = value; textSize = size; setTextColor(Color.WHITE); setPadding(0,dp(4),0,dp(4)) }
-                column.addView(label(if (BuildConfig.DEBUG) "Publicidad · anuncio de prueba" else "Publicidad", 12f))
+                column.addView(label(com.mybetlive.i18n.AppStrings.translate(if (BuildConfig.DEBUG) "Publicidad · anuncio de prueba" else "Publicidad",ctx.resources), 12f))
                 val headline = label(native.headline, 17f); column.addView(headline); root.headlineView = headline
                 val media = MediaView(ctx); column.addView(media, LinearLayout.LayoutParams(-1,dp(160))); root.mediaView = media
                 media.mediaContent = native.mediaContent

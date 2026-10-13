@@ -10,16 +10,18 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.time.LocalDate
-import java.time.ZoneOffset
+import java.time.ZoneId
 
 data class AppState(
     val loggedIn: Boolean = false, val username: String = "", val busy: Boolean = false,
+    val emailMessage:String?=null,val emailLink:EmailAccountLink?=null,val authUrl:String?=null,
     val error: String? = null, val bets: List<BetView> = emptyList(), val events: List<EventView> = emptyList(),
     val sports: List<SportInfo> = emptyList(), val players: List<Player> = emptyList(), val offline: Boolean = false,
     val playersEventId: String? = null,
-    val date: LocalDate = LocalDate.now(ZoneOffset.UTC), val selectedSport: String = "NFL",
+    val date: LocalDate = LocalDate.now(), val selectedSport: String = "NFL",
+    val today: LocalDate = LocalDate.now(), val timeZone: String = ZoneId.systemDefault().id, val followingToday: Boolean = true,
     val subscription: MySubscription? = null, val billingMessage: String? = null,val rewardMessage:String?=null,
-    val notificationBetId: String? = null, val unpinnedBets: Set<String> = emptySet(), val notificationRequest: Long = 0,
+    val notificationBetId: String? = null, val notificationRequest: Long = 0,
     val pinnedBets: Set<String> = emptySet(), val deviceNotificationsEnabled: Boolean = true
 )
 
@@ -38,13 +40,20 @@ class TrackingViewModel(app: Application,
     private var notificationSyncJob: Job? = null
     private val stopNotificationObserver = notifications.observe(::notificationChanged)
     init { syncNotificationState(); if (state.value.loggedIn) refresh() }
+    init {
+        viewModelScope.launch {
+            com.mybetlive.composition.ClientDependencies.live.state.collect { live ->
+                if(state.value.loggedIn && live.owner==account.session?.trackingOwner())
+                    state.update { it.copy(bets=live.bets,offline=live.offline) }
+            }
+        }
+    }
 
     fun syncNotificationState() {
         val active=notifications.activeIds()
         val enabled=notifications.liveEnabled()
         state.update { current -> current.copy(deviceNotificationsEnabled=enabled,
-            pinnedBets=current.bets.filter { it.id in active && it.status !in settledStatuses }.map { it.id }.toSet(),
-            unpinnedBets=current.bets.filter { notifications.isUnpinned(it.id) }.map { it.id }.toSet()) }
+            pinnedBets=current.bets.filter { it.id in active && it.status !in settledStatuses }.map { it.id }.toSet()) }
     }
     private fun notificationChanged() {
         syncNotificationState()
@@ -57,7 +66,7 @@ class TrackingViewModel(app: Application,
         syncNotificationState()
     }
     private fun publishNotifications() {
-        state.value.bets.filter { it.status != "PENDING" }.forEach { notifications.show(it.copy(stale=it.stale || state.value.offline)) }
+        state.value.bets.forEach { notifications.show(it.copy(stale=it.stale || state.value.offline)) }
         syncNotificationState()
     }
     override fun onCleared() { stopNotificationObserver(); super.onCleared() }
@@ -80,6 +89,33 @@ class TrackingViewModel(app: Application,
         state.update { it.copy(loggedIn = true, username = username, bets = emptyList(), offline = false) }
         load()
     }
+    private fun emailAccounts()=account as? EmailAccountOperations ?: error("El registro por correo no está disponible.")
+    fun clearEmailFeedback(){state.update{it.copy(error=null,emailMessage=null)}}
+    fun registerEmail(url:String,username:String,email:String,password:String)=action {
+        emailAccounts().registerEmail(url,username,email,password)
+        state.update{it.copy(emailMessage="Te enviamos un enlace para confirmar tu correo. Revisa también Spam.")}
+    }
+    fun forgotPassword(url:String,email:String)=action {
+        emailAccounts().forgotPassword(url,email)
+        state.update{it.copy(emailMessage="Si el correo tiene una cuenta, recibirás un enlace para recuperar tu contraseña.")}
+    }
+    fun resendVerification(url:String,email:String)=action {
+        emailAccounts().resendVerification(url,email)
+        state.update{it.copy(emailMessage="Si hay una cuenta pendiente, recibirás un enlace de confirmación.")}
+    }
+    fun openEmailLink(link:EmailAccountLink){if(state.value.emailLink!=link)state.update{it.copy(emailLink=link,authUrl=com.mybetlive.BuildConfig.AUTH_BACKEND_URL,error=null,emailMessage=null)}}
+    fun closeEmailLink(){state.update{it.copy(emailLink=null,error=null,emailMessage=null)}}
+    fun verifyEmail()=action {
+        val link=state.value.emailLink?:return@action
+        emailAccounts().verifyEmail(com.mybetlive.BuildConfig.AUTH_BACKEND_URL,link.token)
+        state.update{it.copy(emailMessage="Correo confirmado. Ya puedes iniciar sesión.")}
+    }
+    fun resetPassword(password:String)=action {
+        val link=state.value.emailLink?:return@action
+        emailAccounts().resetPassword(com.mybetlive.BuildConfig.AUTH_BACKEND_URL,link.token,password)
+        runCatching{account.logout()};notifications.clear()
+        state.update{it.copy(loggedIn=false,username="",bets=emptyList(),subscription=null,emailMessage="Contraseña actualizada. Inicia sesión con tu nueva contraseña.")}
+    }
     fun loginGoogle(url: String, credential: suspend (GoogleChallenge) -> String) = action {
         val challenge = account.googleChallenge(url)
         val token = credential(challenge)
@@ -88,22 +124,27 @@ class TrackingViewModel(app: Application,
         load()
     }
     private suspend fun load() {
+        updateCalendar()
         val subscription = subscriptions.subscription()
         state.update { it.copy(subscription = subscription) }
         if (!subscription.access.pushNotifications) notifications.dismissAll()
         val bets = tracking.bets()
-        state.update { it.copy(bets = bets, offline = false, unpinnedBets = bets.filter { b -> notifications.isUnpinned(b.id) }.map { b -> b.id }.toSet()) }
+        state.update { it.copy(bets = bets, offline = false) }
         if (subscription.access.pushNotifications) publishNotifications() else syncNotificationState()
-        if (state.value.sports.isEmpty()) {
-            val sports = tracking.sports()
-            state.update { it.copy(sports = sports) }
-        }
+        val sports = tracking.sports()
+        state.update { it.copy(sports = sports) }
         // Device registration must not depend on the sporting provider's quota/catalog.
         runCatching { devices.registerDevice() }
         val events = tracking.events(state.value.selectedSport, state.value.date)
         state.update { it.copy(events = events) }
     }
     fun refresh() = action { load() }
+    private suspend fun updateCalendar(): Boolean {
+        val before=state.value
+        val calendar=tracking.calendar()
+        state.update { it.withCalendar(calendar) }
+        return before.date!=state.value.date || before.timeZone!=state.value.timeZone
+    }
     fun watchReward(show:suspend(com.mybetlive.data.RewardIntent)->Boolean)=action {
         state.update{it.copy(rewardMessage=null)}
         try {
@@ -121,6 +162,7 @@ class TrackingViewModel(app: Application,
         } catch(error:Exception){state.update{it.copy(rewardMessage=null)};throw error}
     }
     fun setForeground(active: Boolean) {
+        com.mybetlive.composition.ClientDependencies.sync.foreground.value=active
         pollJob?.cancel(); pollJob = null
         if(active) refreshNotificationState()
         if (active) pollJob = viewModelScope.launch {
@@ -129,11 +171,16 @@ class TrackingViewModel(app: Application,
                 if (!state.value.loggedIn || state.value.busy) continue
                 val started=account.session ?: continue
                 try {
+                    if(updateCalendar()) {
+                        val current=state.value
+                        val events=tracking.events(current.selectedSport,current.date)
+                        if(!started.sameOwner(account.session))continue
+                        state.update { it.copy(events=events) }
+                    }
                     val bets = tracking.bets()
                     val subscription = subscriptions.subscription()
                     if(!started.sameOwner(account.session))continue
-                    state.update { it.copy(bets = bets, subscription = subscription, offline = false,
-                        unpinnedBets = bets.filter { b -> notifications.isUnpinned(b.id) }.map { b -> b.id }.toSet()) }
+                    state.update { it.copy(bets = bets, subscription = subscription, offline = false) }
                     if (subscription.access.pushNotifications) publishNotifications()
                     else { notifications.dismissAll(); syncNotificationState() }
                 } catch (error: Exception) {
@@ -148,7 +195,7 @@ class TrackingViewModel(app: Application,
     }
     fun date(date: LocalDate) = action {
         val events = tracking.events(state.value.selectedSport, date)
-        state.update { it.copy(date = date, events = events) }
+        state.update { it.copy(date = date, events = events, followingToday = date == it.today) }
     }
     fun selectSport(sport: String) = action {
         require(state.value.sports.any { it.sport == sport && it.enabled }) { "El deporte aún no está habilitado" }
@@ -170,7 +217,7 @@ class TrackingViewModel(app: Application,
     }
     fun delete(id: String) = action {
         tracking.delete(id); notifications.remove(id)
-        state.update { it.copy(bets = it.bets.filterNot { b -> b.id == id }, unpinnedBets = it.unpinnedBets - id, pinnedBets=it.pinnedBets-id) }
+        state.update { it.copy(bets = it.bets.filterNot { b -> b.id == id }, pinnedBets=it.pinnedBets-id) }
         refreshAfterMutation()
     }
     private suspend fun refreshAfterMutation() {
@@ -186,16 +233,6 @@ class TrackingViewModel(app: Application,
         }
     }
     fun openNotification(id: String) { state.update { it.copy(notificationBetId = id, notificationRequest = it.notificationRequest+1) } }
-    fun unpin(id: String) { notifications.unpin(id); syncNotificationState() }
-    fun pin(id: String) {
-        val current=state.value
-        if(current.subscription?.access?.pushNotifications != true) return
-        val bet=current.bets.find { it.id == id } ?: return
-        if(!notifications.pin(bet.copy(stale=bet.stale || current.offline)))
-            state.update { it.copy(error=if(!notifications.liveEnabled()) "Habilita las notificaciones de MyBetLive en Android."
-                else "No se pudo anclar este dato. Pulsa Actualizar para obtener el estado más reciente.") }
-        syncNotificationState()
-    }
     fun logout() = action {
         account.logout(); notifications.clear()
         state.value = AppState()

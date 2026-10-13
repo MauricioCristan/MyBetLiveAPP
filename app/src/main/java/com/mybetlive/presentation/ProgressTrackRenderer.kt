@@ -23,6 +23,7 @@ object ProgressTrackRenderer {
         "SOCCER" -> R.drawable.ic_soccer
         "MLB" -> R.drawable.ic_baseball
         "NBA" -> R.drawable.ic_basketball
+        "NHL" -> R.drawable.ic_hockey
         else -> R.drawable.ic_football
     }
 
@@ -72,18 +73,18 @@ object ProgressTrackRenderer {
         paint.textAlign = Paint.Align.CENTER
         val current = progress.current.display()
         val halfText = paint.measureText(current) / 2
-        canvas.drawText(current, x.coerceIn(halfText + 2, width - halfText - 2), height * .22f, paint)
+        canvas.drawText(com.mybetlive.i18n.AppStrings.translate(current), x.coerceIn(halfText + 2, width - halfText - 2), height * .22f, paint)
         paint.typeface = Typeface.DEFAULT
         paint.textSize = height * .19f
         paint.color = labelColor
         paint.textAlign = Paint.Align.LEFT
-        canvas.drawText(progress.start.display(), left, height * .95f, paint)
+        canvas.drawText(com.mybetlive.i18n.AppStrings.translate(progress.start.display()), left, height * .95f, paint)
         paint.textAlign = Paint.Align.RIGHT
-        canvas.drawText(progress.end.display(), right, height * .95f, paint)
+        canvas.drawText(com.mybetlive.i18n.AppStrings.translate(progress.end.display()), right, height * .95f, paint)
         if (progress.centered || progress.targetFraction in .18f.. .82f) {
             paint.textAlign = Paint.Align.CENTER
             paint.textSize = height * .15f
-            canvas.drawText(if (progress.centered) "0" else "Línea ${progress.target.display()}", goalX, height * .95f, paint)
+            canvas.drawText(com.mybetlive.i18n.AppStrings.translate(if (progress.centered) "0" else "Línea ${progress.target.display()}"), goalX, height * .95f, paint)
         }
     }
 }

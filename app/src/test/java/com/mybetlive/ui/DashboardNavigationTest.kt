@@ -32,13 +32,93 @@ import java.time.ZoneOffset
 @Config(sdk = [35], qualifiers = "es-rMX-w411dp-h891dp-xxhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class DashboardNavigationTest {
+    @Test fun leagueIconsExpandTheSelectionAndFilterLocallyWithoutSportRequests() {
+        val first=EventView("league-a",event("SOCCER","SCHEDULED").copy(leagueId="262",leagueName="Liga MX"),false)
+        val second=EventView("league-b",event("SOCCER","SCHEDULED").copy(leagueId="39",leagueName="Premier League"),false)
+        state.value=state.value.copy(selectedSport="SOCCER",events=listOf(first,second))
+        launch()
+        compose.onNodeWithTag("nav-EVENTS").performClick()
+        compose.onNodeWithTag("league-ALL").assertIsSelected()
+        compose.onNodeWithContentDescription("Liga MX").assertExists()
+        compose.onAllNodesWithText("Liga MX",substring=false).assertCountEquals(0)
+        compose.onNodeWithTag("league-262").performClick()
+        compose.waitForIdle()
+        compose.onNodeWithTag("league-262").assertIsSelected()
+        compose.onNodeWithText("Liga MX",substring=false).assertExists()
+        compose.onNodeWithTag("event-league-b").assertDoesNotExist()
+        assertTrue(selectedSports.isEmpty())
+        screenshot("partidos-selector-ligas")
+        compose.onNodeWithTag("league-ALL").performClick()
+        compose.onNodeWithTag("event-list").performScrollToNode(hasTestTag("event-league-b"))
+        compose.onNodeWithTag("event-league-b").assertExists()
+    }
+    @Test fun gamesExpandOnlyTheSelectedSportAndKeepIconButtonsAccessible() {
+        state.value=state.value.copy(sports=sports+listOf(SportInfo("NBA",true,listOf("MONEYLINE")),SportInfo("NHL",true,listOf("MONEYLINE"))))
+        launch()
+        compose.onNodeWithTag("nav-EVENTS").performClick()
+        compose.onNodeWithTag("sport-NFL").assertIsSelected()
+        compose.onAllNodesWithText("Fútbol",substring=false).assertCountEquals(0)
+        compose.onNodeWithContentDescription("Fútbol").assertExists()
+        compose.onNodeWithTag("sport-SOCCER").performClick()
+        compose.waitForIdle()
+        compose.onNodeWithTag("sport-SOCCER").assertIsSelected()
+        compose.onNodeWithText("Fútbol",substring=false).assertExists()
+        compose.onAllNodesWithText("NFL",substring=false).assertCountEquals(0)
+        screenshot("partidos-selector-iconos")
+    }
+    @Test @Config(qualifiers="en-rUS-w411dp-h891dp-xxhdpi")
+    fun englishDeviceUsesEnglishNavigationAndGameLabels() {
+        launch()
+        compose.onNodeWithTag("nav-EVENTS").performClick()
+        compose.onNodeWithText("Choose the game you want to track").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Choose date").assertIsDisplayed()
+        compose.onNodeWithText("Add tracker").assertIsDisplayed()
+        compose.onAllNodesWithText("En juego",substring=true).assertCountEquals(0)
+        compose.onNodeWithText("NFL · Live · Q3 05:20").assertIsDisplayed()
+        compose.onAllNodesWithText("Partidos",substring=false).assertCountEquals(0)
+        screenshot("partidos-english")
+    }
+    @Test fun finishedGamesDisappearFromEventsWhileExistingResultsStayInHistory() {
+        state.value=state.value.copy(events=listOf(
+            EventView("finished",event("NFL","FINAL"),false),
+            EventView("cancelled",event("NFL","CANCELLED"),false),
+            EventView("scheduled",event("NFL","SCHEDULED"),false),
+            EventView("live",event("NFL","LIVE"),false)))
+        launch()
+        compose.onNodeWithText("Partidos",substring=false).performClick()
+        compose.onNodeWithTag("event-finished").assertDoesNotExist()
+        compose.onNodeWithTag("event-cancelled").assertDoesNotExist()
+        compose.onNodeWithTag("event-list").performScrollToNode(hasTestTag("event-scheduled"))
+        compose.onNodeWithTag("event-scheduled").assertExists()
+        compose.runOnIdle { state.value=state.value.copy(events=state.value.events.map { if(it.id=="live") it.copy(event=it.event.copy(status="FINAL")) else it }) }
+        compose.onNodeWithTag("event-live").assertDoesNotExist()
+        compose.runOnIdle { state.value=state.value.copy(events=state.value.events.filter { it.id!="scheduled" }) }
+        compose.onNodeWithText("Sin partidos disponibles en esta jornada").assertExists()
+        assertTrue(state.value.bets.any { it.id=="nfl-final" && it.status=="WON" })
+    }
+    @Test fun settledPicksAppearOnlyInHistoryAndRemainAccessible() {
+        launch()
+        compose.runOnIdle {
+            state.value=state.value.copy(bets=listOf(bet("new-result","SOCCER","LOST",1.0).copy(
+                event=event("SOCCER","FINAL"),updatedAt=today.toString()+"T23:00:00Z")),offline=true)
+        }
+        compose.onNodeWithTag("latest-result").assertDoesNotExist()
+        compose.onNodeWithTag("bet-new-result").assertDoesNotExist()
+        compose.onNodeWithTag("pinned-tab").assertDoesNotExist()
+        compose.onNodeWithTag("latest-result").assertDoesNotExist()
+        compose.onNodeWithTag("bet-new-result").assertDoesNotExist()
+        compose.onNodeWithTag("history-tab").performClick()
+        compose.onNodeWithTag("bet-new-result").assertIsDisplayed().performClick()
+        compose.onNodeWithText("Perdida",substring=false).assertIsDisplayed()
+        compose.onNodeWithText("Resultado final del proveedor",substring=false).assertExists()
+    }
     @get:Rule val compose = createComposeRule()
     private val restoration by lazy { StateRestorationTester(compose) }
-    private val today = LocalDate.now(ZoneOffset.UTC)
+    private val today = LocalDate.now()
     private val sports = listOf(SportInfo("NFL", true, listOf("MONEYLINE", "PLAYER_RECEPTIONS")),
         SportInfo("SOCCER", true, listOf("TOTAL")), SportInfo("MLB", true, listOf("MONEYLINE", "SPREAD", "TOTAL", "TEAM_TOTAL")))
     private fun event(sport: String, status: String = "LIVE") = EventSnapshot(sport, "DEMO_UI", sport,
-        today.toString() + "T19:00:00Z", Team("home", when(sport) { "MLB" -> "Atlanta Braves"; "SOCCER" -> "Novorizontino"; else -> "Cleveland Browns" }),
+        if(status=="SCHEDULED")java.time.Instant.now().plusSeconds(3600).toString() else today.toString() + "T19:00:00Z", Team("home", when(sport) { "MLB" -> "Atlanta Braves"; "SOCCER" -> "Novorizontino"; else -> "Cleveland Browns" }),
         Team("away", when(sport) { "MLB" -> "Philadelphia Phillies"; "SOCCER" -> "Goiás"; else -> "Pittsburgh Steelers" }),
         if(status == "SCHEDULED") null else 6, if(status == "SCHEDULED") null else 2,
         status, if(status == "SCHEDULED") "NS" else if(sport == "MLB") "IN6" else "Q3", if(status == "SCHEDULED") null else if(sport == "MLB") "Entrada 6" else "05:20",
@@ -71,9 +151,7 @@ class DashboardNavigationTest {
                         events = listOf(EventView("$sport-game", event(sport, "SCHEDULED"), false))) },
                     onDate = { date -> state.value = state.value.copy(date = date) }, onOpenEvent = { openedEvents += it },
                     onDelete = { id -> deleted += id; state.value = state.value.copy(bets = state.value.bets.filter { it.id != id }) },
-                    onLogout = { loggedOut++ }, buy = {}, restore = {}, manage = {}, createdBet = created.value,
-                    onUnpin={ id -> state.value=state.value.copy(pinnedBets=state.value.pinnedBets-id,unpinnedBets=state.value.unpinnedBets+id) },
-                    onPin={ id -> state.value=state.value.copy(pinnedBets=state.value.pinnedBets+id,unpinnedBets=state.value.unpinnedBets-id) })
+                    onLogout = { loggedOut++ }, buy = {}, restore = {}, manage = {}, createdBet = created.value)
                 }
             }
         }
@@ -82,7 +160,7 @@ class DashboardNavigationTest {
         restoration.emulateSavedInstanceStateRestore()
         compose.mainClock.advanceTimeBy(250)
         compose.waitForIdle()
-        compose.onNodeWithContentDescription("Actualizar datos").assertIsDisplayed()
+        compose.onNodeWithContentDescription(com.mybetlive.i18n.AppStrings.translate("Actualizar datos")).assertIsDisplayed()
         compose.runOnIdle {
             val activity = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).single()
             val view = activity.window.decorView
@@ -101,14 +179,21 @@ class DashboardNavigationTest {
 
     @Test fun trackerFiltersStayInTrackersAndDoNotRequestAnEventSport() {
         launch()
+        compose.onNodeWithTag("sport-ALL").assertIsSelected()
+        compose.onNodeWithContentDescription("Fútbol").assertExists()
+        compose.onAllNodesWithText("Fútbol",substring=false).assertCountEquals(0)
         compose.onNodeWithTag("bet-nfl-live").assertIsDisplayed()
         compose.onNodeWithTag("bet-nfl-final").assertDoesNotExist()
         screenshot("seguimientos-activos")
         compose.onNodeWithTag("sport-MLB").performClick()
+        compose.waitForIdle()
+        compose.onNodeWithText("MLB",substring=false).assertExists()
+        compose.onAllNodesWithText("Todos",substring=false).assertCountEquals(0)
         compose.onNodeWithTag("nav-TRACKERS").assertIsSelected()
         compose.onNodeWithTag("bet-mlb-live").assertIsDisplayed()
         compose.onNodeWithTag("bet-nfl-live").assertDoesNotExist()
         assertTrue(selectedSports.isEmpty())
+        screenshot("seguimientos-selector-iconos")
         compose.onNodeWithTag("nav-EVENTS").performClick()
         compose.onNodeWithTag("sport-SOCCER").performClick()
         assertEquals(listOf("SOCCER"), selectedSports)
@@ -169,8 +254,10 @@ class DashboardNavigationTest {
     @Test fun scheduledGamesKeepUnknownScoresAndOpenTheChosenEvent() {
         launch()
         compose.onNodeWithTag("nav-EVENTS").performClick()
+        compose.onNodeWithText("Hoy", substring = false).assertDoesNotExist()
+        compose.onNodeWithText("· local", substring = true).assertDoesNotExist()
         compose.onNodeWithTag("sport-MLB").performClick()
-        compose.onNodeWithText("Por comenzar", substring = true).assertIsDisplayed()
+        compose.onNodeWithText("Programado", substring = true).assertIsDisplayed()
         compose.onAllNodesWithText("—").assertCountEquals(2)
         compose.onNodeWithTag("team-logo-home").assertIsDisplayed()
         compose.onNodeWithTag("team-logo-away").assertIsDisplayed()
@@ -179,8 +266,10 @@ class DashboardNavigationTest {
         assertEquals(listOf("MLB-game"), openedEvents)
         compose.onNodeWithContentDescription("Jornada siguiente").performClick()
         compose.runOnIdle { assertEquals(today.plusDays(1), state.value.date) }
+        compose.onNodeWithText("Hoy", substring = false).assertIsDisplayed()
         compose.onNodeWithText("Hoy", substring = false).performClick()
         compose.runOnIdle { assertEquals(today, state.value.date) }
+        compose.onNodeWithText("Hoy", substring = false).assertDoesNotExist()
         compose.onNodeWithContentDescription("Elegir jornada").performClick()
         compose.onNodeWithText("Ver jornada").performClick()
         compose.runOnIdle { assertEquals(today, state.value.date) }
@@ -264,33 +353,26 @@ class DashboardNavigationTest {
         market="PLAYER_POINTS",playerName="LeBron James",line=24.5,currentValue=26.0,status="THRESHOLD_REACHED")
     private fun prepareNba(pinned: Boolean=true) {
         state.value=state.value.copy(bets=listOf(nba())+initialBets,sports=sports+SportInfo("NBA",true,listOf("MONEYLINE","PLAYER_POINTS")),
-            pinnedBets=if(pinned) setOf("nba-prop") else emptySet(),unpinnedBets=if(pinned) emptySet() else setOf("nba-prop"))
+            pinnedBets=if(pinned) setOf("nba-prop") else emptySet())
     }
-    @Test fun pinnedTabUsesActualDeviceNotificationsAndRepinningKeepsTheTracker() {
+    @Test fun activeTrackersHaveAutomaticNotificationsWithoutAPinnedCategory() {
         prepareNba(); launch()
-        compose.onNodeWithTag("pinned-tab").performClick()
+        compose.onNodeWithTag("pinned-tab").assertDoesNotExist()
         compose.onNodeWithTag("sport-NBA").performClick()
-        compose.onNodeWithTag("bet-nba-prop").assertIsDisplayed()
-        compose.onNodeWithTag("bet-nfl-live").assertDoesNotExist()
-        screenshot("nba-anclados")
-        compose.onNodeWithTag("bet-nba-prop").performClick()
-        compose.onNodeWithTag("bet-detail-list").performScrollToNode(hasTestTag("unpin-notification"))
-        compose.onNodeWithTag("notification-state").assertTextEquals("Anclada en este dispositivo")
-        screenshot("nba-detalle-anclado")
-        compose.onNodeWithTag("unpin-notification").performClick()
-        compose.onNodeWithTag("notification-state").assertTextEquals("Notificación desanclada")
-        screenshot("nba-desanclado")
-        compose.onNodeWithTag("pin-notification").performClick()
+        compose.onNodeWithTag("bet-nba-prop").assertIsDisplayed().performClick()
+        compose.onNodeWithTag("bet-detail-list").performScrollToNode(hasTestTag("notification-state"))
+        compose.onNodeWithTag("notification-state").assertTextEquals("Notificación activa")
+        compose.onNodeWithTag("unpin-notification").assertDoesNotExist()
+        compose.onNodeWithTag("pin-notification").assertDoesNotExist()
         compose.onNodeWithContentDescription("Volver a seguimientos").performClick()
-        compose.onNodeWithTag("pinned-tab").assertIsSelected()
+        compose.onNodeWithTag("active-tab").assertIsSelected()
         compose.onNodeWithTag("bet-nba-prop").assertIsDisplayed()
+        screenshot("seguimientos-activos-unificados")
         compose.runOnIdle { assertEquals(6,state.value.bets.size) }
     }
     @Test fun disabledDeviceNotificationsShowSettingsAndNoFalsePinnedCount() {
         prepareNba();state.value=state.value.copy(deviceNotificationsEnabled=false);launch()
-        compose.onNodeWithTag("pinned-tab").performClick()
-        compose.onNodeWithText("Anclados (0)").assertExists()
-        compose.onNodeWithTag("bet-nba-prop").assertDoesNotExist()
+        compose.onNodeWithTag("pinned-tab").assertDoesNotExist()
         compose.onNodeWithTag("active-tab").performClick()
         compose.onNodeWithTag("sport-NBA").performClick()
         compose.onNodeWithTag("bet-nba-prop").performClick()
@@ -333,7 +415,7 @@ class DashboardNavigationTest {
         compose.onNodeWithTag("tracker-list").performScrollToNode(hasTestTag("bet-nba-prop"))
         compose.onNodeWithTag("bet-nba-prop").performClick()
         compose.onNodeWithTag("bet-detail-list").performScrollToNode(hasTestTag("notification-state"))
-        compose.onNodeWithTag("notification-state").assertTextEquals("Aviso pendiente de inicio")
+        compose.onNodeWithTag("notification-state").assertTextEquals("Notificación automática")
         compose.onNodeWithTag("pin-notification").assertDoesNotExist()
         compose.runOnIdle { state.value=state.value.copy(bets=listOf(nba().copy(status="WON",event=nba().event.copy(status="FINAL")))) }
         compose.onNodeWithTag("notification-state").assertTextEquals("Notificación de resultado")

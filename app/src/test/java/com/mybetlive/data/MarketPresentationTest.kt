@@ -4,6 +4,36 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class MarketPresentationTest {
+    @Test fun footballMatchMetricsUseTheirOwnUnitAndProgressRatherThanGoals() {
+        val metrics=mapOf("TOTAL_CORNERS" to "tiros de esquina","TOTAL_CARDS" to "tarjetas",
+            "TOTAL_SHOTS" to "remates","TOTAL_SHOTS_ON_TARGET" to "remates a puerta")
+        for((market,unit) in metrics) {
+            val p=marketPresentation("SOCCER",market,"OVER",7.5,8.0,"THRESHOLD_REACHED",1,0)
+            assertEquals(unit,p.unit);assertEquals("8 / 7.5",p.value);assertEquals(MarketVisual.TOTAL,p.visual)
+            assertEquals(ProgressTone.GREEN,betProgress("SOCCER",market,"OVER",8.0,7.5,"THRESHOLD_REACHED")!!.tone)
+            assertEquals("— / 7.5",marketPresentation("SOCCER",market,"OVER",7.5,null,"AWAITING_DATA",1,0).value)
+            assertTrue(needsMarketLine(market))
+        }
+    }
+    @Test fun savesUseTheCorrectUnitAndRequireExplicitPlayerEligibility() {
+        val p=marketPresentation("SOCCER","PLAYER_SAVES","OVER",3.5,4.0,"THRESHOLD_REACHED",1,0)
+        assertEquals("atajadas",p.unit);assertEquals(ProgressTone.GREEN,p.tone);assertTrue(p.provisional)
+        assertEquals("Atajadas del portero",marketLabel("PLAYER_SAVES","SOCCER"))
+        assertFalse(Player("7","Unknown","1").supports("PLAYER_SAVES"))
+        assertFalse(Player("7","Defender","1",listOf("PLAYER_SHOTS")).supports("PLAYER_SAVES"))
+        assertTrue(Player("7","Keeper","1",listOf("PLAYER_SAVES")).supports("PLAYER_SAVES"))
+        val missing=marketPresentation("SOCCER","PLAYER_SAVES","OVER",3.5,null,"AWAITING_DATA",1,0)
+        assertEquals("— / 3.5",missing.value);assertEquals(ProgressTone.MUTED,missing.tone)
+    }
+    @Test fun storedFinalOutcomeStaysVisibleOffline() {
+        val event=EventSnapshot("SOCCER","TEST","id","",Team("h","America Mineiro"),Team("a","Fortaleza"),0,1,"FINAL","FT","90'","")
+        val bet=BetView("bet","event",event,"TOTAL","OVER",2.5,null,null,null,null,null,null,"LOST",1.0,null,"",false)
+        assertEquals("Perdida",bet.presentation(offline=true).status)
+        assertFalse(bet.presentation(offline=true).provisional)
+        assertEquals(ProgressTone.RED,bet.visualProgress(offline=true)!!.tone)
+        assertEquals("Perdida",marketPresentation("SOCCER","TOTAL","OVER",2.5,1.0,"LOST",0,1,true).status)
+        assertEquals(ProgressTone.RED,betProgress("SOCCER","TOTAL","OVER",1.0,2.5,"LOST",true)!!.tone)
+    }
     private fun ml(selection:String,home:Int?,away:Int?,stale:Boolean=false)=marketPresentation("SOCCER","MONEYLINE",selection,null,
         home?.let { away?.let { z->(it-z).toDouble() } },"LIVE_WINNING",home,away,stale)
     @Test fun selectedTeamHasStablePositionAndScalesWithScore() {

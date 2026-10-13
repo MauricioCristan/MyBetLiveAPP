@@ -1,0 +1,1029 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string-array name="ui_source">
+    <item>" El resultado informativo puede diferir de la liquidación del casino."</item>
+    <item>"1 seguimiento extra disponible por anuncio · úsalo antes de "</item>
+    <item>"1.er período"</item>
+    <item>"2.º período"</item>
+    <item>"3.er período"</item>
+    <item>"90 minutos más compensación, sin prórroga ni penales."</item>
+    <item>"90′ más compensación, sin prórroga."</item>
+    <item>"Abre un seguimiento activo para anclar su aviso. Los partidos por comenzar aparecerán cuando haya datos."</item>
+    <item>"Acceso concedido por administración"</item>
+    <item>"Actualiza el catálogo para cargar el rango permitido de esta línea."</item>
+    <item>"Actualiza para consultar los permisos de tu plan. Tu seguimiento se conserva."</item>
+    <item>"Actualizar datos"</item>
+    <item>"Alcance"</item>
+    <item>"Ancla este seguimiento para ver su avance en la barra de notificaciones."</item>
+    <item>"Anclar notificación"</item>
+    <item>"Anuncio cerrado sin recompensa. Puedes volver a intentarlo."</item>
+    <item>"Asistencias"</item>
+    <item>"Avisos activos en este dispositivo. Desanclar conserva el seguimiento y su historial."</item>
+    <item>"Añadir monto, momio o casino"</item>
+    <item>"Añadir seguimiento"</item>
+    <item>"Aún no hay jugadores con datos para esta estadística."</item>
+    <item>"Aún no hay porteros con datos de atajadas disponibles."</item>
+    <item>"Aún no hay resultados aquí"</item>
+    <item>"Bloque de recompensa inválido"</item>
+    <item>"Cada seguimiento indica partido completo, 60 minutos o un período."</item>
+    <item>"Cancelar"</item>
+    <item>"Cargando anuncio…"</item>
+    <item>"Cargando jugadores…"</item>
+    <item>"Carreras del equipo"</item>
+    <item>"Cerrar"</item>
+    <item>"Cerrar sesión"</item>
+    <item>"Completa un anuncio para añadir otro seguimiento de equipos. Máximo uno extra activo; continuará hasta que termine. Tienes 24 horas para usar la recompensa."</item>
+    <item>"Compras verificadas. Tu plan está actualizado."</item>
+    <item>"Con 0 hay push; esta estadística no puede quedar por debajo de 0."</item>
+    <item>"Conectando…"</item>
+    <item>"Confirmando recompensa…"</item>
+    <item>"Contenido oculto · desbloquea para ver tu seguimiento"</item>
+    <item>"Continuar con mi plan"</item>
+    <item>"Contraseña"</item>
+    <item>"Cuando estén disponibles, aquí verás sus beneficios y precio. Puedes continuar usando tu plan actual."</item>
+    <item>"Dato guardado · esperando actualización"</item>
+    <item>"Demo · datos deportivos simulados"</item>
+    <item>"Desanclar"</item>
+    <item>"Desanclar conserva el seguimiento y su historial."</item>
+    <item>"Desanclar notificación"</item>
+    <item>"Desbloquea 1 seguimiento extra"</item>
+    <item>"Desliza arriba o abajo y toca una línea para elegirla."</item>
+    <item>"Detalle del seguimiento"</item>
+    <item>"Diferencia de goles · 90 minutos más compensación"</item>
+    <item>"El anuncio tardó demasiado. Puedes volver a intentarlo."</item>
+    <item>"El aspecto en la barra y el bloqueo depende de tu versión de Android y sus ajustes de privacidad."</item>
+    <item>"El avance de tus selecciones"</item>
+    <item>"El aviso aparecerá cuando el partido tenga datos. No se muestra un marcador inventado."</item>
+    <item>"El cambio se guardó. No se pudo actualizar la consulta; pulsa Actualizar para reintentar."</item>
+    <item>"El deporte aún no está habilitado"</item>
+    <item>"El plan aún no está disponible en Google Play."</item>
+    <item>"El seguimiento usa el resultado del partido completo, incluido tiempo extra. Revisa que coincida con las reglas de tu apuesta."</item>
+    <item>"El servidor no pudo completar la operación ({0})."</item>
+    <item>"Elige un partido y añade la selección que quieres seguir."</item>
+    <item>"Eliminar"</item>
+    <item>"Eliminar seguimiento"</item>
+    <item>"Empate"</item>
+    <item>"Empate a los 90 minutos más compensación"</item>
+    <item>"Empate en la línea"</item>
+    <item>"En la línea"</item>
+    <item>"En la línea · necesita superar {0}"</item>
+    <item>"En la línea · push si termina así"</item>
+    <item>"Entrar"</item>
+    <item>"Equipo"</item>
+    <item>"Esperando datos"</item>
+    <item>"Esperando estadísticas"</item>
+    <item>"Esperando información"</item>
+    <item>"Faltan {0} para superar la línea"</item>
+    <item>"Faltan {0} {1} para superar la línea"</item>
+    <item>"Fútbol"</item>
+    <item>"Ganada"</item>
+    <item>"Ganada según los datos"</item>
+    <item>"Ganador · incluye prórroga"</item>
+    <item>"Ganador · incluye prórroga y shootout"</item>
+    <item>"Gestiona tu suscripción actual"</item>
+    <item>"Goles"</item>
+    <item>"Goles del equipo"</item>
+    <item>"Goles del equipo · 90 minutos"</item>
+    <item>"Google Play no está disponible en este dispositivo."</item>
+    <item>"Google no devolvió una credencial válida. Intenta nuevamente"</item>
+    <item>"Google no encontró una cuenta disponible. Agrega una cuenta de Google en este dispositivo."</item>
+    <item>"Google no pudo iniciar sesión. Revisa tu cuenta y vuelve a intentar."</item>
+    <item>"Guardando…"</item>
+    <item>"Guardar seguimiento"</item>
+    <item>"Hoy"</item>
+    <item>"Hándicap asiático · 90 minutos"</item>
+    <item>"Hándicap · incluye prórroga"</item>
+    <item>"Incluye 1 seguimiento extra por anuncio, válido hasta terminar."</item>
+    <item>"Ingresa una URL HTTPS válida (HTTP local disponible en debug)"</item>
+    <item>"Ingresa una línea numérica válida."</item>
+    <item>"Inicia sesión"</item>
+    <item>"Juego completo con entradas extra, sin condición de pitcher ni primeras entradas."</item>
+    <item>"Juego completo, incluidas entradas extra; sin condición de pitcher ni mercados de primeras entradas. Finales abreviados o datos incompletos esperan revisión. API-Baseball no ofrece props de jugadores."</item>
+    <item>"Jugadores"</item>
+    <item>"La apuesta continúa en la app. El aviso no se volverá a fijar automáticamente."</item>
+    <item>"La cuenta cambió durante la consulta"</item>
+    <item>"La línea de {0} debe estar entre {1} y {2}."</item>
+    <item>"La sesión no es válida. Revisa tus credenciales."</item>
+    <item>"Las líneas alcanzadas son provisionales hasta el resultado final. Toca una tarjeta para ver el detalle."</item>
+    <item>"Las suscripciones estarán disponibles cuando se definan los planes y se habiliten las compras."</item>
+    <item>"Los anuncios todavía no están disponibles. Vuelve a intentar."</item>
+    <item>"Los partidos finalizados no aparecen aquí. Elige otra jornada o actualiza para buscar encuentros por comenzar o en juego."</item>
+    <item>"Los seguimientos ganados, perdidos, empatados o cancelados aparecerán en Historial."</item>
+    <item>"Límite de seguimientos"</item>
+    <item>"Línea"</item>
+    <item>"Línea alcanzada · provisional"</item>
+    <item>"Línea anterior"</item>
+    <item>"Línea elegida: {0} {1}"</item>
+    <item>"Línea siguiente"</item>
+    <item>"Línea superada · resultado provisional"</item>
+    <item>"Línea {0}"</item>
+    <item>"Líneas y resultados"</item>
+    <item>"ML, totales y hándicap de equipos incluidos"</item>
+    <item>"Margen ajustado = diferencia de marcador + hándicap."</item>
+    <item>"Mercado"</item>
+    <item>"Mi plan"</item>
+    <item>"Mi suscripción"</item>
+    <item>"Más de (Over)"</item>
+    <item>"Necesita {0} {1} o más al finalizar."</item>
+    <item>"No"</item>
+    <item>"No cubre · desfavorable"</item>
+    <item>"No cubre ← 0 → Cubre"</item>
+    <item>"No hay empate · desfavorable"</item>
+    <item>"No hay líneas disponibles. Actualiza el catálogo."</item>
+    <item>"No hay notificaciones ancladas"</item>
+    <item>"No hay un anuncio disponible. Tu seguimiento normal se conserva; intenta después."</item>
+    <item>"No hay una cuenta de Google disponible. Revisa las cuentas del teléfono e intenta nuevamente"</item>
+    <item>"No se pudieron consultar los precios. Actualiza o reintenta."</item>
+    <item>"No se pudieron restaurar las compras. Reintenta."</item>
+    <item>"No se pudo abrir el acceso con Google. Revisa tu conexión y los servicios de Google Play"</item>
+    <item>"No se pudo abrir la compra en Google Play."</item>
+    <item>"No se pudo anclar este dato. Pulsa Actualizar para obtener el estado más reciente."</item>
+    <item>"No se pudo completar la operación. Vuelve a intentar."</item>
+    <item>"No se pudo conectar al servidor. Revisa tu conexión y vuelve a intentar; tus seguimientos guardados se conservan."</item>
+    <item>"No se pudo consultar tu plan. Actualiza para reintentar."</item>
+    <item>"No se pudo mostrar el anuncio. Puedes reintentar."</item>
+    <item>"No se pudo verificar la compra. Usa Restaurar compras para reintentar."</item>
+    <item>"No tienes seguimientos activos"</item>
+    <item>"Notificaciones no incluidas en tu plan"</item>
+    <item>"Notificación de resultado"</item>
+    <item>"Notificación desanclada"</item>
+    <item>"Notificación sin anclar"</item>
+    <item>"Nuevo seguimiento"</item>
+    <item>"Nuevos planes próximamente"</item>
+    <item>"O usa tu usuario y contraseña"</item>
+    <item>"Ocultar datos opcionales"</item>
+    <item>"Pago en período de gracia"</item>
+    <item>"Pago pendiente. El acceso se activará cuando Google Play confirme la compra."</item>
+    <item>"Partido completo · incluye prórroga y shootout"</item>
+    <item>"Partidos"</item>
+    <item>"Perdida"</item>
+    <item>"Perdida según los datos"</item>
+    <item>"Perfil"</item>
+    <item>"Procesando anuncio…"</item>
+    <item>"Próximamente"</item>
+    <item>"Publicidad · anuncio de prueba"</item>
+    <item>"Puedes consultar el avance aquí. Revisa los beneficios disponibles en Mi plan."</item>
+    <item>"Puedes consultar el avance desde la barra de notificaciones. El resultado sigue siendo provisional."</item>
+    <item>"Puntos"</item>
+    <item>"Puntos del equipo"</item>
+    <item>"Push · empate en la línea"</item>
+    <item>"Rebotes"</item>
+    <item>"Recompensa pendiente. Se actualizará al recibir la confirmación de AdMob."</item>
+    <item>"Registra apuestas que ya realizaste. Los resultados se basan en datos deportivos y pueden diferir de la liquidación del casino."</item>
+    <item>"Renovación automática. Puedes cancelar en Google Play."</item>
+    <item>"Resultado"</item>
+    <item>"Resultado del partido finalizado"</item>
+    <item>"Resultados informativos según los datos deportivos. Toca una tarjeta para consultar el detalle."</item>
+    <item>"Revisa la selección y la línea del seguimiento."</item>
+    <item>"Se canceló el inicio con Google. Puedes volver a intentarlo."</item>
+    <item>"Se evalúan 90 minutos más compensación, sin prórroga ni penales. Se admiten líneas enteras o medias; revisa las reglas de tu apuesta."</item>
+    <item>"Se quitará este seguimiento y su notificación."</item>
+    <item>"Seguimiento provisional · aviso permanente mientras esté anclado"</item>
+    <item>"Seguimientos"</item>
+    <item>"Seleccionar"</item>
+    <item>"Selección"</item>
+    <item>"Selección desfavorable"</item>
+    <item>"Selección favorable por ahora"</item>
+    <item>"Sigue el marcador y el progreso de tus apuestas NFL, fútbol, MLB, NBA y NHL en un solo lugar."</item>
+    <item>"Sin conexión · mostrando la última actualización guardada"</item>
+    <item>"Sin datos no se interpreta como cero."</item>
+    <item>"Sin límite de"</item>
+    <item>"Sin línea elegida"</item>
+    <item>"Sin partidos disponibles en esta jornada"</item>
+    <item>"Sin suscripción vigente. Conservas el acceso de {0}."</item>
+    <item>"Suscripción aún no disponible"</item>
+    <item>"Suscripción de Google Play"</item>
+    <item>"Sí"</item>
+    <item>"Terminó exactamente en la línea"</item>
+    <item>"Todos"</item>
+    <item>"Total del equipo"</item>
+    <item>"Total del partido"</item>
+    <item>"Totales"</item>
+    <item>"Triples"</item>
+    <item>"Tu apuesta.\nCada jugada."</item>
+    <item>"Tu cuenta MyBetLive"</item>
+    <item>"Tu plan no incluye nuevas props. Puedes seguir ML, totales y hándicap del equipo."</item>
+    <item>"Tu plan no permite esta operación. Consulta Mi plan."</item>
+    <item>"Tu selección"</item>
+    <item>"Tus seguimientos actuales continúan. Podrás añadir otra selección cuando se libere un espacio."</item>
+    <item>"Tus seguimientos continúan. Podrás añadir otro cuando tengas menos de {0} activos."</item>
+    <item>"Usa una línea entera o media: por ejemplo, {0}."</item>
+    <item>"Ver anuncio y desbloquear"</item>
+    <item>"Ver jornada"</item>
+    <item>"Ver mi plan"</item>
+    <item>"Ver otros planes"</item>
+    <item>"Ver partidos"</item>
+    <item>"Ver resultado"</item>
+    <item>"Ver resultado · guardado en Historial"</item>
+    <item>"Ver seguimiento"</item>
+    <item>"Ver seguimientos"</item>
+    <item>"Ver seguimientos activos"</item>
+    <item>"Ver vista previa del aviso"</item>
+    <item>"Volver al partido"</item>
+    <item>"Ya hay un anuncio en curso"</item>
+    <item>"Yardas de recepción"</item>
+    <item>"asistencias"</item>
+    <item>"atajadas"</item>
+    <item>"año"</item>
+    <item>"carreras"</item>
+    <item>"datos del partido"</item>
+    <item>"estadística del jugador"</item>
+    <item>"goles"</item>
+    <item>"mes"</item>
+    <item>"más"</item>
+    <item>"plan"</item>
+    <item>"puntos"</item>
+    <item>"rebotes"</item>
+    <item>"recepciones"</item>
+    <item>"sin límite"</item>
+    <item>"tiros"</item>
+    <item>"yardas"</item>
+    <item>"{0}\nÚltimo dato {1} · Sin datos no se interpreta como cero"</item>
+    <item>"{0} · último dato {1}"</item>
+    <item>"{0}. El partido completo usa el marcador oficial, incluido el gol decisivo del shootout. Los períodos y los 60 minutos excluyen prórroga y shootout. Revisa las reglas de tu apuesta."</item>
+    <item>"¡Tienes 1 seguimiento extra! Elige tu selección y guárdala."</item>
+    <item>"¿Habrá prórroga?"</item>
+    <item>"¿Qué quieres seguir?"</item>
+    <item>"Último valor guardado; aún no es actual."</item>
+    <item>" Con {0} hay push."</item>
+    <item>"3 meses"</item>
+    <item>"6 meses"</item>
+    <item>"60 minutos"</item>
+    <item>"APUESTA: EMPATE"</item>
+    <item>"Acceso con Google cancelado"</item>
+    <item>"Acceso por {0}."</item>
+    <item>"Activos ({0})"</item>
+    <item>"Administra permisos y avisos en este dispositivo."</item>
+    <item>"Al finalizar, el aviso deja de ser permanente y puede descartarse."</item>
+    <item>"Ambos equipos anotan"</item>
+    <item>"Anclada en este dispositivo"</item>
+    <item>"Anclados ({0})"</item>
+    <item>"Atajadas del portero"</item>
+    <item>"Aviso pendiente de inicio"</item>
+    <item>"Cancelada · acceso hasta el vencimiento"</item>
+    <item>"Casino · opcional"</item>
+    <item>"Casino: {0}"</item>
+    <item>"Compra cancelada."</item>
+    <item>"Comprobando acceso a notificaciones"</item>
+    <item>"Con .5"</item>
+    <item>"Configurar notificaciones"</item>
+    <item>"Consulta Perfil → Planes para revisar disponibilidad y condiciones."</item>
+    <item>"Consultar planes"</item>
+    <item>"Continuar con Google"</item>
+    <item>"Cualquiera gana · sin empate"</item>
+    <item>"Cubre · favorable por ahora"</item>
+    <item>"Dato guardado"</item>
+    <item>"Datos de tu apuesta"</item>
+    <item>"Datos pendientes de actualizar"</item>
+    <item>"Debe terminar por debajo de {0} {1}."</item>
+    <item>"Debe terminar por debajo de {0} · provisional"</item>
+    <item>"Demo local: activa el perfil demo del backend y entra con demo / demo-change-me."</item>
+    <item>"Diferencia de carreras · incluye entradas extra"</item>
+    <item>"Diferencia de goles · resultado provisional"</item>
+    <item>"Diferencia de puntos · resultado provisional"</item>
+    <item>"Diferencia {0} · Empate = 0"</item>
+    <item>"Diferencia {0} · Objetivo &gt; {1}"</item>
+    <item>"Doble oportunidad"</item>
+    <item>"Elegir jornada"</item>
+    <item>"Elige el encuentro que quieres seguir"</item>
+    <item>"En juego · {0} {1}"</item>
+    <item>"En vivo · provisional"</item>
+    <item>"Esperando marcador"</item>
+    <item>"Esperando {0}"</item>
+    <item>"Estado por confirmar"</item>
+    <item>"Evento cancelado"</item>
+    <item>"Ganador · juego completo"</item>
+    <item>"Goles · {0}"</item>
+    <item>"Google Play no pudo completar la compra. Reintenta."</item>
+    <item>"Habilita las notificaciones de MyBetLive en Android."</item>
+    <item>"Habilita los avisos de MyBetLive y el canal Seguimiento en vivo en los ajustes del dispositivo."</item>
+    <item>"Habilitar notificaciones en Android"</item>
+    <item>"Historial ({0})"</item>
+    <item>"Historial de tus seguimientos incluido"</item>
+    <item>"Horarios de {0}"</item>
+    <item>"Jornada anterior"</item>
+    <item>"Jornada siguiente"</item>
+    <item>"Jugador: {0}"</item>
+    <item>"Logo: {0}: {1}"</item>
+    <item>"Marcador exacto"</item>
+    <item>"Margen {0}"</item>
+    <item>"Menos de (Under)"</item>
+    <item>"Momio decimal · opcional (1.72)"</item>
+    <item>"Momio decimal: {0}"</item>
+    <item>"Monto · opcional"</item>
+    <item>"Monto: {0}"</item>
+    <item>"Notificaciones bloqueadas en Android"</item>
+    <item>"Notificaciones incluidas"</item>
+    <item>"Notificaciones: {0}"</item>
+    <item>"Objetivo {0}"</item>
+    <item>"Para cumplir: {0} o {1} al finalizar."</item>
+    <item>"Partido completo, incluido tiempo extra."</item>
+    <item>"Planes disponibles"</item>
+    <item>"Por comenzar"</item>
+    <item>"Preparando anuncios…"</item>
+    <item>"Privacidad de anuncios"</item>
+    <item>"Props de jugadores"</item>
+    <item>"Props de jugadores incluidos"</item>
+    <item>"Props de jugadores: {0}"</item>
+    <item>"Props {0} · notificaciones {1}"</item>
+    <item>"Proveedor sin configurar o sin consultas disponibles. Revisa el backend."</item>
+    <item>"Puntos + rebotes + asistencias"</item>
+    <item>"Restaurar compras"</item>
+    <item>"Resultado "</item>
+    <item>"Resultado 1X2"</item>
+    <item>"Resultado 1X2 · 90 minutos"</item>
+    <item>"Resultado final"</item>
+    <item>"Resultado final del proveedor"</item>
+    <item>"Resultado final · aviso descartable"</item>
+    <item>"Resultado provisional hasta finalizar."</item>
+    <item>"Run Line · juego completo"</item>
+    <item>"Seguimiento en vivo"</item>
+    <item>"Seguimiento guardado"</item>
+    <item>"Si es tu primera vez, crearemos tu cuenta al continuar con Google."</item>
+    <item>"Suscribirme con Google Play"</item>
+    <item>"TU EQUIPO"</item>
+    <item>"Tiros a puerta"</item>
+    <item>"Tiros totales"</item>
+    <item>"Todas las ligas"</item>
+    <item>"Total de carreras"</item>
+    <item>"Total de goles"</item>
+    <item>"Total de goles · 90 minutos"</item>
+    <item>"Total de puntos"</item>
+    <item>"Touchdowns de pase"</item>
+    <item>"Tus seguimientos guardados se conservan. Los permisos actuales se aplican al crear nuevas selecciones."</item>
+    <item>"URL del backend"</item>
+    <item>"Usuario"</item>
+    <item>"Va empatando · favorable por ahora"</item>
+    <item>"Va empatando · juego en curso"</item>
+    <item>"Va ganando"</item>
+    <item>"Va ganando · favorable por ahora"</item>
+    <item>"Va perdiendo"</item>
+    <item>"Va perdiendo · desfavorable"</item>
+    <item>"Vence: "</item>
+    <item>"Verificando compra…"</item>
+    <item>"Vista previa del aviso"</item>
+    <item>"Volver a anclar"</item>
+    <item>"Volver a seguimientos"</item>
+    <item>"Yardas de pase"</item>
+    <item>"Yardas terrestres"</item>
+    <item>"incluidas"</item>
+    <item>"incluidos"</item>
+    <item>"no incluidas"</item>
+    <item>"no incluidos"</item>
+    <item>"su vencimiento"</item>
+    <item>"tiros a puerta"</item>
+    <item>"{0} / {1} seguimientos activos"</item>
+    <item>"{0} o empate"</item>
+    <item>"{0} seguimientos activos"</item>
+    <item>"{0} · {1} / {2} seguimientos activos"</item>
+    <item>"Último dato {0}"</item>
+    <item>"Último resultado · {0}"</item>
+    <item>"Último valor guardado · pendiente de actualizar"</item>
+    <item>"‹ Volver a Perfil"</item>
+    <item>"Gratis"</item>
+    <item>"trimestre"</item>
+    <item>"semestre"</item>
+    <item>"touchdowns"</item>
+    <item>"Ampliada"</item>
+    <item>"Cancelada"</item>
+    <item>"Cancelado"</item>
+    <item>"Compacta"</item>
+    <item>"Enteras"</item>
+    <item>"Finalizado"</item>
+    <item>"Gestionar"</item>
+    <item>"Notificaciones"</item>
+    <item>"Planes"</item>
+    <item>"Pospuesto"</item>
+    <item>"Privada"</item>
+    <item>"Publicidad"</item>
+    <item>"menos"</item>
+    <item>"semana"</item>
+    <item>"En juego"</item>
+    <item>"Recepciones"</item>
+    <item>"triples"</item>
+    <item>"tiros totales"</item>
+    <item>"goles del equipo"</item>
+    <item>"goles de hándicap"</item>
+    <item>"puntos del equipo"</item>
+    <item>"puntos de hándicap"</item>
+    <item>"yardas terrestres"</item>
+    <item>"yardas de recepción"</item>
+    <item>"yardas de pase"</item>
+    <item>"touchdowns de pase"</item>
+    <item>"puntos + rebotes + asistencias"</item>
+    <item>"carreras del equipo"</item>
+    <item>"carreras de hándicap"</item>
+    <item>"Programado"</item>
+    <item>"Esperando inicio"</item>
+    <item>"Notificación activa"</item>
+    <item>"Notificación automática"</item>
+    <item>"Los seguimientos activos aparecen automáticamente en notificaciones hasta finalizar."</item>
+    <item>"Seguimiento activo · aviso permanente hasta finalizar"</item>
+    <item>"Burbuja de seguimiento"</item>
+    <item>"Burbuja activa · toca para abrir MyBetLive"</item>
+    <item>"Cerrar burbuja"</item>
+    <item>"Ver en burbuja"</item>
+    <item>"Lleva tu pick contigo"</item>
+    <item>"Burbuja activada. Puedes cambiar de aplicación."</item>
+    <item>"Habilita el permiso para mostrar la burbuja sobre otras aplicaciones."</item>
+    <item>"No se pudo activar la burbuja."</item>
+    <item>"Consulta el avance mientras usas otras apps. Android te pedirá habilitar el permiso para mostrar sobre otras aplicaciones. Puedes cerrar la burbuja sin borrar tu seguimiento."</item>
+    <item>"Habilitar burbuja"</item>
+    <item>"Ahora no"</item>
+    <item>"No se pudo abrir la configuración de Android."</item>
+    <item>"Este seguimiento ya no está disponible."</item>
+    <item>"Este seguimiento ya finalizó."</item>
+    <item>"Abrir seguimiento"</item>
+    <item>"Ganador"</item>
+    <item>"Sin datos"</item>
+    <item>"Push"</item>
+    <item>"Hándicap {0}"</item>
+    <item>"Exacto {0}"</item>
+    <item>"Prórroga · {0}"</item>
+    <item>"Ambos anotan · {0}"</item>
+    <item>"Seguimientos en burbujas"</item>
+    <item>"Cerrar todas las burbujas"</item>
+    <item>"Tiros de esquina"</item>
+    <item>"Total de tarjetas"</item>
+    <item>"Remates"</item>
+    <item>"Remates a puerta"</item>
+    <item>"tiros de esquina"</item>
+    <item>"tarjetas"</item>
+    <item>"remates"</item>
+    <item>"remates a puerta"</item>
+    <item>"Amarilla = 1 · roja directa = 2 · doble amarilla = 2 en total. Amarilla y roja directa = 3. Solo jugadores en cancha durante 90 minutos más compensación; se excluyen banca y cuerpo técnico."</item>
+    <item>"Usa entre 3 y 60 letras, números, puntos, guiones o guiones bajos para el usuario."</item>
+    <item>"Ingresa un correo válido."</item>
+    <item>"Usa una contraseña de al menos 8 caracteres."</item>
+    <item>"La contraseña es demasiado larga. Usa menos caracteres."</item>
+    <item>"Las contraseñas no coinciden."</item>
+    <item>"O usa tu correo o usuario y contraseña"</item>
+    <item>"Crear cuenta con correo"</item>
+    <item>"Crear una cuenta con correo"</item>
+    <item>"Recuperar contraseña"</item>
+    <item>"Confirma tu correo antes de comenzar. Tu cuenta inicia con el plan Free."</item>
+    <item>"Correo o usuario"</item>
+    <item>"Correo electrónico"</item>
+    <item>"Confirmar contraseña"</item>
+    <item>"Crear cuenta"</item>
+    <item>"Procesando…"</item>
+    <item>"Enviar enlace de recuperación"</item>
+    <item>"Reenviar confirmación de correo"</item>
+    <item>"Olvidé mi contraseña"</item>
+    <item>"Volver a iniciar sesión"</item>
+    <item>"Confirmar mi correo"</item>
+    <item>"Confirmar correo"</item>
+    <item>"Crear nueva contraseña"</item>
+    <item>"Nueva contraseña"</item>
+    <item>"Guardar contraseña"</item>
+    <item>"Volver a MyBetLive"</item>
+    <item>"Te enviamos un enlace para confirmar tu correo. Revisa también Spam."</item>
+    <item>"Si el correo tiene una cuenta, recibirás un enlace para recuperar tu contraseña."</item>
+    <item>"Si hay una cuenta pendiente, recibirás un enlace de confirmación."</item>
+    <item>"Correo confirmado. Ya puedes iniciar sesión."</item>
+    <item>"Contraseña actualizada. Inicia sesión con tu nueva contraseña."</item>
+    <item>"Sigue tus picks en tiempo real."</item>
+    <item>"O entra con tu correo"</item>
+    <item>"Configuración de desarrollo"</item>
+    <item>"Mostrar"</item>
+    <item>"Ocultar"</item>
+    <item>"Te enviaremos un enlace para crear una nueva contraseña."</item>
+    <item>"Bearer {0}"</item>
+    <item>"alerted:{0}"</item>
+    <item>"deleted:{0}"</item>
+    <item>"package:{0}"</item>
+    <item>"status:{0}"</item>
+    <item>"unpinned:{0}"</item>
+    <item>"version:{0}"</item>
+    <item>"{0}\n{1}\n{2}\nÚltimo dato {3}"</item>
+    <item>"{0}\nÚltimo dato {1} · {2}"</item>
+    <item>"{0} / {1}"</item>
+    <item>"{0} : {1}"</item>
+    <item>"{0} {1}"</item>
+    <item>"{0} {1} - {2} {3} · {4} {5}"</item>
+    <item>"{0} {1} : {2} {3}"</item>
+    <item>"{0} {1} · {2}\nÚltimo dato {3}"</item>
+    <item>"{0} · Premium"</item>
+    <item>"{0} · {1}"</item>
+    <item>"{0} · {1} vs {2}"</item>
+    <item>"{0} · {1} {2}"</item>
+    <item>"{0}. {1}"</item>
+    <item>"{0}. {1}. {2}"</item>
+    <item>"{0}: {1}"</item>
+    <item>"{0}:{1}"</item>
+    <item>"{0}{1} / {2} · {3}"</item>
+</string-array>
+<string-array name="ui_translation">
+    <item>" El resultado informativo puede diferir de la liquidación del casino."</item>
+    <item>"1 seguimiento extra disponible por anuncio · úsalo antes de "</item>
+    <item>"1.er período"</item>
+    <item>"2.º período"</item>
+    <item>"3.er período"</item>
+    <item>"90 minutos más compensación, sin prórroga ni penales."</item>
+    <item>"90′ más compensación, sin prórroga."</item>
+    <item>"Abre un seguimiento activo para anclar su aviso. Los partidos por comenzar aparecerán cuando haya datos."</item>
+    <item>"Acceso concedido por administración"</item>
+    <item>"Actualiza el catálogo para cargar el rango permitido de esta línea."</item>
+    <item>"Actualiza para consultar los permisos de tu plan. Tu seguimiento se conserva."</item>
+    <item>"Actualizar datos"</item>
+    <item>"Alcance"</item>
+    <item>"Ancla este seguimiento para ver su avance en la barra de notificaciones."</item>
+    <item>"Anclar notificación"</item>
+    <item>"Anuncio cerrado sin recompensa. Puedes volver a intentarlo."</item>
+    <item>"Asistencias"</item>
+    <item>"Avisos activos en este dispositivo. Desanclar conserva el seguimiento y su historial."</item>
+    <item>"Añadir monto, momio o casino"</item>
+    <item>"Añadir seguimiento"</item>
+    <item>"Aún no hay jugadores con datos para esta estadística."</item>
+    <item>"Aún no hay porteros con datos de atajadas disponibles."</item>
+    <item>"Aún no hay resultados aquí"</item>
+    <item>"Bloque de recompensa inválido"</item>
+    <item>"Cada seguimiento indica partido completo, 60 minutos o un período."</item>
+    <item>"Cancelar"</item>
+    <item>"Cargando anuncio…"</item>
+    <item>"Cargando jugadores…"</item>
+    <item>"Carreras del equipo"</item>
+    <item>"Cerrar"</item>
+    <item>"Cerrar sesión"</item>
+    <item>"Completa un anuncio para añadir otro seguimiento de equipos. Máximo uno extra activo; continuará hasta que termine. Tienes 24 horas para usar la recompensa."</item>
+    <item>"Compras verificadas. Tu plan está actualizado."</item>
+    <item>"Con 0 hay push; esta estadística no puede quedar por debajo de 0."</item>
+    <item>"Conectando…"</item>
+    <item>"Confirmando recompensa…"</item>
+    <item>"Contenido oculto · desbloquea para ver tu seguimiento"</item>
+    <item>"Continuar con mi plan"</item>
+    <item>"Contraseña"</item>
+    <item>"Cuando estén disponibles, aquí verás sus beneficios y precio. Puedes continuar usando tu plan actual."</item>
+    <item>"Dato guardado · esperando actualización"</item>
+    <item>"Demo · datos deportivos simulados"</item>
+    <item>"Desanclar"</item>
+    <item>"Desanclar conserva el seguimiento y su historial."</item>
+    <item>"Desanclar notificación"</item>
+    <item>"Desbloquea 1 seguimiento extra"</item>
+    <item>"Desliza arriba o abajo y toca una línea para elegirla."</item>
+    <item>"Detalle del seguimiento"</item>
+    <item>"Diferencia de goles · 90 minutos más compensación"</item>
+    <item>"El anuncio tardó demasiado. Puedes volver a intentarlo."</item>
+    <item>"El aspecto en la barra y el bloqueo depende de tu versión de Android y sus ajustes de privacidad."</item>
+    <item>"El avance de tus selecciones"</item>
+    <item>"El aviso aparecerá cuando el partido tenga datos. No se muestra un marcador inventado."</item>
+    <item>"El cambio se guardó. No se pudo actualizar la consulta; pulsa Actualizar para reintentar."</item>
+    <item>"El deporte aún no está habilitado"</item>
+    <item>"El plan aún no está disponible en Google Play."</item>
+    <item>"El seguimiento usa el resultado del partido completo, incluido tiempo extra. Revisa que coincida con las reglas de tu apuesta."</item>
+    <item>"El servidor no pudo completar la operación ({0})."</item>
+    <item>"Elige un partido y añade la selección que quieres seguir."</item>
+    <item>"Eliminar"</item>
+    <item>"Eliminar seguimiento"</item>
+    <item>"Empate"</item>
+    <item>"Empate a los 90 minutos más compensación"</item>
+    <item>"Empate en la línea"</item>
+    <item>"En la línea"</item>
+    <item>"En la línea · necesita superar {0}"</item>
+    <item>"En la línea · push si termina así"</item>
+    <item>"Entrar"</item>
+    <item>"Equipo"</item>
+    <item>"Esperando datos"</item>
+    <item>"Esperando estadísticas"</item>
+    <item>"Esperando información"</item>
+    <item>"Faltan {0} para superar la línea"</item>
+    <item>"Faltan {0} {1} para superar la línea"</item>
+    <item>"Fútbol"</item>
+    <item>"Ganada"</item>
+    <item>"Ganada según los datos"</item>
+    <item>"Ganador · incluye prórroga"</item>
+    <item>"Ganador · incluye prórroga y shootout"</item>
+    <item>"Gestiona tu suscripción actual"</item>
+    <item>"Goles"</item>
+    <item>"Goles del equipo"</item>
+    <item>"Goles del equipo · 90 minutos"</item>
+    <item>"Google Play no está disponible en este dispositivo."</item>
+    <item>"Google no devolvió una credencial válida. Intenta nuevamente"</item>
+    <item>"Google no encontró una cuenta disponible. Agrega una cuenta de Google en este dispositivo."</item>
+    <item>"Google no pudo iniciar sesión. Revisa tu cuenta y vuelve a intentar."</item>
+    <item>"Guardando…"</item>
+    <item>"Guardar seguimiento"</item>
+    <item>"Hoy"</item>
+    <item>"Hándicap asiático · 90 minutos"</item>
+    <item>"Hándicap · incluye prórroga"</item>
+    <item>"Incluye 1 seguimiento extra por anuncio, válido hasta terminar."</item>
+    <item>"Ingresa una URL HTTPS válida (HTTP local disponible en debug)"</item>
+    <item>"Ingresa una línea numérica válida."</item>
+    <item>"Inicia sesión"</item>
+    <item>"Juego completo con entradas extra, sin condición de pitcher ni primeras entradas."</item>
+    <item>"Juego completo, incluidas entradas extra; sin condición de pitcher ni mercados de primeras entradas. Finales abreviados o datos incompletos esperan revisión. API-Baseball no ofrece props de jugadores."</item>
+    <item>"Jugadores"</item>
+    <item>"La apuesta continúa en la app. El aviso no se volverá a fijar automáticamente."</item>
+    <item>"La cuenta cambió durante la consulta"</item>
+    <item>"La línea de {0} debe estar entre {1} y {2}."</item>
+    <item>"La sesión no es válida. Revisa tus credenciales."</item>
+    <item>"Las líneas alcanzadas son provisionales hasta el resultado final. Toca una tarjeta para ver el detalle."</item>
+    <item>"Las suscripciones estarán disponibles cuando se definan los planes y se habiliten las compras."</item>
+    <item>"Los anuncios todavía no están disponibles. Vuelve a intentar."</item>
+    <item>"Los partidos finalizados no aparecen aquí. Elige otra jornada o actualiza para buscar encuentros por comenzar o en juego."</item>
+    <item>"Los seguimientos ganados, perdidos, empatados o cancelados aparecerán en Historial."</item>
+    <item>"Límite de seguimientos"</item>
+    <item>"Línea"</item>
+    <item>"Línea alcanzada · provisional"</item>
+    <item>"Línea anterior"</item>
+    <item>"Línea elegida: {0} {1}"</item>
+    <item>"Línea siguiente"</item>
+    <item>"Línea superada · resultado provisional"</item>
+    <item>"Línea {0}"</item>
+    <item>"Líneas y resultados"</item>
+    <item>"ML, totales y hándicap de equipos incluidos"</item>
+    <item>"Margen ajustado = diferencia de marcador + hándicap."</item>
+    <item>"Mercado"</item>
+    <item>"Mi plan"</item>
+    <item>"Mi suscripción"</item>
+    <item>"Más de (Over)"</item>
+    <item>"Necesita {0} {1} o más al finalizar."</item>
+    <item>"No"</item>
+    <item>"No cubre · desfavorable"</item>
+    <item>"No cubre ← 0 → Cubre"</item>
+    <item>"No hay empate · desfavorable"</item>
+    <item>"No hay líneas disponibles. Actualiza el catálogo."</item>
+    <item>"No hay notificaciones ancladas"</item>
+    <item>"No hay un anuncio disponible. Tu seguimiento normal se conserva; intenta después."</item>
+    <item>"No hay una cuenta de Google disponible. Revisa las cuentas del teléfono e intenta nuevamente"</item>
+    <item>"No se pudieron consultar los precios. Actualiza o reintenta."</item>
+    <item>"No se pudieron restaurar las compras. Reintenta."</item>
+    <item>"No se pudo abrir el acceso con Google. Revisa tu conexión y los servicios de Google Play"</item>
+    <item>"No se pudo abrir la compra en Google Play."</item>
+    <item>"No se pudo anclar este dato. Pulsa Actualizar para obtener el estado más reciente."</item>
+    <item>"No se pudo completar la operación. Vuelve a intentar."</item>
+    <item>"No se pudo conectar al servidor. Revisa tu conexión y vuelve a intentar; tus seguimientos guardados se conservan."</item>
+    <item>"No se pudo consultar tu plan. Actualiza para reintentar."</item>
+    <item>"No se pudo mostrar el anuncio. Puedes reintentar."</item>
+    <item>"No se pudo verificar la compra. Usa Restaurar compras para reintentar."</item>
+    <item>"No tienes seguimientos activos"</item>
+    <item>"Notificaciones no incluidas en tu plan"</item>
+    <item>"Notificación de resultado"</item>
+    <item>"Notificación desanclada"</item>
+    <item>"Notificación sin anclar"</item>
+    <item>"Nuevo seguimiento"</item>
+    <item>"Nuevos planes próximamente"</item>
+    <item>"O usa tu usuario y contraseña"</item>
+    <item>"Ocultar datos opcionales"</item>
+    <item>"Pago en período de gracia"</item>
+    <item>"Pago pendiente. El acceso se activará cuando Google Play confirme la compra."</item>
+    <item>"Partido completo · incluye prórroga y shootout"</item>
+    <item>"Partidos"</item>
+    <item>"Perdida"</item>
+    <item>"Perdida según los datos"</item>
+    <item>"Perfil"</item>
+    <item>"Procesando anuncio…"</item>
+    <item>"Próximamente"</item>
+    <item>"Publicidad · anuncio de prueba"</item>
+    <item>"Puedes consultar el avance aquí. Revisa los beneficios disponibles en Mi plan."</item>
+    <item>"Puedes consultar el avance desde la barra de notificaciones. El resultado sigue siendo provisional."</item>
+    <item>"Puntos"</item>
+    <item>"Puntos del equipo"</item>
+    <item>"Push · empate en la línea"</item>
+    <item>"Rebotes"</item>
+    <item>"Recompensa pendiente. Se actualizará al recibir la confirmación de AdMob."</item>
+    <item>"Registra apuestas que ya realizaste. Los resultados se basan en datos deportivos y pueden diferir de la liquidación del casino."</item>
+    <item>"Renovación automática. Puedes cancelar en Google Play."</item>
+    <item>"Resultado"</item>
+    <item>"Resultado del partido finalizado"</item>
+    <item>"Resultados informativos según los datos deportivos. Toca una tarjeta para consultar el detalle."</item>
+    <item>"Revisa la selección y la línea del seguimiento."</item>
+    <item>"Se canceló el inicio con Google. Puedes volver a intentarlo."</item>
+    <item>"Se evalúan 90 minutos más compensación, sin prórroga ni penales. Se admiten líneas enteras o medias; revisa las reglas de tu apuesta."</item>
+    <item>"Se quitará este seguimiento y su notificación."</item>
+    <item>"Seguimiento provisional · aviso permanente mientras esté anclado"</item>
+    <item>"Seguimientos"</item>
+    <item>"Seleccionar"</item>
+    <item>"Selección"</item>
+    <item>"Selección desfavorable"</item>
+    <item>"Selección favorable por ahora"</item>
+    <item>"Sigue el marcador y el progreso de tus apuestas NFL, fútbol, MLB, NBA y NHL en un solo lugar."</item>
+    <item>"Sin conexión · mostrando la última actualización guardada"</item>
+    <item>"Sin datos no se interpreta como cero."</item>
+    <item>"Sin límite de"</item>
+    <item>"Sin línea elegida"</item>
+    <item>"Sin partidos disponibles en esta jornada"</item>
+    <item>"Sin suscripción vigente. Conservas el acceso de {0}."</item>
+    <item>"Suscripción aún no disponible"</item>
+    <item>"Suscripción de Google Play"</item>
+    <item>"Sí"</item>
+    <item>"Terminó exactamente en la línea"</item>
+    <item>"Todos"</item>
+    <item>"Total del equipo"</item>
+    <item>"Total del partido"</item>
+    <item>"Totales"</item>
+    <item>"Triples"</item>
+    <item>"Tu apuesta.\nCada jugada."</item>
+    <item>"Tu cuenta MyBetLive"</item>
+    <item>"Tu plan no incluye nuevas props. Puedes seguir ML, totales y hándicap del equipo."</item>
+    <item>"Tu plan no permite esta operación. Consulta Mi plan."</item>
+    <item>"Tu selección"</item>
+    <item>"Tus seguimientos actuales continúan. Podrás añadir otra selección cuando se libere un espacio."</item>
+    <item>"Tus seguimientos continúan. Podrás añadir otro cuando tengas menos de {0} activos."</item>
+    <item>"Usa una línea entera o media: por ejemplo, {0}."</item>
+    <item>"Ver anuncio y desbloquear"</item>
+    <item>"Ver jornada"</item>
+    <item>"Ver mi plan"</item>
+    <item>"Ver otros planes"</item>
+    <item>"Ver partidos"</item>
+    <item>"Ver resultado"</item>
+    <item>"Ver resultado · guardado en Historial"</item>
+    <item>"Ver seguimiento"</item>
+    <item>"Ver seguimientos"</item>
+    <item>"Ver seguimientos activos"</item>
+    <item>"Ver vista previa del aviso"</item>
+    <item>"Volver al partido"</item>
+    <item>"Ya hay un anuncio en curso"</item>
+    <item>"Yardas de recepción"</item>
+    <item>"asistencias"</item>
+    <item>"atajadas"</item>
+    <item>"año"</item>
+    <item>"carreras"</item>
+    <item>"datos del partido"</item>
+    <item>"estadística del jugador"</item>
+    <item>"goles"</item>
+    <item>"mes"</item>
+    <item>"más"</item>
+    <item>"plan"</item>
+    <item>"puntos"</item>
+    <item>"rebotes"</item>
+    <item>"recepciones"</item>
+    <item>"sin límite"</item>
+    <item>"tiros"</item>
+    <item>"yardas"</item>
+    <item>"{0}\nÚltimo dato {1} · Sin datos no se interpreta como cero"</item>
+    <item>"{0} · último dato {1}"</item>
+    <item>"{0}. El partido completo usa el marcador oficial, incluido el gol decisivo del shootout. Los períodos y los 60 minutos excluyen prórroga y shootout. Revisa las reglas de tu apuesta."</item>
+    <item>"¡Tienes 1 seguimiento extra! Elige tu selección y guárdala."</item>
+    <item>"¿Habrá prórroga?"</item>
+    <item>"¿Qué quieres seguir?"</item>
+    <item>"Último valor guardado; aún no es actual."</item>
+    <item>" Con {0} hay push."</item>
+    <item>"3 meses"</item>
+    <item>"6 meses"</item>
+    <item>"60 minutos"</item>
+    <item>"APUESTA: EMPATE"</item>
+    <item>"Acceso con Google cancelado"</item>
+    <item>"Acceso por {0}."</item>
+    <item>"Activos ({0})"</item>
+    <item>"Administra permisos y avisos en este dispositivo."</item>
+    <item>"Al finalizar, el aviso deja de ser permanente y puede descartarse."</item>
+    <item>"Ambos equipos anotan"</item>
+    <item>"Anclada en este dispositivo"</item>
+    <item>"Anclados ({0})"</item>
+    <item>"Atajadas del portero"</item>
+    <item>"Aviso pendiente de inicio"</item>
+    <item>"Cancelada · acceso hasta el vencimiento"</item>
+    <item>"Casino · opcional"</item>
+    <item>"Casino: {0}"</item>
+    <item>"Compra cancelada."</item>
+    <item>"Comprobando acceso a notificaciones"</item>
+    <item>"Con .5"</item>
+    <item>"Configurar notificaciones"</item>
+    <item>"Consulta Perfil → Planes para revisar disponibilidad y condiciones."</item>
+    <item>"Consultar planes"</item>
+    <item>"Continuar con Google"</item>
+    <item>"Cualquiera gana · sin empate"</item>
+    <item>"Cubre · favorable por ahora"</item>
+    <item>"Dato guardado"</item>
+    <item>"Datos de tu apuesta"</item>
+    <item>"Datos pendientes de actualizar"</item>
+    <item>"Debe terminar por debajo de {0} {1}."</item>
+    <item>"Debe terminar por debajo de {0} · provisional"</item>
+    <item>"Demo local: activa el perfil demo del backend y entra con demo / demo-change-me."</item>
+    <item>"Diferencia de carreras · incluye entradas extra"</item>
+    <item>"Diferencia de goles · resultado provisional"</item>
+    <item>"Diferencia de puntos · resultado provisional"</item>
+    <item>"Diferencia {0} · Empate = 0"</item>
+    <item>"Diferencia {0} · Objetivo &gt; {1}"</item>
+    <item>"Doble oportunidad"</item>
+    <item>"Elegir jornada"</item>
+    <item>"Elige el encuentro que quieres seguir"</item>
+    <item>"En juego · {0} {1}"</item>
+    <item>"En vivo · provisional"</item>
+    <item>"Esperando marcador"</item>
+    <item>"Esperando {0}"</item>
+    <item>"Estado por confirmar"</item>
+    <item>"Evento cancelado"</item>
+    <item>"Ganador · juego completo"</item>
+    <item>"Goles · {0}"</item>
+    <item>"Google Play no pudo completar la compra. Reintenta."</item>
+    <item>"Habilita las notificaciones de MyBetLive en Android."</item>
+    <item>"Habilita los avisos de MyBetLive y el canal Seguimiento en vivo en los ajustes del dispositivo."</item>
+    <item>"Habilitar notificaciones en Android"</item>
+    <item>"Historial ({0})"</item>
+    <item>"Historial de tus seguimientos incluido"</item>
+    <item>"Horarios de {0}"</item>
+    <item>"Jornada anterior"</item>
+    <item>"Jornada siguiente"</item>
+    <item>"Jugador: {0}"</item>
+    <item>"Logo: {0}: {1}"</item>
+    <item>"Marcador exacto"</item>
+    <item>"Margen {0}"</item>
+    <item>"Menos de (Under)"</item>
+    <item>"Momio decimal · opcional (1.72)"</item>
+    <item>"Momio decimal: {0}"</item>
+    <item>"Monto · opcional"</item>
+    <item>"Monto: {0}"</item>
+    <item>"Notificaciones bloqueadas en Android"</item>
+    <item>"Notificaciones incluidas"</item>
+    <item>"Notificaciones: {0}"</item>
+    <item>"Objetivo {0}"</item>
+    <item>"Para cumplir: {0} o {1} al finalizar."</item>
+    <item>"Partido completo, incluido tiempo extra."</item>
+    <item>"Planes disponibles"</item>
+    <item>"Por comenzar"</item>
+    <item>"Preparando anuncios…"</item>
+    <item>"Privacidad de anuncios"</item>
+    <item>"Props de jugadores"</item>
+    <item>"Props de jugadores incluidos"</item>
+    <item>"Props de jugadores: {0}"</item>
+    <item>"Props {0} · notificaciones {1}"</item>
+    <item>"Proveedor sin configurar o sin consultas disponibles. Revisa el backend."</item>
+    <item>"Puntos + rebotes + asistencias"</item>
+    <item>"Restaurar compras"</item>
+    <item>"Resultado "</item>
+    <item>"Resultado 1X2"</item>
+    <item>"Resultado 1X2 · 90 minutos"</item>
+    <item>"Resultado final"</item>
+    <item>"Resultado final del proveedor"</item>
+    <item>"Resultado final · aviso descartable"</item>
+    <item>"Resultado provisional hasta finalizar."</item>
+    <item>"Run Line · juego completo"</item>
+    <item>"Seguimiento en vivo"</item>
+    <item>"Seguimiento guardado"</item>
+    <item>"Si es tu primera vez, crearemos tu cuenta al continuar con Google."</item>
+    <item>"Suscribirme con Google Play"</item>
+    <item>"TU EQUIPO"</item>
+    <item>"Tiros a puerta"</item>
+    <item>"Tiros totales"</item>
+    <item>"Todas las ligas"</item>
+    <item>"Total de carreras"</item>
+    <item>"Total de goles"</item>
+    <item>"Total de goles · 90 minutos"</item>
+    <item>"Total de puntos"</item>
+    <item>"Touchdowns de pase"</item>
+    <item>"Tus seguimientos guardados se conservan. Los permisos actuales se aplican al crear nuevas selecciones."</item>
+    <item>"URL del backend"</item>
+    <item>"Usuario"</item>
+    <item>"Va empatando · favorable por ahora"</item>
+    <item>"Va empatando · juego en curso"</item>
+    <item>"Va ganando"</item>
+    <item>"Va ganando · favorable por ahora"</item>
+    <item>"Va perdiendo"</item>
+    <item>"Va perdiendo · desfavorable"</item>
+    <item>"Vence: "</item>
+    <item>"Verificando compra…"</item>
+    <item>"Vista previa del aviso"</item>
+    <item>"Volver a anclar"</item>
+    <item>"Volver a seguimientos"</item>
+    <item>"Yardas de pase"</item>
+    <item>"Yardas terrestres"</item>
+    <item>"incluidas"</item>
+    <item>"incluidos"</item>
+    <item>"no incluidas"</item>
+    <item>"no incluidos"</item>
+    <item>"su vencimiento"</item>
+    <item>"tiros a puerta"</item>
+    <item>"{0} / {1} seguimientos activos"</item>
+    <item>"{0} o empate"</item>
+    <item>"{0} seguimientos activos"</item>
+    <item>"{0} · {1} / {2} seguimientos activos"</item>
+    <item>"Último dato {0}"</item>
+    <item>"Último resultado · {0}"</item>
+    <item>"Último valor guardado · pendiente de actualizar"</item>
+    <item>"‹ Volver a Perfil"</item>
+    <item>"Gratis"</item>
+    <item>"trimestre"</item>
+    <item>"semestre"</item>
+    <item>"touchdowns"</item>
+    <item>"Ampliada"</item>
+    <item>"Cancelada"</item>
+    <item>"Cancelado"</item>
+    <item>"Compacta"</item>
+    <item>"Enteras"</item>
+    <item>"Finalizado"</item>
+    <item>"Gestionar"</item>
+    <item>"Notificaciones"</item>
+    <item>"Planes"</item>
+    <item>"Pospuesto"</item>
+    <item>"Privada"</item>
+    <item>"Publicidad"</item>
+    <item>"menos"</item>
+    <item>"semana"</item>
+    <item>"En juego"</item>
+    <item>"Recepciones"</item>
+    <item>"triples"</item>
+    <item>"tiros totales"</item>
+    <item>"goles del equipo"</item>
+    <item>"goles de hándicap"</item>
+    <item>"puntos del equipo"</item>
+    <item>"puntos de hándicap"</item>
+    <item>"yardas terrestres"</item>
+    <item>"yardas de recepción"</item>
+    <item>"yardas de pase"</item>
+    <item>"touchdowns de pase"</item>
+    <item>"puntos + rebotes + asistencias"</item>
+    <item>"carreras del equipo"</item>
+    <item>"carreras de hándicap"</item>
+    <item>"Programado"</item>
+    <item>"Esperando inicio"</item>
+    <item>"Notificación activa"</item>
+    <item>"Notificación automática"</item>
+    <item>"Los seguimientos activos aparecen automáticamente en notificaciones hasta finalizar."</item>
+    <item>"Seguimiento activo · aviso permanente hasta finalizar"</item>
+    <item>"Burbuja de seguimiento"</item>
+    <item>"Burbuja activa · toca para abrir MyBetLive"</item>
+    <item>"Cerrar burbuja"</item>
+    <item>"Ver en burbuja"</item>
+    <item>"Lleva tu pick contigo"</item>
+    <item>"Burbuja activada. Puedes cambiar de aplicación."</item>
+    <item>"Habilita el permiso para mostrar la burbuja sobre otras aplicaciones."</item>
+    <item>"No se pudo activar la burbuja."</item>
+    <item>"Consulta el avance mientras usas otras apps. Android te pedirá habilitar el permiso para mostrar sobre otras aplicaciones. Puedes cerrar la burbuja sin borrar tu seguimiento."</item>
+    <item>"Habilitar burbuja"</item>
+    <item>"Ahora no"</item>
+    <item>"No se pudo abrir la configuración de Android."</item>
+    <item>"Este seguimiento ya no está disponible."</item>
+    <item>"Este seguimiento ya finalizó."</item>
+    <item>"Abrir seguimiento"</item>
+    <item>"Ganador"</item>
+    <item>"Sin datos"</item>
+    <item>"Push"</item>
+    <item>"Hándicap {0}"</item>
+    <item>"Exacto {0}"</item>
+    <item>"Prórroga · {0}"</item>
+    <item>"Ambos anotan · {0}"</item>
+    <item>"Seguimientos en burbujas"</item>
+    <item>"Cerrar todas las burbujas"</item>
+    <item>"Tiros de esquina"</item>
+    <item>"Total de tarjetas"</item>
+    <item>"Remates"</item>
+    <item>"Remates a puerta"</item>
+    <item>"tiros de esquina"</item>
+    <item>"tarjetas"</item>
+    <item>"remates"</item>
+    <item>"remates a puerta"</item>
+    <item>"Amarilla = 1 · roja directa = 2 · doble amarilla = 2 en total. Amarilla y roja directa = 3. Solo jugadores en cancha durante 90 minutos más compensación; se excluyen banca y cuerpo técnico."</item>
+    <item>"Usa entre 3 y 60 letras, números, puntos, guiones o guiones bajos para el usuario."</item>
+    <item>"Ingresa un correo válido."</item>
+    <item>"Usa una contraseña de al menos 8 caracteres."</item>
+    <item>"La contraseña es demasiado larga. Usa menos caracteres."</item>
+    <item>"Las contraseñas no coinciden."</item>
+    <item>"O usa tu correo o usuario y contraseña"</item>
+    <item>"Crear cuenta con correo"</item>
+    <item>"Crear una cuenta con correo"</item>
+    <item>"Recuperar contraseña"</item>
+    <item>"Confirma tu correo antes de comenzar. Tu cuenta inicia con el plan Free."</item>
+    <item>"Correo o usuario"</item>
+    <item>"Correo electrónico"</item>
+    <item>"Confirmar contraseña"</item>
+    <item>"Crear cuenta"</item>
+    <item>"Procesando…"</item>
+    <item>"Enviar enlace de recuperación"</item>
+    <item>"Reenviar confirmación de correo"</item>
+    <item>"Olvidé mi contraseña"</item>
+    <item>"Volver a iniciar sesión"</item>
+    <item>"Confirmar mi correo"</item>
+    <item>"Confirmar correo"</item>
+    <item>"Crear nueva contraseña"</item>
+    <item>"Nueva contraseña"</item>
+    <item>"Guardar contraseña"</item>
+    <item>"Volver a MyBetLive"</item>
+    <item>"Te enviamos un enlace para confirmar tu correo. Revisa también Spam."</item>
+    <item>"Si el correo tiene una cuenta, recibirás un enlace para recuperar tu contraseña."</item>
+    <item>"Si hay una cuenta pendiente, recibirás un enlace de confirmación."</item>
+    <item>"Correo confirmado. Ya puedes iniciar sesión."</item>
+    <item>"Contraseña actualizada. Inicia sesión con tu nueva contraseña."</item>
+    <item>"Sigue tus picks en tiempo real."</item>
+    <item>"O entra con tu correo"</item>
+    <item>"Configuración de desarrollo"</item>
+    <item>"Mostrar"</item>
+    <item>"Ocultar"</item>
+    <item>"Te enviaremos un enlace para crear una nueva contraseña."</item>
+    <item>"Bearer {0}"</item>
+    <item>"alerted:{0}"</item>
+    <item>"deleted:{0}"</item>
+    <item>"package:{0}"</item>
+    <item>"status:{0}"</item>
+    <item>"unpinned:{0}"</item>
+    <item>"version:{0}"</item>
+    <item>"{0}\n{1}\n{2}\nÚltimo dato {3}"</item>
+    <item>"{0}\nÚltimo dato {1} · {2}"</item>
+    <item>"{0} / {1}"</item>
+    <item>"{0} : {1}"</item>
+    <item>"{0} {1}"</item>
+    <item>"{0} {1} - {2} {3} · {4} {5}"</item>
+    <item>"{0} {1} : {2} {3}"</item>
+    <item>"{0} {1} · {2}\nÚltimo dato {3}"</item>
+    <item>"{0} · Premium"</item>
+    <item>"{0} · {1}"</item>
+    <item>"{0} · {1} vs {2}"</item>
+    <item>"{0} · {1} {2}"</item>
+    <item>"{0}. {1}"</item>
+    <item>"{0}. {1}. {2}"</item>
+    <item>"{0}: {1}"</item>
+    <item>"{0}:{1}"</item>
+    <item>"{0}{1} / {2} · {3}"</item>
+</string-array>
+</resources>

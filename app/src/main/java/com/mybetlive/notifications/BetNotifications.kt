@@ -25,16 +25,22 @@ class BetNotifications(private val context: Context) : com.mybetlive.application
     private val manager = context.getSystemService(NotificationManager::class.java)
     private val prefs = context.getSharedPreferences("notification-state", Context.MODE_PRIVATE)
     init {
-        manager.createNotificationChannel(NotificationChannel("tracking-live", "Seguimiento en vivo", NotificationManager.IMPORTANCE_LOW))
-        manager.createNotificationChannel(NotificationChannel("tracking-results", "Líneas y resultados", NotificationManager.IMPORTANCE_HIGH))
+        // Previous per-tracker unpin choices no longer define a separate category.
+        val legacy=prefs.all.keys.filter{it.startsWith("unpinned:")}
+        if(legacy.isNotEmpty())prefs.edit().apply{legacy.forEach{remove(it)}}.apply()
+        manager.createNotificationChannel(NotificationChannel("tracking-live",com.mybetlive.i18n.AppStrings.translate( "Seguimiento en vivo"), NotificationManager.IMPORTANCE_LOW))
+        manager.createNotificationChannel(NotificationChannel("tracking-results",com.mybetlive.i18n.AppStrings.translate( "Líneas y resultados"), NotificationManager.IMPORTANCE_HIGH))
     }
     override fun show(bet: BetView) {
-        show(mapOf("betId" to bet.id, "title" to bet.title(), "body" to "${bet.event.home.name} ${bet.event.homeScore ?: "—"} - ${bet.event.awayScore ?: "—"} ${bet.event.away.name} · ${bet.event.period} ${bet.event.clock.orEmpty()}",
+        val (home,away)=bet.scopedScores()
+        show(mapOf("betId" to bet.id, "title" to bet.title(), "body" to "${bet.event.home.name} ${home ?: "—"} - ${away ?: "—"} ${bet.event.away.name} · ${bet.event.period} ${bet.event.clock.orEmpty()}",
             "status" to bet.status, "currentValue" to (bet.currentValue?.display() ?: ""), "line" to (bet.line?.display() ?: ""),
             "remaining" to (bet.remaining?.display() ?: ""), "updatedAt" to bet.updatedAt,
             "sport" to bet.event.sport, "market" to bet.market, "selection" to bet.selection, "stale" to bet.stale.toString(),
+            "scope" to (bet.scope ?: "MATCH"),"targetScore" to bet.targetScore.orEmpty(),
+            "scopeHomeScore" to (bet.scopedScores().first?.toString()?:""),"scopeAwayScore" to (bet.scopedScores().second?.toString()?:""),
             "homeName" to bet.event.home.name, "awayName" to bet.event.away.name,
-            "homeScore" to (bet.event.homeScore?.toString() ?: ""), "awayScore" to (bet.event.awayScore?.toString() ?: ""),
+            "homeScore" to (home?.toString() ?: ""), "awayScore" to (away?.toString() ?: ""),
             "homeLogoUrl" to bet.event.home.logoUrl.orEmpty(), "awayLogoUrl" to bet.event.away.logoUrl.orEmpty(),
             "playerName" to bet.playerName.orEmpty(), "playerImageUrl" to bet.playerImageUrl.orEmpty(), "team" to bet.team.orEmpty(),
             "eventStatus" to bet.event.status, "period" to bet.event.period, "clock" to bet.event.clock.orEmpty(),
@@ -58,14 +64,13 @@ class BetNotifications(private val context: Context) : com.mybetlive.application
             prefs.getLong("alerted:$id", -1) != updated
         prefs.edit().putString("status:$id", data["status"]).apply()
         if (important) prefs.edit().putLong("alerted:$id", updated).apply()
-        if (!final && prefs.getBoolean("unpinned:$id", false)) return
         if (!final && !liveEnabled()) return
         val status = statusLabels[data["status"]] ?: data["status"].orEmpty()
         val body = data["body"].orEmpty()
         val presentation = marketPresentation(data["sport"] ?: "NFL",data["market"].orEmpty(),data["selection"].orEmpty(),
             data["line"]?.toDoubleOrNull(),data["currentValue"]?.toDoubleOrNull(),data["status"].orEmpty(),
-            data["homeScore"]?.toIntOrNull(),data["awayScore"]?.toIntOrNull(),data["stale"]=="true")
-        val isMoneyline = data["market"]=="MONEYLINE"
+            (if(data["sport"]=="NHL")data["scopeHomeScore"] else data["homeScore"])?.toIntOrNull(),(if(data["sport"]=="NHL")data["scopeAwayScore"] else data["awayScore"])?.toIntOrNull(),data["stale"]=="true",data["scope"]?:"MATCH",data["targetScore"])
+        val isMoneyline = presentation.visual==MarketVisual.MONEYLINE
         val progress = marketProgress(data["sport"] ?: "NFL", data["market"].orEmpty(), data["selection"].orEmpty(),
             data["line"]?.toDoubleOrNull(),data["currentValue"]?.toDoubleOrNull(),data["status"].orEmpty(),
             data["homeScore"]?.toIntOrNull(),data["awayScore"]?.toIntOrNull(),data["stale"] == "true")
@@ -73,7 +78,7 @@ class BetNotifications(private val context: Context) : com.mybetlive.application
         val title = if(data["homeName"].isNullOrBlank()) data["title"] ?: "MyBetLive" else {
             val event=EventSnapshot(data["sport"]?:"NFL","PUSH","", "", Team("home",data["homeName"].orEmpty()),Team("away",data["awayName"].orEmpty()),
                 null,null,data["eventStatus"].orEmpty(),data["period"].orEmpty(),data["clock"],data["updatedAt"].orEmpty())
-            selectionTitle(data["market"].orEmpty(),data["selection"].orEmpty(),data["line"]?.toDoubleOrNull(),data["team"],data["playerName"]?.takeIf{it.isNotBlank()},event)
+            selectionTitle(data["market"].orEmpty(),data["selection"].orEmpty(),data["line"]?.toDoubleOrNull(),data["team"],data["playerName"]?.takeIf{it.isNotBlank()},event,data["scope"]?:"MATCH",data["targetScore"]?.takeIf{it.isNotBlank()})
         }
         val time = runCatching { Instant.ofEpochMilli(updated).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("HH:mm")) }.getOrDefault("—")
         val details = listOf(body, value, presentation.status, "Último dato $time").filter { it.isNotBlank() }.joinToString("\n")
@@ -82,39 +87,39 @@ class BetNotifications(private val context: Context) : com.mybetlive.application
         val pending = PendingIntent.getActivity(context, id.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val channel=existing?.notification?.channelId ?: if(important) "tracking-results" else "tracking-live"
         val builder = NotificationCompat.Builder(context, channel)
-            .setSmallIcon(R.drawable.ic_mybet_notification).setContentTitle(title)
-            .setContentText(presentation.status).setStyle(NotificationCompat.BigTextStyle().bigText(details))
+            .setSmallIcon(R.drawable.ic_mybet_notification).setContentTitle(com.mybetlive.i18n.AppStrings.translate(title))
+            .setContentText(com.mybetlive.i18n.AppStrings.translate(presentation.status)).setStyle(NotificationCompat.BigTextStyle().bigText(com.mybetlive.i18n.AppStrings.translate(details)))
             .setContentIntent(pending).setOnlyAlertOnce(!important).setOngoing(!final).setAutoCancel(final)
-            .setSubText(listOf(data["sport"] ?: "NFL",data["period"].orEmpty(),data["clock"].orEmpty(),
-                if(final) "Resultado final" else "Provisional").filter { it.isNotBlank() }.joinToString(" · "))
+            .setSubText(com.mybetlive.i18n.AppStrings.translate(listOf(data["sport"] ?: "NFL",data["period"].orEmpty(),data["clock"].orEmpty(),
+                if(final) "Resultado final" else "Provisional").filter { it.isNotBlank() }.joinToString(" · ")))
             .setWhen(updated.takeIf { it > 0 } ?: System.currentTimeMillis()).setShowWhen(true)
             .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
             .setPublicVersion(NotificationCompat.Builder(context, channel)
-                .setSmallIcon(R.drawable.ic_mybet_notification).setContentTitle("MyBetLive")
-                .setContentText("Contenido oculto · desbloquea para ver tu seguimiento")
+                .setSmallIcon(R.drawable.ic_mybet_notification).setContentTitle(com.mybetlive.i18n.AppStrings.translate("MyBetLive"))
+                .setContentText(com.mybetlive.i18n.AppStrings.translate("Contenido oculto · desbloquea para ver tu seguimiento"))
                 .setContentIntent(pending).setOngoing(!final).setAutoCancel(final)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).build())
-            .addAction(0, if(final) "Ver resultado" else "Ver seguimiento", pending)
+            .addAction(0,com.mybetlive.i18n.AppStrings.translate( if(final) "Ver resultado" else "Ver seguimiento"), pending)
         if(data["market"]?.startsWith("PLAYER_")==true)
             NotificationArtwork.cached(data["playerImageUrl"])?.let { builder.setLargeIcon(it) }
         if(isMoneyline && data.containsKey("homeScore") && (Build.VERSION.SDK_INT < 36 || final)){
             val small=RemoteViews(context.packageName,R.layout.notification_progress_small)
-            small.setTextViewText(R.id.progress_title,title)
-            small.setTextViewText(R.id.progress_value,"")
+            small.setTextViewText(R.id.progress_title,com.mybetlive.i18n.AppStrings.translate(title))
+            small.setTextViewText(R.id.progress_value,com.mybetlive.i18n.AppStrings.translate(""))
             small.setImageViewBitmap(R.id.progress_track,moneylineArtwork(data,presentation,true))
-            small.setContentDescription(R.id.progress_track,"${presentation.value}. ${presentation.status}")
+            small.setContentDescription(R.id.progress_track,com.mybetlive.i18n.AppStrings.translate("${presentation.value}. ${presentation.status}"))
             val large=RemoteViews(context.packageName,R.layout.notification_progress_large)
-            large.setTextViewText(R.id.progress_title,title);large.setTextViewText(R.id.progress_value,"")
+            large.setTextViewText(R.id.progress_title,com.mybetlive.i18n.AppStrings.translate(title));large.setTextViewText(R.id.progress_value,com.mybetlive.i18n.AppStrings.translate(""))
             large.setImageViewBitmap(R.id.progress_track,moneylineArtwork(data,presentation,false))
-            large.setContentDescription(R.id.progress_track,"${presentation.value}. ${presentation.status}")
-            large.setTextViewText(R.id.progress_status,presentation.status)
+            large.setContentDescription(R.id.progress_track,com.mybetlive.i18n.AppStrings.translate("${presentation.value}. ${presentation.status}"))
+            large.setTextViewText(R.id.progress_status,com.mybetlive.i18n.AppStrings.translate(presentation.status))
             large.setTextColor(R.id.progress_status,presentation.tone.argb)
-            large.setTextViewText(R.id.progress_details,"${data["period"].orEmpty()} ${data["clock"].orEmpty()} · ${presentation.caption}\nÚltimo dato $time")
+            large.setTextViewText(R.id.progress_details,com.mybetlive.i18n.AppStrings.translate("${data["period"].orEmpty()} ${data["clock"].orEmpty()} · ${presentation.caption}\nÚltimo dato $time"))
             builder.setStyle(NotificationCompat.DecoratedCustomViewStyle()).setCustomContentView(small).setCustomBigContentView(large)
         }
         if(isMoneyline && Build.VERSION.SDK_INT >= 36 && !final) {
-            builder.setContentText("${presentation.value} · ${presentation.status}")
-                .setStyle(NotificationCompat.BigTextStyle().bigText("${presentation.value}\n$body\n${presentation.status}\nÚltimo dato $time"))
+            builder.setContentText(com.mybetlive.i18n.AppStrings.translate("${presentation.value} · ${presentation.status}"))
+                .setStyle(NotificationCompat.BigTextStyle().bigText(com.mybetlive.i18n.AppStrings.translate("${presentation.value}\n$body\n${presentation.status}\nÚltimo dato $time")))
             val teamKey=if(data["selection"]=="AWAY") "awayLogoUrl" else "homeLogoUrl"
             NotificationArtwork.cached(data[teamKey])?.let { builder.setLargeIcon(it) }
         }
@@ -130,23 +135,23 @@ class BetNotifications(private val context: Context) : com.mybetlive.application
                 builder.setStyle(style.addProgressPoint(NotificationCompat.ProgressStyle.Point((progress.targetFraction * 1000).roundToInt()).setColor(ProgressTone.MUTED.argb))
                     .setProgress((progress.fraction * 1000).roundToInt())
                     .setProgressTrackerIcon(IconCompat.createWithResource(context, ProgressTrackRenderer.sportIcon(progress.sport))))
-                    .setContentText("$value · ${progress.statusLabel}")
+                    .setContentText(com.mybetlive.i18n.AppStrings.translate("$value · ${progress.statusLabel}"))
             } else {
                 val small = RemoteViews(context.packageName, R.layout.notification_progress_small)
-                small.setTextViewText(R.id.progress_title, title)
-                small.setTextViewText(R.id.progress_value, value)
+                small.setTextViewText(R.id.progress_title,com.mybetlive.i18n.AppStrings.translate( title))
+                small.setTextViewText(R.id.progress_value,com.mybetlive.i18n.AppStrings.translate( value))
                 small.setTextColor(R.id.progress_value, presentation.tone.argb)
                 small.setImageViewBitmap(R.id.progress_track, ProgressTrackRenderer.bitmap(context, progress, compact = true))
-                small.setContentDescription(R.id.progress_track, progress.description)
+                small.setContentDescription(R.id.progress_track,com.mybetlive.i18n.AppStrings.translate( progress.description))
                 val large = RemoteViews(context.packageName, R.layout.notification_progress_large)
-                large.setTextViewText(R.id.progress_title, title)
-                large.setTextViewText(R.id.progress_value, value)
+                large.setTextViewText(R.id.progress_title,com.mybetlive.i18n.AppStrings.translate( title))
+                large.setTextViewText(R.id.progress_value,com.mybetlive.i18n.AppStrings.translate( value))
                 large.setTextColor(R.id.progress_value, presentation.tone.argb)
                 large.setImageViewBitmap(R.id.progress_track, ProgressTrackRenderer.bitmap(context, progress))
-                large.setContentDescription(R.id.progress_track, progress.description)
-                large.setTextViewText(R.id.progress_status, progress.statusLabel)
+                large.setContentDescription(R.id.progress_track,com.mybetlive.i18n.AppStrings.translate( progress.description))
+                large.setTextViewText(R.id.progress_status,com.mybetlive.i18n.AppStrings.translate( progress.statusLabel))
                 large.setTextColor(R.id.progress_status, presentation.tone.argb)
-                large.setTextViewText(R.id.progress_details, "$body\nÚltimo dato $time · ${if(final) "Final" else "Provisional"}")
+                large.setTextViewText(R.id.progress_details,com.mybetlive.i18n.AppStrings.translate( "$body\nÚltimo dato $time · ${if(final) "Final" else "Provisional"}"))
                 playerAvatar(large,data)
                 builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
                     .setCustomContentView(small).setCustomBigContentView(large)
@@ -156,23 +161,19 @@ class BetNotifications(private val context: Context) : com.mybetlive.application
             val small=RemoteViews(context.packageName,R.layout.notification_progress_small)
             val large=RemoteViews(context.packageName,R.layout.notification_progress_large)
             for(view in listOf(small,large)) {
-                view.setTextViewText(R.id.progress_title,title)
-                view.setTextViewText(R.id.progress_value,presentation.value)
+                view.setTextViewText(R.id.progress_title,com.mybetlive.i18n.AppStrings.translate(title))
+                view.setTextViewText(R.id.progress_value,com.mybetlive.i18n.AppStrings.translate(presentation.value))
                 view.setTextColor(R.id.progress_value,presentation.tone.argb)
                 view.setViewVisibility(R.id.progress_track,View.GONE)
                 view.setViewVisibility(R.id.progress_status,View.VISIBLE)
-                view.setTextViewText(R.id.progress_status,presentation.status)
+                view.setTextViewText(R.id.progress_status,com.mybetlive.i18n.AppStrings.translate(presentation.status))
             }
-            large.setTextViewText(R.id.progress_details,"$body\nÚltimo dato $time · Sin datos no se interpreta como cero")
+            large.setTextViewText(R.id.progress_details,com.mybetlive.i18n.AppStrings.translate("$body\nÚltimo dato $time · Sin datos no se interpreta como cero"))
             playerAvatar(large,data)
             builder.setStyle(NotificationCompat.DecoratedCustomViewStyle()).setCustomContentView(small).setCustomBigContentView(large)
         }
         if (!final) {
-            val unpin = PendingIntent.getBroadcast(context, id.hashCode(), Intent(context, UnpinReceiver::class.java)
-                .setData(android.net.Uri.parse("mybetlive://unpin/$id")).putExtra("betId", id),
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
             builder.setShortCriticalText(if(isMoneyline) presentation.value.replace(" : ",":").take(7) else data["currentValue"]?.take(7))
-                .setDeleteIntent(unpin).addAction(0, "Desanclar", unpin)
             if (Build.VERSION.SDK_INT >= 36) builder.setRequestPromotedOngoing(true)
         }
         manager.notify(id, 1, builder.build())
@@ -189,7 +190,7 @@ class BetNotifications(private val context: Context) : com.mybetlive.application
     private fun playerAvatar(view: RemoteViews, data: Map<String,String>) {
         if(data["market"]?.startsWith("PLAYER_")!=true) return
         view.setViewVisibility(R.id.progress_avatar,View.VISIBLE)
-        view.setContentDescription(R.id.progress_avatar,data["playerName"].orEmpty())
+        view.setContentDescription(R.id.progress_avatar,com.mybetlive.i18n.AppStrings.translate(data["playerName"].orEmpty()))
         val photo=NotificationArtwork.cached(data["playerImageUrl"])
         if(photo!=null) view.setImageViewBitmap(R.id.progress_avatar,photo)
         else view.setImageViewResource(R.id.progress_avatar,R.drawable.ic_player_avatar)
@@ -206,22 +207,11 @@ class BetNotifications(private val context: Context) : com.mybetlive.application
         return { prefs.unregisterOnSharedPreferenceChangeListener(observer) }
     }
     private fun changed() { prefs.edit().putLong("revision",prefs.getLong("revision",0)+1).apply() }
-    override fun pin(bet: BetView): Boolean = synchronized(stateLock) {
-        val updated=runCatching { Instant.parse(bet.updatedAt).toEpochMilli() }.getOrDefault(0)
-        if (!liveEnabled() || bet.status in settledStatuses || bet.status == "PENDING" || prefs.getBoolean("deleted:${bet.id}",false) ||
-            updated < prefs.getLong("version:${bet.id}",0) || prefs.getString("status:${bet.id}",null) in settledStatuses) return@synchronized false
-        prefs.edit().remove("unpinned:${bet.id}").apply()
-        show(bet)
-        // Android enqueues notify asynchronously; acceptance is separate from activeIds() visibility.
-        true
-    }
     override fun remove(id: String) { synchronized(stateLock) {
         prefs.edit().putBoolean("deleted:$id", true).apply()
         manager.cancel(id, 1)
         changed()
     } }
-    override fun isUnpinned(id: String) = prefs.getBoolean("unpinned:$id", false)
-    override fun unpin(id: String) { synchronized(stateLock) { prefs.edit().putBoolean("unpinned:$id", true).apply(); manager.cancel(id, 1); changed() } }
     override fun dismissAll() { synchronized(stateLock) { manager.cancelAll(); changed() } }
     override fun clear() { synchronized(stateLock) { manager.cancelAll(); val next=prefs.getLong("epoch",0)+1
         val revision=prefs.getLong("revision",0)+1; prefs.edit().clear().putLong("epoch",next).putLong("revision",revision).apply() } }

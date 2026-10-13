@@ -13,6 +13,7 @@ interface SessionOperations {
 interface TrackingOperations {
     val cachedBets: List<BetView>
     suspend fun sports(): List<SportInfo>
+    suspend fun calendar(): CalendarInfo
     suspend fun events(sport: String, date: LocalDate): List<EventView>
     suspend fun players(id: String): List<Player>
     suspend fun bets(): List<BetView>
@@ -32,10 +33,7 @@ interface TrackerNotifications {
     fun activeIds(): Set<String>
     fun liveEnabled(): Boolean
     fun observe(listener: () -> Unit): () -> Unit
-    fun isUnpinned(id: String): Boolean
     fun show(bet: BetView)
-    fun pin(bet: BetView): Boolean
-    fun unpin(id: String)
     fun remove(id: String)
     fun dismissAll()
     fun clear()

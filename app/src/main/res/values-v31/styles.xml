@@ -1,7 +1,8 @@
 <resources>
     <style name="Theme.MyBetLive.Starting" parent="Theme.MyBetLive">
         <item name="android:windowSplashScreenBackground">@color/brand_ink</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_mybet_launcher_foreground</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_mybet_splash_animated</item>
+        <item name="android:windowSplashScreenAnimationDuration">500</item>
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
 </resources>

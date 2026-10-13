@@ -22,7 +22,7 @@ import org.robolectric.annotation.GraphicsMode
 import org.robolectric.Shadows.shadowOf
 import java.io.File
 
-@RunWith(RobolectricTestRunner::class) @Config(sdk=[28])
+@RunWith(RobolectricTestRunner::class) @Config(sdk=[28],qualifiers="es-rMX")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class BetNotificationsTest {
     private val context get()=RuntimeEnvironment.getApplication()
@@ -36,15 +36,26 @@ class BetNotificationsTest {
             "LIVE","Q4","05:42","2026-10-04T20:00:00Z"),"PLAYER_POINTS","OVER",24.5,null,"player","LeBron James",
         null,null,null,status,value,null,"2026-10-04T20:00:00Z",false)
     @Before fun reset(){BetNotifications(context).clear()}
+    @Test fun hockeyRegulationNotificationUsesRegulationScoreAndScopeInTitle() {
+        val event=EventSnapshot("NHL","API_SPORTS_NHL","game","",Team("h","Capitals"),Team("a","Rangers"),3,2,"FINAL","AOT",null,"",periodScores=mapOf("P1" to PeriodScore(0,1),"P2" to PeriodScore(2,0),"P3" to PeriodScore(0,1)))
+        val bet=BetView("nhl-regulation","game",event,"RESULT_3WAY","DRAW",null,null,null,null,null,null,null,"WON",0.0,null,"2026-10-09T20:00:00Z",false,scope="REGULATION")
+        BetNotifications(context).show(bet)
+        val n=manager.activeNotifications.single().notification
+        assertTrue(n.extras.getString(Notification.EXTRA_TITLE).orEmpty().contains("60 minutos"))
+        // Foreground synchronization is deliberately silent; a push can alert on the results channel.
+        assertEquals("tracking-live",n.channelId)
+        assertNotNull(n.bigContentView)
+        assertEquals(0,n.flags and Notification.FLAG_ONGOING_EVENT)
+    }
     @Test fun liveNotificationHasActionsAndMLArtworkInsteadOfAProgressBar(){
         BetNotifications(context).show(payload())
         val n=manager.activeNotifications.single().notification
         assertTrue(n.flags and Notification.FLAG_ONGOING_EVENT!=0);assertNotNull(n.bigContentView)
-        assertEquals(listOf("Ver seguimiento","Desanclar"),n.actions.map{it.title.toString()})
+        assertEquals(listOf("Ver seguimiento"),n.actions.map{it.title.toString()})
     }
     @Test fun unpinPreventsRepinningButAllowsFinalAndRejectsOlderSnapshot(){
-        val notifications=BetNotifications(context);notifications.show(payload());notifications.unpin("test-bet")
-        assertEquals(0,manager.activeNotifications.size);notifications.show(payload());assertEquals(0,manager.activeNotifications.size)
+        val notifications=BetNotifications(context);notifications.show(payload())
+        manager.cancel("test-bet",1);notifications.show(payload());assertEquals(1,manager.activeNotifications.size)
         notifications.show(payload("WON","2026-10-03T20:10:00Z"))
         assertEquals(1,manager.activeNotifications.size)
         val n=manager.activeNotifications.single().notification;assertEquals(0,n.flags and Notification.FLAG_ONGOING_EVENT)
@@ -72,67 +83,53 @@ class BetNotificationsTest {
         assertEquals("tracking-results",n.channelId)
         assertTrue(n.flags and Notification.FLAG_ONLY_ALERT_ONCE != 0)
     }
-    @Test fun explicitRepinSurvivesInstancesAndKeepsOtherTrackersUnpinned() {
+    @Test fun legacyUnpinChoicesMigrateToAutomaticNotifications() {
+        context.getSharedPreferences("notification-state",0).edit().putBoolean("unpinned:nba-prop",true).putBoolean("unpinned:other",true).commit()
         val notifications=BetNotifications(context)
-        val bet=nbaBet()
-        notifications.show(bet); notifications.show(bet.copy(id="other"))
-        notifications.unpin(bet.id); notifications.unpin("other")
-        val restarted=BetNotifications(context)
-        restarted.show(bet)
-        assertTrue(restarted.activeIds().isEmpty())
-        assertTrue(restarted.pin(bet))
-        assertEquals(setOf(bet.id),restarted.activeIds())
-        assertTrue(restarted.isUnpinned("other"))
-        assertFalse(restarted.isUnpinned(bet.id))
+        notifications.show(nbaBet()); notifications.show(nbaBet().copy(id="other"))
+        assertEquals(setOf("nba-prop","other"),notifications.activeIds())
+        assertFalse(context.getSharedPreferences("notification-state",0).contains("unpinned:nba-prop"))
     }
-    @Test fun deletedScheduledAndSettledTrackersCannotBeRepinned() {
+    @Test fun scheduledTrackersNotifyButDeletedTrackersCannotReturn() {
         val notifications=BetNotifications(context)
-        assertFalse(notifications.pin(nbaBet("PENDING",null)))
-        assertFalse(notifications.pin(nbaBet("WON")))
-        notifications.remove("nba-prop")
-        assertFalse(notifications.pin(nbaBet()))
+        notifications.show(nbaBet("PENDING",null))
+        assertEquals(setOf("nba-prop"),notifications.activeIds())
+        assertNull(manager.activeNotifications.single().notification.deleteIntent)
+        notifications.remove("nba-prop"); notifications.show(nbaBet())
         assertTrue(notifications.activeIds().isEmpty())
     }
-    @Test fun aNewerPushSnapshotCannotBeOverwrittenByAnOlderRepin() {
+    @Test fun newerPushSnapshotCannotBeOverwrittenByOlderForegroundData() {
         val notifications=BetNotifications(context)
         notifications.show(nbaBet().copy(updatedAt="2026-10-04T20:01:00Z"))
-        notifications.unpin("nba-prop")
-        assertFalse(notifications.pin(nbaBet()))
-        assertTrue(notifications.isUnpinned("nba-prop"))
-        assertTrue(notifications.activeIds().isEmpty())
+        notifications.show(nbaBet("LIVE_LOSING",0.0))
+        val view=render(manager.activeNotifications.single().notification,"snapshot-preservado")
+        assertEquals("26 / 24.5",view.findViewById<TextView>(R.id.progress_value).text.toString())
     }
-    @Test fun disablingLiveChannelDoesNotClaimPinningAndKeepsTheUserPreference() {
+    @Test fun disabledLiveChannelCannotProduceActiveNotifications() {
         val notifications=BetNotifications(context)
-        notifications.unpin("nba-prop")
         manager.createNotificationChannel(NotificationChannel("tracking-live","Seguimiento en vivo",NotificationManager.IMPORTANCE_NONE))
         assertFalse(notifications.liveEnabled())
-        assertFalse(notifications.pin(nbaBet()))
-        assertTrue(notifications.isUnpinned("nba-prop"))
+        notifications.show(nbaBet())
         assertTrue(notifications.activeIds().isEmpty())
     }
     @Test @Config(sdk=[35]) fun permissionDeniedCannotProduceAnActiveNotification() {
         shadowOf(context).denyPermissions(android.Manifest.permission.POST_NOTIFICATIONS)
         val notifications=BetNotifications(context)
-        assertFalse(notifications.liveEnabled()); assertFalse(notifications.pin(nbaBet()))
-        notifications.show(nbaBet())
+        assertFalse(notifications.liveEnabled());notifications.show(nbaBet())
         assertTrue(notifications.activeIds().isEmpty())
     }
-    @Test fun notificationActionUnpinsAndNotifiesAnOpenAppObserver() {
-        val notifications=BetNotifications(context)
-        notifications.show(nbaBet())
+    @Test fun removingTrackerNotifiesOpenAppObserver() {
+        val notifications=BetNotifications(context);notifications.show(nbaBet())
         var updated=false
         val stop=notifications.observe { updated=true }
-        UnpinReceiver().onReceive(context,Intent().putExtra("betId","nba-prop"))
+        notifications.remove("nba-prop")
         shadowOf(android.os.Looper.getMainLooper()).idle()
-        assertTrue(updated); assertTrue(notifications.isUnpinned("nba-prop")); assertTrue(notifications.activeIds().isEmpty())
-        stop()
+        assertTrue(updated);assertTrue(notifications.activeIds().isEmpty());stop()
     }
-    @Test fun restrictedAccessDismissesNotificationsWithoutErasingUnpinPreferences() {
-        val notifications=BetNotifications(context)
-        notifications.show(nbaBet()); notifications.unpin("nba-prop")
-        notifications.dismissAll()
-        notifications.show(nbaBet())
-        assertTrue(notifications.activeIds().isEmpty()); assertTrue(notifications.isUnpinned("nba-prop"))
+    @Test fun restrictedAccessDismissesNotificationsAndCanResumeWithoutDeletingTracker() {
+        val notifications=BetNotifications(context);notifications.show(nbaBet())
+        notifications.dismissAll();assertTrue(notifications.activeIds().isEmpty())
+        notifications.show(nbaBet());assertEquals(setOf("nba-prop"),notifications.activeIds())
     }
     @Test fun privateLockScreenHasNoPlayerSelectionScoresOrActions() {
         BetNotifications(context).show(nbaBet())

@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string-array name="ui_translation">
+    <item>" The informational result may differ from your sportsbook\'s settlement."</item>
+    <item>"1 extra tracker available from an ad · use it before "</item>
+    <item>"1st period"</item>
+    <item>"2nd period"</item>
+    <item>"3rd period"</item>
+    <item>"90 minutes plus stoppage time, excluding extra time and penalties."</item>
+    <item>"90′ plus stoppage time, excluding extra time."</item>
+    <item>"Open an active tracker to pin its notification. Upcoming games will appear when data is available."</item>
+    <item>"Access granted by an administrator"</item>
+    <item>"Refresh the catalog to load the allowed range for this line."</item>
+    <item>"Refresh to check your plan\'s permissions. Your tracker is kept."</item>
+    <item>"Refresh data"</item>
+    <item>"Scope"</item>
+    <item>"Pin this tracker to see its progress in the notification bar."</item>
+    <item>"Pin notification"</item>
+    <item>"Ad closed without a reward. You can try again."</item>
+    <item>"Assists"</item>
+    <item>"Notifications active on this device. Unpinning keeps the tracker and its history."</item>
+    <item>"Add stake, odds or sportsbook"</item>
+    <item>"Add tracker"</item>
+    <item>"No players have data for this statistic yet."</item>
+    <item>"No goalkeepers have save statistics available yet."</item>
+    <item>"No results here yet"</item>
+    <item>"Invalid rewarded ad unit"</item>
+    <item>"Each tracker specifies the full game, 60 minutes or a period."</item>
+    <item>"Cancel"</item>
+    <item>"Loading ad…"</item>
+    <item>"Loading players…"</item>
+    <item>"Team runs"</item>
+    <item>"Close"</item>
+    <item>"Sign out"</item>
+    <item>"Complete an ad to add another team tracker. A maximum of one extra active tracker; it lasts until the game ends. You have 24 hours to use the reward."</item>
+    <item>"Purchases verified. Your plan is up to date."</item>
+    <item>"A line of 0 can push; this statistic cannot go below 0."</item>
+    <item>"Connecting…"</item>
+    <item>"Confirming reward…"</item>
+    <item>"Content hidden · unlock to see your tracker"</item>
+    <item>"Continue with my plan"</item>
+    <item>"Password"</item>
+    <item>"When available, their benefits and prices will appear here. You can keep using your current plan."</item>
+    <item>"Saved data · waiting for an update"</item>
+    <item>"Demo · simulated sports data"</item>
+    <item>"Unpin"</item>
+    <item>"Unpinning keeps the tracker and its history."</item>
+    <item>"Unpin notification"</item>
+    <item>"Unlock 1 extra tracker"</item>
+    <item>"Swipe up or down and tap a line to select it."</item>
+    <item>"Tracker details"</item>
+    <item>"Goal difference · 90 minutes plus stoppage time"</item>
+    <item>"The ad took too long. You can try again."</item>
+    <item>"Its appearance in the notification bar and lock screen depends on your Android version and privacy settings."</item>
+    <item>"Your selections\' progress"</item>
+    <item>"The notification will appear when the game has data. No invented score is shown."</item>
+    <item>"The change was saved. The data could not be refreshed; tap Refresh to try again."</item>
+    <item>"This sport is not enabled yet"</item>
+    <item>"This plan is not available on Google Play yet."</item>
+    <item>"The tracker uses the full game result, including overtime. Check that it matches your bet\'s rules."</item>
+    <item>"The server could not complete the operation ({0})."</item>
+    <item>"Choose a game and add the selection you want to track."</item>
+    <item>"Delete"</item>
+    <item>"Delete tracker"</item>
+    <item>"Draw"</item>
+    <item>"Draw after 90 minutes plus stoppage time"</item>
+    <item>"Exactly on the line"</item>
+    <item>"On the line"</item>
+    <item>"On the line · needs to exceed {0}"</item>
+    <item>"On the line · pushes if it ends this way"</item>
+    <item>"Sign in"</item>
+    <item>"Team"</item>
+    <item>"Waiting for data"</item>
+    <item>"Waiting for statistics"</item>
+    <item>"Waiting for information"</item>
+    <item>"{0} more needed to exceed the line"</item>
+    <item>"{0} more {1} needed to exceed the line"</item>
+    <item>"Soccer"</item>
+    <item>"Won"</item>
+    <item>"Won according to the data"</item>
+    <item>"Winner · includes overtime"</item>
+    <item>"Winner · includes overtime and shootout"</item>
+    <item>"Manage your current subscription"</item>
+    <item>"Goals"</item>
+    <item>"Team goals"</item>
+    <item>"Team goals · 90 minutes"</item>
+    <item>"Google Play is not available on this device."</item>
+    <item>"Google did not return a valid credential. Try again"</item>
+    <item>"Google could not find an available account. Add a Google account to this device."</item>
+    <item>"Google could not sign you in. Check your account and try again."</item>
+    <item>"Saving…"</item>
+    <item>"Save tracker"</item>
+    <item>"Today"</item>
+    <item>"Asian handicap · 90 minutes"</item>
+    <item>"Handicap · includes overtime"</item>
+    <item>"Includes 1 extra tracker per ad, valid until the game ends."</item>
+    <item>"Enter a valid HTTPS URL (local HTTP is available in debug)"</item>
+    <item>"Enter a valid numeric line."</item>
+    <item>"Sign in"</item>
+    <item>"Full game with extra innings, excluding pitcher conditions and early innings markets."</item>
+    <item>"Full game, including extra innings; excluding pitcher conditions and early innings markets. Shortened games or incomplete data await review. API-Baseball does not offer player props."</item>
+    <item>"Players"</item>
+    <item>"Your bet remains in the app. The notification will not be pinned again automatically."</item>
+    <item>"The account changed during the request"</item>
+    <item>"The {0} line must be between {1} and {2}."</item>
+    <item>"Your session is invalid. Check your credentials."</item>
+    <item>"Reached lines remain provisional until the final result. Tap a card for details."</item>
+    <item>"Subscriptions will be available when plans are defined and purchases are enabled."</item>
+    <item>"Ads are not available yet. Try again."</item>
+    <item>"Finished games do not appear here. Choose another date or refresh to find upcoming or live games."</item>
+    <item>"Won, lost, pushed or canceled trackers will appear in History."</item>
+    <item>"Tracker limit"</item>
+    <item>"Line"</item>
+    <item>"Line reached · provisional"</item>
+    <item>"Previous line"</item>
+    <item>"Selected line: {0} {1}"</item>
+    <item>"Next line"</item>
+    <item>"Line exceeded · provisional result"</item>
+    <item>"Line {0}"</item>
+    <item>"Lines and results"</item>
+    <item>"ML, team totals and handicaps included"</item>
+    <item>"Adjusted margin = score difference + handicap."</item>
+    <item>"Market"</item>
+    <item>"My plan"</item>
+    <item>"My subscription"</item>
+    <item>"More than (Over)"</item>
+    <item>"Needs {0} {1} or more at the end."</item>
+    <item>"No"</item>
+    <item>"Not covering · unfavorable"</item>
+    <item>"Not covering ← 0 → Covering"</item>
+    <item>"Not tied · unfavorable"</item>
+    <item>"No lines available. Refresh the catalog."</item>
+    <item>"No pinned notifications"</item>
+    <item>"No ad is available. Your regular tracker is kept; try later."</item>
+    <item>"No Google account is available. Check your phone\'s accounts and try again"</item>
+    <item>"Prices could not be loaded. Refresh or try again."</item>
+    <item>"Purchases could not be restored. Try again."</item>
+    <item>"Google sign-in could not be opened. Check your connection and Google Play services"</item>
+    <item>"Google Play checkout could not be opened."</item>
+    <item>"This data could not be pinned. Tap Refresh to get the latest status."</item>
+    <item>"The operation could not be completed. Try again."</item>
+    <item>"Could not connect to the server. Check your connection and try again; your saved trackers are kept."</item>
+    <item>"Your plan could not be loaded. Refresh to try again."</item>
+    <item>"The ad could not be shown. You can try again."</item>
+    <item>"Your purchase could not be verified. Use Restore purchases to try again."</item>
+    <item>"You have no active trackers"</item>
+    <item>"Notifications are not included in your plan"</item>
+    <item>"Result notification"</item>
+    <item>"Notification unpinned"</item>
+    <item>"Notification not pinned"</item>
+    <item>"New tracker"</item>
+    <item>"New plans coming soon"</item>
+    <item>"Or use your username and password"</item>
+    <item>"Hide optional details"</item>
+    <item>"Payment grace period"</item>
+    <item>"Payment pending. Access will be activated when Google Play confirms the purchase."</item>
+    <item>"Full game · includes overtime and shootout"</item>
+    <item>"Games"</item>
+    <item>"Lost"</item>
+    <item>"Lost according to the data"</item>
+    <item>"Profile"</item>
+    <item>"Processing ad…"</item>
+    <item>"Coming soon"</item>
+    <item>"Advertisement · test ad"</item>
+    <item>"You can view progress here. Check the available benefits in My plan."</item>
+    <item>"You can view progress in the notification bar. The result remains provisional."</item>
+    <item>"Points"</item>
+    <item>"Team points"</item>
+    <item>"Push · exactly on the line"</item>
+    <item>"Rebounds"</item>
+    <item>"Reward pending. It will update when confirmation arrives from AdMob."</item>
+    <item>"Track bets you have already placed. Results use sports data and may differ from your sportsbook\'s settlement."</item>
+    <item>"Automatic renewal. You can cancel on Google Play."</item>
+    <item>"Result"</item>
+    <item>"Result of the finished game"</item>
+    <item>"Informational results based on sports data. Tap a card for details."</item>
+    <item>"Check the selection and tracker line."</item>
+    <item>"Google sign-in was canceled. You can try again."</item>
+    <item>"90 minutes plus stoppage time are evaluated, excluding extra time and penalties. Whole and half lines are supported; check your bet\'s rules."</item>
+    <item>"This tracker and its notification will be deleted."</item>
+    <item>"Provisional tracker · ongoing notification while pinned"</item>
+    <item>"Trackers"</item>
+    <item>"Select"</item>
+    <item>"Selection"</item>
+    <item>"Unfavorable selection"</item>
+    <item>"Favorable selection for now"</item>
+    <item>"Follow scores and your bets\' progress for NFL, soccer, MLB, NBA and NHL in one place."</item>
+    <item>"Offline · showing the last saved update"</item>
+    <item>"Missing data is not treated as zero."</item>
+    <item>"Unlimited"</item>
+    <item>"No line selected"</item>
+    <item>"No games available on this date"</item>
+    <item>"No active subscription. You keep access to {0}."</item>
+    <item>"Subscription not available yet"</item>
+    <item>"Google Play subscription"</item>
+    <item>"Yes"</item>
+    <item>"Finished exactly on the line"</item>
+    <item>"All"</item>
+    <item>"Team total"</item>
+    <item>"Game total"</item>
+    <item>"Totals"</item>
+    <item>"Three-pointers"</item>
+    <item>"Your bet.\nEvery play."</item>
+    <item>"Your MyBetLive account"</item>
+    <item>"Your plan does not include new props. You can track ML, totals and team handicaps."</item>
+    <item>"Your plan does not allow this operation. Check My plan."</item>
+    <item>"Your selection"</item>
+    <item>"Your current trackers continue. You can add another selection when a slot becomes available."</item>
+    <item>"Your trackers continue. You can add another when you have fewer than {0} active."</item>
+    <item>"Use a whole or half line: for example, {0}."</item>
+    <item>"Watch ad and unlock"</item>
+    <item>"View date"</item>
+    <item>"View my plan"</item>
+    <item>"View other plans"</item>
+    <item>"View games"</item>
+    <item>"View result"</item>
+    <item>"View result · saved in History"</item>
+    <item>"View tracker"</item>
+    <item>"View trackers"</item>
+    <item>"View active trackers"</item>
+    <item>"Preview notification"</item>
+    <item>"Back to game"</item>
+    <item>"An ad is already in progress"</item>
+    <item>"Receiving yards"</item>
+    <item>"assists"</item>
+    <item>"saves"</item>
+    <item>"year"</item>
+    <item>"runs"</item>
+    <item>"game data"</item>
+    <item>"player statistics"</item>
+    <item>"goals"</item>
+    <item>"month"</item>
+    <item>"more"</item>
+    <item>"plan"</item>
+    <item>"points"</item>
+    <item>"rebounds"</item>
+    <item>"receptions"</item>
+    <item>"unlimited"</item>
+    <item>"shots"</item>
+    <item>"yards"</item>
+    <item>"{0}\nLast data {1} · Missing data is not treated as zero"</item>
+    <item>"{0} · last data {1}"</item>
+    <item>"{0}. The full game uses the official score, including the deciding shootout goal. Periods and 60 minutes exclude overtime and shootout. Check your bet\'s rules."</item>
+    <item>"You have 1 extra tracker! Choose your selection and save it."</item>
+    <item>"Will there be overtime?"</item>
+    <item>"What would you like to track?"</item>
+    <item>"Last saved value; it is not current yet."</item>
+    <item>" A line of {0} can push."</item>
+    <item>"3 months"</item>
+    <item>"6 months"</item>
+    <item>"60 minutes"</item>
+    <item>"BET: DRAW"</item>
+    <item>"Google sign-in canceled"</item>
+    <item>"Access for {0}."</item>
+    <item>"Active ({0})"</item>
+    <item>"Manage permissions and notifications on this device."</item>
+    <item>"Once finished, the notification is no longer ongoing and can be dismissed."</item>
+    <item>"Both teams to score"</item>
+    <item>"Pinned on this device"</item>
+    <item>"Pinned ({0})"</item>
+    <item>"Goalkeeper saves"</item>
+    <item>"Notification waiting for the start"</item>
+    <item>"Canceled · access until expiration"</item>
+    <item>"Sportsbook · optional"</item>
+    <item>"Sportsbook: {0}"</item>
+    <item>"Purchase canceled."</item>
+    <item>"Checking notification access"</item>
+    <item>"Half lines"</item>
+    <item>"Notification settings"</item>
+    <item>"Open Profile → Plans to check availability and terms."</item>
+    <item>"View plans"</item>
+    <item>"Continue with Google"</item>
+    <item>"Either team wins · no draw"</item>
+    <item>"Covering · favorable for now"</item>
+    <item>"Saved data"</item>
+    <item>"Your bet details"</item>
+    <item>"Data awaiting an update"</item>
+    <item>"Must finish below {0} {1}."</item>
+    <item>"Must finish below {0} · provisional"</item>
+    <item>"Local demo: enable the backend demo profile and sign in with demo / demo-change-me."</item>
+    <item>"Run difference · includes extra innings"</item>
+    <item>"Goal difference · provisional result"</item>
+    <item>"Point difference · provisional result"</item>
+    <item>"Difference {0} · Draw = 0"</item>
+    <item>"Difference {0} · Target &gt; {1}"</item>
+    <item>"Double chance"</item>
+    <item>"Choose date"</item>
+    <item>"Choose the game you want to track"</item>
+    <item>"Live · {0} {1}"</item>
+    <item>"Live · provisional"</item>
+    <item>"Waiting for score"</item>
+    <item>"Waiting for {0}"</item>
+    <item>"Status to be confirmed"</item>
+    <item>"Event canceled"</item>
+    <item>"Winner · full game"</item>
+    <item>"Goals · {0}"</item>
+    <item>"Google Play could not complete the purchase. Try again."</item>
+    <item>"Enable MyBetLive notifications in Android."</item>
+    <item>"Enable MyBetLive notifications and the Live tracking channel in device settings."</item>
+    <item>"Enable Android notifications"</item>
+    <item>"History ({0})"</item>
+    <item>"Tracker history included"</item>
+    <item>"Times in {0}"</item>
+    <item>"Previous date"</item>
+    <item>"Next date"</item>
+    <item>"Player: {0}"</item>
+    <item>"Logo: {0}: {1}"</item>
+    <item>"Correct score"</item>
+    <item>"Margin {0}"</item>
+    <item>"Less than (Under)"</item>
+    <item>"Decimal odds · optional (1.72)"</item>
+    <item>"Decimal odds: {0}"</item>
+    <item>"Stake · optional"</item>
+    <item>"Stake: {0}"</item>
+    <item>"Notifications blocked in Android"</item>
+    <item>"Notifications included"</item>
+    <item>"Notifications: {0}"</item>
+    <item>"Target {0}"</item>
+    <item>"To win: {0} or {1} at the end."</item>
+    <item>"Full game, including overtime."</item>
+    <item>"Available plans"</item>
+    <item>"Upcoming"</item>
+    <item>"Preparing ads…"</item>
+    <item>"Ad privacy"</item>
+    <item>"Player props"</item>
+    <item>"Player props included"</item>
+    <item>"Player props: {0}"</item>
+    <item>"Props {0} · notifications {1}"</item>
+    <item>"Provider not configured or requests unavailable. Check the backend."</item>
+    <item>"Points + rebounds + assists"</item>
+    <item>"Restore purchases"</item>
+    <item>"Result "</item>
+    <item>"1X2 result"</item>
+    <item>"1X2 result · 90 minutes"</item>
+    <item>"Final result"</item>
+    <item>"Provider\'s final result"</item>
+    <item>"Final result · dismissible notification"</item>
+    <item>"Provisional result until the game ends."</item>
+    <item>"Run Line · full game"</item>
+    <item>"Live tracking"</item>
+    <item>"Tracker saved"</item>
+    <item>"If this is your first time, we will create your account when you continue with Google."</item>
+    <item>"Subscribe with Google Play"</item>
+    <item>"YOUR TEAM"</item>
+    <item>"Shots on target"</item>
+    <item>"Total shots"</item>
+    <item>"All leagues"</item>
+    <item>"Total runs"</item>
+    <item>"Total goals"</item>
+    <item>"Total goals · 90 minutes"</item>
+    <item>"Total points"</item>
+    <item>"Passing touchdowns"</item>
+    <item>"Your saved trackers are kept. Current permissions apply when creating new selections."</item>
+    <item>"Backend URL"</item>
+    <item>"Username"</item>
+    <item>"Tied · favorable for now"</item>
+    <item>"Tied · game in progress"</item>
+    <item>"Winning"</item>
+    <item>"Winning · favorable for now"</item>
+    <item>"Losing"</item>
+    <item>"Losing · unfavorable"</item>
+    <item>"Expires: "</item>
+    <item>"Verifying purchase…"</item>
+    <item>"Notification preview"</item>
+    <item>"Pin again"</item>
+    <item>"Back to trackers"</item>
+    <item>"Passing yards"</item>
+    <item>"Rushing yards"</item>
+    <item>"included"</item>
+    <item>"included"</item>
+    <item>"not included"</item>
+    <item>"not included"</item>
+    <item>"its expiration"</item>
+    <item>"shots on target"</item>
+    <item>"{0} / {1} active trackers"</item>
+    <item>"{0} or draw"</item>
+    <item>"{0} active trackers"</item>
+    <item>"{0} · {1} / {2} active trackers"</item>
+    <item>"Last data {0}"</item>
+    <item>"Latest result · {0}"</item>
+    <item>"Last saved value · awaiting an update"</item>
+    <item>"‹ Back to Profile"</item>
+    <item>"Free"</item>
+    <item>"quarter"</item>
+    <item>"half year"</item>
+    <item>"touchdowns"</item>
+    <item>"Expanded"</item>
+    <item>"Canceled"</item>
+    <item>"Canceled"</item>
+    <item>"Compact"</item>
+    <item>"Whole lines"</item>
+    <item>"Finished"</item>
+    <item>"Manage"</item>
+    <item>"Notifications"</item>
+    <item>"Plans"</item>
+    <item>"Postponed"</item>
+    <item>"Private"</item>
+    <item>"Ads"</item>
+    <item>"less"</item>
+    <item>"week"</item>
+    <item>"Live"</item>
+    <item>"Receptions"</item>
+    <item>"three-pointers"</item>
+    <item>"total shots"</item>
+    <item>"team goals"</item>
+    <item>"handicap goals"</item>
+    <item>"team points"</item>
+    <item>"handicap points"</item>
+    <item>"rushing yards"</item>
+    <item>"receiving yards"</item>
+    <item>"passing yards"</item>
+    <item>"passing touchdowns"</item>
+    <item>"points + rebounds + assists"</item>
+    <item>"team runs"</item>
+    <item>"run handicap"</item>
+    <item>"Scheduled"</item>
+    <item>"Waiting for the start"</item>
+    <item>"Active notification"</item>
+    <item>"Automatic notification"</item>
+    <item>"Active trackers appear automatically in notifications until they finish."</item>
+    <item>"Active tracker · ongoing notification until it finishes"</item>
+    <item>"Floating tracker"</item>
+    <item>"Bubble active · tap to open MyBetLive"</item>
+    <item>"Close bubble"</item>
+    <item>"View in bubble"</item>
+    <item>"Take your pick with you"</item>
+    <item>"Bubble activated. You can switch apps."</item>
+    <item>"Enable permission to display the bubble over other apps."</item>
+    <item>"Unable to activate the bubble."</item>
+    <item>"Follow your pick while using other apps. Android will ask you to enable display over other apps. Closing the bubble does not delete your tracker."</item>
+    <item>"Enable bubble"</item>
+    <item>"Not now"</item>
+    <item>"Unable to open Android settings."</item>
+    <item>"This tracker is no longer available."</item>
+    <item>"This tracker has already finished."</item>
+    <item>"Open tracker"</item>
+    <item>"Winner"</item>
+    <item>"No data"</item>
+    <item>"Push"</item>
+    <item>"Handicap {0}"</item>
+    <item>"Exact score {0}"</item>
+    <item>"Overtime · {0}"</item>
+    <item>"Both teams score · {0}"</item>
+    <item>"Floating trackers"</item>
+    <item>"Close all bubbles"</item>
+    <item>"Corner kicks"</item>
+    <item>"Total cards"</item>
+    <item>"Shots"</item>
+    <item>"Shots on target"</item>
+    <item>"corner kicks"</item>
+    <item>"cards"</item>
+    <item>"shots"</item>
+    <item>"shots on target"</item>
+    <item>"Yellow = 1 · straight red = 2 · second yellow dismissal = 2 in total. Yellow and straight red = 3. Only players on the pitch during 90 minutes plus stoppage time; bench and coaching staff excluded."</item>
+    <item>"Use 3 to 60 letters, numbers, periods, hyphens or underscores for your username."</item>
+    <item>"Enter a valid email address."</item>
+    <item>"Use a password with at least 8 characters."</item>
+    <item>"The password is too long. Use fewer characters."</item>
+    <item>"Passwords do not match."</item>
+    <item>"Or use your email or username and password"</item>
+    <item>"Create an account with email"</item>
+    <item>"Create an account with email"</item>
+    <item>"Reset password"</item>
+    <item>"Confirm your email before starting. Your account starts on the Free plan."</item>
+    <item>"Email or username"</item>
+    <item>"Email address"</item>
+    <item>"Confirm password"</item>
+    <item>"Create account"</item>
+    <item>"Processing…"</item>
+    <item>"Send reset link"</item>
+    <item>"Resend confirmation email"</item>
+    <item>"Forgot password"</item>
+    <item>"Back to sign in"</item>
+    <item>"Confirm my email"</item>
+    <item>"Confirm email"</item>
+    <item>"Create a new password"</item>
+    <item>"New password"</item>
+    <item>"Save password"</item>
+    <item>"Back to MyBetLive"</item>
+    <item>"We sent a link to confirm your email. Check your spam folder too."</item>
+    <item>"If an account uses this email, you will receive a password reset link."</item>
+    <item>"If an account is awaiting confirmation, you will receive a confirmation link."</item>
+    <item>"Email confirmed. You can now sign in."</item>
+    <item>"Password updated. Sign in with your new password."</item>
+    <item>"Follow your picks in real time."</item>
+    <item>"Or sign in with email"</item>
+    <item>"Development settings"</item>
+    <item>"Show"</item>
+    <item>"Hide"</item>
+    <item>"We\'ll send you a link to create a new password."</item>
+    <item>"Bearer {0}"</item>
+    <item>"alerted:{0}"</item>
+    <item>"deleted:{0}"</item>
+    <item>"package:{0}"</item>
+    <item>"status:{0}"</item>
+    <item>"unpinned:{0}"</item>
+    <item>"version:{0}"</item>
+    <item>"{0}\n{1}\n{2}\nLast data {3}"</item>
+    <item>"{0}\nLast data {1} · {2}"</item>
+    <item>"{0} / {1}"</item>
+    <item>"{0} : {1}"</item>
+    <item>"{0} {1}"</item>
+    <item>"{0} {1} - {2} {3} · {4} {5}"</item>
+    <item>"{0} {1} : {2} {3}"</item>
+    <item>"{0} {1} · {2}\nLast data {3}"</item>
+    <item>"{0} · Premium"</item>
+    <item>"{0} · {1}"</item>
+    <item>"{0} · {1} vs {2}"</item>
+    <item>"{0} · {1} {2}"</item>
+    <item>"{0}. {1}"</item>
+    <item>"{0}. {1}. {2}"</item>
+    <item>"{0}: {1}"</item>
+    <item>"{0}:{1}"</item>
+    <item>"{0}{1} / {2} · {3}"</item>
+</string-array>
+</resources>

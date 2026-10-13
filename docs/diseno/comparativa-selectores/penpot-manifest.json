@@ -1,0 +1,92 @@
+{
+  "fileId": "71b39894-c9c5-81cd-8008-bc366032f6eb",
+  "pageId": "3637abe7-4f8f-800b-8008-c165f1e09b65",
+  "page": "08 · Comparativa de selectores",
+  "boards": [
+    {
+      "key": "carousel-goals",
+      "id": "3637abe7-4f8f-800b-8008-c1661a285dd6",
+      "name": "App / 1 · Carrusel horizontal",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "wheel-goals",
+      "id": "3637abe7-4f8f-800b-8008-c1661be326f9",
+      "name": "App / 2 · Rueda vertical",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "slider-goals",
+      "id": "3637abe7-4f8f-800b-8008-c1661dc5e78f",
+      "name": "App / 3 · Deslizador con pasos",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "carousel-nfl",
+      "id": "3637abe7-4f8f-800b-8008-c1665583075b",
+      "name": "App / 1 · Carrusel / Yardas",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "wheel-nfl",
+      "id": "3637abe7-4f8f-800b-8008-c166575fe10e",
+      "name": "App / 2 · Rueda / Yardas",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "slider-nfl",
+      "id": "3637abe7-4f8f-800b-8008-c16659692091",
+      "name": "App / 3 · Deslizador / Rango acotado",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "precise-goals",
+      "id": "3637abe7-4f8f-800b-8008-c16b22b05740",
+      "name": "App / 4 · Rueda con ajuste fino",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "ruler-goals",
+      "id": "3637abe7-4f8f-800b-8008-c16b24dfa833",
+      "name": "App / 5 · Regla horizontal",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "columns-goals",
+      "id": "3637abe7-4f8f-800b-8008-c16b279d7bcd",
+      "name": "App / 6 · Entero y decimal",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "precise-nfl",
+      "id": "3637abe7-4f8f-800b-8008-c16b6040a579",
+      "name": "App / 4 · Rueda + botones / NFL",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "ruler-nfl",
+      "id": "3637abe7-4f8f-800b-8008-c16b6288ace7",
+      "name": "App / 5 · Regla / NFL",
+      "width": 390,
+      "height": 920
+    },
+    {
+      "key": "columns-nfl",
+      "id": "3637abe7-4f8f-800b-8008-c16b65a4a47b",
+      "name": "App / 6 · Dos columnas / NFL",
+      "width": 390,
+      "height": 920
+    }
+  ],
+  "checks": []
+}

@@ -5,6 +5,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.JsonParser
 import com.mybetlive.data.*
+import com.mybetlive.application.trackingOwner
 import kotlinx.coroutines.*
 
 class TrackingMessagingService : FirebaseMessagingService() {
@@ -22,6 +23,7 @@ class TrackingMessagingService : FirebaseMessagingService() {
             JsonParser.parseString(String(Base64.decode(claims, Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING))).asJsonObject["sub"].asString
         }.getOrNull()
         if (owner != message.data["userId"]) return
+        com.mybetlive.composition.ClientDependencies.live.push(session.trackingOwner(),message.data)
         BetNotifications(this).show(message.data)
     }
 }

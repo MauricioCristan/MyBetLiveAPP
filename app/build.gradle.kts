@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -5,6 +7,12 @@ plugins {
 }
 if (file("google-services.json").exists()) apply(plugin = "com.google.gms.google-services")
 val productionAdmobAppId = providers.gradleProperty("MYBET_ADMOB_APP_ID").orElse("").get()
+val signingPropertiesFile = rootProject.file(".local/signing/release-signing.properties")
+val releaseSigning = Properties().apply {
+    if (signingPropertiesFile.exists()) signingPropertiesFile.inputStream().use { load(it) }
+}
+fun signingValue(name: String): String = releaseSigning.getProperty(name)?.takeIf { it.isNotBlank() }
+    ?: throw GradleException("Missing release signing property: $name")
 
 android {
     namespace = "com.mybetlive"
@@ -15,17 +23,26 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "0.1.0"
+        buildConfigField("String", "AUTH_BACKEND_URL", "\"https://mybetlivebackend-production.up.railway.app\"")
         manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"
         buildConfigField("String", "ADMOB_APP_ID", "\"ca-app-pub-3940256099942544~3347511713\"")
+    }
+    signingConfigs {
+        if (signingPropertiesFile.exists()) create("production") {
+            storeFile = rootProject.file(signingValue("storeFile"))
+            storePassword = signingValue("storePassword")
+            keyAlias = signingValue("keyAlias")
+            keyPassword = signingValue("keyPassword")
+            storeType = "PKCS12"
+        }
     }
     buildTypes {
         debug { /* Always Google's demo app ID, regardless of production properties. */ }
         release {
             isMinifyEnabled = false
-            val appId = productionAdmobAppId.takeIf { it.matches(Regex("ca-app-pub-[0-9]{16}~[0-9]{10}")) }
-                ?: "ca-app-pub-3940256099942544~3347511713"
-            manifestPlaceholders["admobAppId"] = appId
-            buildConfigField("String", "ADMOB_APP_ID", "\"$appId\"")
+            if (signingPropertiesFile.exists()) signingConfig = signingConfigs.getByName("production")
+            manifestPlaceholders["admobAppId"] = productionAdmobAppId
+            buildConfigField("String", "ADMOB_APP_ID", "\"$productionAdmobAppId\"")
         }
     }
     compileOptions {
@@ -44,6 +61,21 @@ android {
                 "--add-opens=java.desktop/java.awt.font=ALL-UNNAMED", "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED")
         }
     }
+}
+val validateProductionConfig by tasks.registering {
+    doLast {
+        check(productionAdmobAppId.matches(Regex("ca-app-pub-[0-9]{16}~[0-9]{10}")) &&
+            !productionAdmobAppId.startsWith("ca-app-pub-3940256099942544~")) {
+            "Release requires your own valid MYBET_ADMOB_APP_ID."
+        }
+        check(signingPropertiesFile.exists()) {
+            "Release signing is missing. Run scripts/Prepare-ReleaseSigning.ps1 or restore your existing signing files."
+        }
+        check(rootProject.file(signingValue("storeFile")).isFile) { "Release keystore file is missing." }
+    }
+}
+tasks.configureEach {
+    if (name == "preReleaseBuild") dependsOn(validateProductionConfig)
 }
 dependencies {
     implementation("com.google.android.gms:play-services-ads:25.5.0")
