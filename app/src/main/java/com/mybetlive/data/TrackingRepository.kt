@@ -56,7 +56,12 @@ class TrackingRepository(context: Context,private val deviceTokens:DeviceTokenSo
     override suspend fun resendVerification(url:String,email:String){publicEndpoints.api(baseUrl(url)).resendVerification(EmailAddress(email.trim()))}
     override suspend fun verifyEmail(url:String,token:String){publicEndpoints.api(baseUrl(url)).verifyEmail(EmailToken(token))}
     override suspend fun resetPassword(url:String,token:String,password:String){publicEndpoints.api(baseUrl(url)).resetPassword(NewPassword(token,password))}
-    private val calls=AuthorizedCalls({vault.session},{vault.session=it},endpoints::api)
+    private val calls=AuthorizedCalls({vault.session},{vault.session=it},endpoints::api) { started ->
+        if(started.sameOwner(vault.session)) {
+            com.mybetlive.floating.FloatingTrackingController(context=appContext).stop()
+            vault.clear();com.mybetlive.composition.ClientDependencies.live.bind(null)
+        }
+    }
     private fun api(baseUrl: String): TrackingApi = endpoints.api(baseUrl)
     override suspend fun login(url: String, username: String, password: String) {
         val baseUrl = baseUrl(url)

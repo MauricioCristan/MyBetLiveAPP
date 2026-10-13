@@ -488,6 +488,7 @@
     <item>"Mostrar"</item>
     <item>"Ocultar"</item>
     <item>"Te enviaremos un enlace para crear una nueva contraseña."</item>
+    <item>"Tu sesión expiró. Inicia sesión de nuevo."</item>
     <item>"Bearer {0}"</item>
     <item>"alerted:{0}"</item>
     <item>"deleted:{0}"</item>
@@ -1001,6 +1002,7 @@
     <item>"Mostrar"</item>
     <item>"Ocultar"</item>
     <item>"Te enviaremos un enlace para crear una nueva contraseña."</item>
+    <item>"Tu sesión expiró. Inicia sesión de nuevo."</item>
     <item>"Bearer {0}"</item>
     <item>"alerted:{0}"</item>
     <item>"deleted:{0}"</item>

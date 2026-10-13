@@ -43,6 +43,10 @@ class TrackingViewModel(app: Application,
     init {
         viewModelScope.launch {
             com.mybetlive.composition.ClientDependencies.live.state.collect { live ->
+                if(state.value.loggedIn && account.session==null) {
+                    notifications.clear()
+                    state.value=AppState(error="Tu sesión expiró. Inicia sesión de nuevo.")
+                }
                 if(state.value.loggedIn && live.owner==account.session?.trackingOwner())
                     state.update { it.copy(bets=live.bets,offline=live.offline) }
             }
@@ -79,6 +83,10 @@ class TrackingViewModel(app: Application,
             try { block() }
             catch (error: Exception) {
                 if (error is CancellationException) throw error
+                if(error is SessionExpiredException) {
+                    notifications.clear();state.value=AppState(error=error.message)
+                    return@withLock
+                }
                 state.update { it.copy(error = failures.message(error), offline = it.offline || error is java.io.IOException) }
             } finally { state.update { it.copy(busy = false) } }
           }
@@ -185,6 +193,9 @@ class TrackingViewModel(app: Application,
                     else { notifications.dismissAll(); syncNotificationState() }
                 } catch (error: Exception) {
                     if (error is CancellationException) throw error
+                    if(error is SessionExpiredException) {
+                        notifications.clear();state.value=AppState(error=error.message);continue
+                    }
                     if(!started.sameOwner(account.session))continue
                     state.update { it.copy(offline = true) }
                     if (state.value.subscription?.access?.pushNotifications == true)
