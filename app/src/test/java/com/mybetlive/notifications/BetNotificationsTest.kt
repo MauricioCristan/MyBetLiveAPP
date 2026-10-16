@@ -55,7 +55,7 @@ class BetNotificationsTest {
     }
     @Test fun unpinPreventsRepinningButAllowsFinalAndRejectsOlderSnapshot(){
         val notifications=BetNotifications(context);notifications.show(payload())
-        manager.cancel("test-bet",1);notifications.show(payload());assertEquals(1,manager.activeNotifications.size)
+        manager.cancel(BetNotifications.SUMMARY_TAG,1);notifications.show(payload());assertEquals(1,manager.activeNotifications.size)
         notifications.show(payload("WON","2026-10-03T20:10:00Z"))
         assertEquals(1,manager.activeNotifications.size)
         val n=manager.activeNotifications.single().notification;assertEquals(0,n.flags and Notification.FLAG_ONGOING_EVENT)
@@ -68,7 +68,7 @@ class BetNotificationsTest {
         val result=payload("WON","2026-10-03T20:10:00Z")
         notifications.show(result)
         assertEquals("tracking-results",manager.activeNotifications.single().notification.channelId)
-        manager.cancel("test-bet",1)
+        manager.cancel(BetNotifications.SUMMARY_TAG,1)
         notifications.show(result)
         notifications.show(result+mapOf("artworkRefresh" to "true"))
         assertEquals(0,manager.activeNotifications.size)
@@ -94,7 +94,7 @@ class BetNotificationsTest {
         val notifications=BetNotifications(context)
         notifications.show(nbaBet("PENDING",null))
         assertEquals(setOf("nba-prop"),notifications.activeIds())
-        assertNull(manager.activeNotifications.single().notification.deleteIntent)
+        assertNotNull(manager.activeNotifications.single().notification.deleteIntent)
         notifications.remove("nba-prop"); notifications.show(nbaBet())
         assertTrue(notifications.activeIds().isEmpty())
     }
@@ -156,6 +156,65 @@ class BetNotificationsTest {
         assertEquals("0 / 24.5",zero.findViewById<TextView>(R.id.progress_value).text.toString())
         assertEquals(View.VISIBLE,zero.findViewById<View>(R.id.progress_track).visibility)
     }
+    private fun current()=manager.activeNotifications.single().notification
+    private fun dispatch(pending:android.app.PendingIntent){
+        val intent=shadowOf(pending).savedIntent
+        assertEquals(TrackingNotificationReceiver::class.java.name,intent.component!!.className)
+        context.packageManager.getReceiverInfo(intent.component!!,0)
+        TrackingNotificationReceiver().onReceive(context,intent)
+        shadowOf(android.os.Looper.getMainLooper()).idle()
+    }
+    private fun tap(label:String){dispatch(current().actions.first{it.title.toString()==label}.actionIntent)}
+    private fun selectedId()=shadowOf(current().contentIntent).savedIntent.getStringExtra("betId")
+    @Test fun manyTrackersShareOneCardAndNavigationSurvivesRecreationWithoutJumpingOnUpdates(){
+        val notifications=BetNotifications(context)
+        notifications.show(nbaBet());notifications.show(payload());notifications.show(nbaBet().copy(id="third"))
+        assertEquals(1,manager.activeNotifications.size)
+        assertEquals(setOf("nba-prop","test-bet","third"),notifications.activeIds())
+        assertEquals("nba-prop",selectedId())
+        assertEquals("Seguimiento 1 / 3",current().extras.getString(Notification.EXTRA_SUB_TEXT))
+        assertEquals(listOf("Anterior","Siguiente","Ver seguimiento"),current().actions.map{it.title.toString()})
+        tap("Siguiente");assertEquals("test-bet",selectedId())
+        BetNotifications(context).show(nbaBet().copy(updatedAt="2026-10-04T20:01:00Z"))
+        assertEquals("test-bet",selectedId());assertTrue(current().flags and Notification.FLAG_ONLY_ALERT_ONCE!=0)
+        tap("Siguiente");assertEquals("third",selectedId());tap("Siguiente");assertEquals("nba-prop",selectedId())
+        tap("Anterior");assertEquals("third",selectedId())
+        assertEquals(1,manager.activeNotifications.size)
+    }
+    @Test fun finalForAnotherTrackerStaysInSameCardAndReportsUnreadWithoutChangingSelection(){
+        val notifications=BetNotifications(context);notifications.show(nbaBet());notifications.show(payload())
+        notifications.show(payload("WON","2026-10-03T20:10:00Z"))
+        assertEquals(1,manager.activeNotifications.size);assertEquals("nba-prop",selectedId())
+        assertTrue(current().extras.getString(Notification.EXTRA_SUB_TEXT).orEmpty().contains("Novedades: 1"))
+        assertEquals("tracking-results",current().channelId)
+        assertEquals(setOf("nba-prop"),notifications.activeIds())
+        tap("Siguiente");assertEquals("test-bet",selectedId())
+        assertFalse(current().extras.getString(Notification.EXTRA_SUB_TEXT).orEmpty().contains("Novedades"))
+        assertTrue(current().flags and Notification.FLAG_ONLY_ALERT_ONCE!=0)
+        assertTrue(current().flags and Notification.FLAG_ONGOING_EVENT!=0)
+        notifications.show(nbaBet("WON").copy(updatedAt="2026-10-04T20:10:00Z"))
+        assertEquals(0,current().flags and Notification.FLAG_ONGOING_EVENT)
+        assertTrue(notifications.activeIds().isEmpty())
+    }
+    @Test fun removingSelectedTrackerFallsBackAndOldActionsCannotRestoreClearedAccount(){
+        val notifications=BetNotifications(context);notifications.show(nbaBet());notifications.show(payload())
+        val previous=current().actions.first().actionIntent
+        notifications.remove("nba-prop")
+        assertEquals("test-bet",selectedId());assertEquals(listOf("Ver seguimiento"),current().actions.map{it.title.toString()})
+        notifications.show(nbaBet());assertEquals(setOf("test-bet"),notifications.activeIds())
+        notifications.clear();notifications.show(nbaBet().copy(id="new-account"));notifications.show(payload().plus("betId" to "new-two"))
+        dispatch(previous)
+        assertEquals("new-account",selectedId())
+        notifications.remove("new-account");notifications.remove("new-two");assertEquals(0,manager.activeNotifications.size)
+    }
+    @Test fun dismissingAllFinalsCannotBeUndoneByOldNavigationArtworkOrPolling(){
+        val notifications=BetNotifications(context);notifications.show(nbaBet());notifications.show(payload())
+        notifications.show(nbaBet("WON").copy(updatedAt="2026-10-04T20:10:00Z"));val result=payload("WON","2026-10-03T20:10:00Z");notifications.show(result)
+        val next=current().actions.first{it.title.toString()=="Siguiente"}.actionIntent
+        val dismiss=current().deleteIntent;manager.cancel(BetNotifications.SUMMARY_TAG,1);dispatch(dismiss)
+        dispatch(next);notifications.show(result);notifications.show(result+mapOf("artworkRefresh" to "true"));shadowOf(android.os.Looper.getMainLooper()).idle()
+        assertEquals(0,manager.activeNotifications.size)
+    }
     private fun render(notification: Notification, name: String, compact: Boolean=false): View {
         val parent=FrameLayout(context)
         val view=(if(compact) notification.contentView else notification.bigContentView).apply(context,parent)
@@ -202,12 +261,18 @@ class BetNotificationsTest {
         assertEquals("android.app.Notification\$ProgressStyle",progress.extras.getString(Notification.EXTRA_TEMPLATE))
         assertNull(progress.contentView);assertNull(progress.bigContentView)
         notifications.show(nbaBet().copy(id="nba-ml",market="MONEYLINE",selection="HOME",line=null,playerName=null,currentValue=-6.0,status="LIVE_LOSING"))
-        val ml=manager.activeNotifications.first { it.tag=="nba-ml" }.notification
+        assertEquals(1,manager.activeNotifications.size)
+        assertEquals(setOf("nba-prop","nba-ml"),notifications.activeIds())
+        tap("Siguiente")
+        shadowOf(android.os.Looper.getMainLooper()).idle()
+        val ml=manager.activeNotifications.single().notification
         assertEquals("android.app.Notification\$BigTextStyle",ml.extras.getString(Notification.EXTRA_TEMPLATE))
         assertNull(ml.contentView);assertNull(ml.bigContentView)
         notifications.show(nbaBet("WON").copy(updatedAt="2026-10-04T20:10:00Z"))
-        val final=manager.activeNotifications.first { it.tag=="nba-prop" }.notification
-        assertEquals(0,final.flags and Notification.FLAG_ONGOING_EVENT)
+        tap("Anterior")
+        shadowOf(android.os.Looper.getMainLooper()).idle()
+        val final=manager.activeNotifications.single().notification
+        assertTrue(final.flags and Notification.FLAG_ONGOING_EVENT!=0)
         assertEquals(setOf("nba-ml"),notifications.activeIds())
     }
 }

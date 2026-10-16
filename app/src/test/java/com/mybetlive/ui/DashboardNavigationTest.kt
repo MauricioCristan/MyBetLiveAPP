@@ -32,6 +32,90 @@ import java.time.ZoneOffset
 @Config(sdk = [35], qualifiers = "es-rMX-w411dp-h891dp-xxhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class DashboardNavigationTest {
+    @Test fun historyShowsOnlyItsLoadedPageAndRequestsMoreNearTheEnd(){
+        val template=initialBets.first{it.status=="WON"}
+        val all=(0 until 30).map{template.copy(id="history-$it")}
+        state.value=state.value.copy(bets=all,history=all.take(10),historyTotal=30,historyPage=0,historyHasMore=true,historySport="ALL")
+        val filters=mutableListOf<String>();var requests=0
+        launch(onHistory={filters+=it},onMore={requests++;state.value=state.value.copy(historyLoading=true)})
+        compose.onNodeWithTag("history-tab").performClick();compose.waitForIdle()
+        assertEquals(listOf("ALL"),filters);assertEquals(0,requests)
+        compose.onNodeWithText("Historial (30)").assertExists()
+        compose.onNodeWithTag("bet-history-10").assertDoesNotExist()
+        compose.onNodeWithTag("tracker-list").performScrollToNode(hasTestTag("bet-history-9"));compose.waitForIdle()
+        assertEquals(1,requests)
+        compose.onNodeWithTag("tracker-list").performScrollToNode(hasTestTag("history-loading"));compose.onNodeWithTag("history-loading").assertExists()
+        assertEquals(1,requests)
+    }
+    @Test fun historyFailureRetainsLoadedRowsAndOffersRetry(){
+        val template=initialBets.first{it.status=="WON"}
+        state.value=state.value.copy(history=listOf(template),historyTotal=20,historyPage=0,historyHasMore=true,historyError="No se pudo cargar el historial")
+        var retries=0;launch(onHistory={},onMore={retries++})
+        compose.onNodeWithTag("history-tab").performClick()
+        compose.onNodeWithTag("bet-${template.id}").assertExists()
+        compose.onNodeWithTag("tracker-list").performScrollToNode(hasTestTag("history-retry"));compose.onNodeWithTag("history-retry").performClick()
+        assertEquals(1,retries)
+    }
+    @Test fun baseballLeaguesUseTheSameLocalFilterAsFootball(){
+        val mlb=EventView("mlb-game",event("MLB","SCHEDULED").copy(leagueId="1",leagueName="MLB"),false)
+        val mexico=EventView("mexico-game",event("MLB","SCHEDULED").copy(leagueId="2",leagueName="Liga Mexicana",leagueCountry="Mexico"),false)
+        state.value=state.value.copy(selectedSport="MLB",events=listOf(mlb,mexico))
+        launch();compose.onNodeWithTag("nav-EVENTS").performClick()
+        compose.onNodeWithContentDescription("Béisbol").assertExists()
+        compose.onNodeWithTag("league-ALL").assertIsSelected()
+        compose.onNodeWithTag("league-2").performClick()
+        compose.onNodeWithTag("league-2").assertIsSelected()
+        compose.onNodeWithTag("event-mlb-game").assertDoesNotExist()
+        compose.onNodeWithTag("event-list").performScrollToNode(hasTestTag("event-mexico-game"))
+        compose.onNodeWithTag("event-mexico-game").assertExists()
+        assertTrue(selectedSports.isEmpty())
+        screenshot("partidos-ligas-baseball")
+    }
+    @Test fun basketballLeaguesUseTheSameLocalFilterAsFootball(){
+        val mlb=EventView("mlb-game",event("NBA","SCHEDULED").copy(leagueId="1",leagueName="NBA"),false)
+        val mexico=EventView("mexico-game",event("NBA","SCHEDULED").copy(leagueId="2",leagueName="LNBP",leagueCountry="Mexico"),false)
+        state.value=state.value.copy(selectedSport="NBA",events=listOf(mlb,mexico),sports=sports+SportInfo("NBA",true,listOf("MONEYLINE")))
+        launch();compose.onNodeWithTag("nav-EVENTS").performClick()
+        compose.onNodeWithContentDescription("Baloncesto").assertExists()
+        compose.onNodeWithTag("league-ALL").assertIsSelected()
+        compose.onNodeWithTag("league-2").performClick()
+        compose.onNodeWithTag("league-2").assertIsSelected()
+        compose.onNodeWithTag("event-mlb-game").assertDoesNotExist()
+        compose.onNodeWithTag("event-list").performScrollToNode(hasTestTag("event-mexico-game"))
+        compose.onNodeWithTag("event-mexico-game").assertExists()
+        assertTrue(selectedSports.isEmpty())
+        screenshot("partidos-ligas-basketball")
+    }
+    @Test fun hockeyLeaguesUseTheSameLocalFilterAsFootball(){
+        val mlb=EventView("mlb-game",event("NHL","SCHEDULED").copy(leagueId="1",leagueName="NHL"),false)
+        val mexico=EventView("mexico-game",event("NHL","SCHEDULED").copy(leagueId="2",leagueName="KHL",leagueCountry="Russia"),false)
+        state.value=state.value.copy(selectedSport="NHL",events=listOf(mlb,mexico),sports=sports+SportInfo("NHL",true,listOf("MONEYLINE")))
+        launch();compose.onNodeWithTag("nav-EVENTS").performClick()
+        compose.onNodeWithContentDescription("Hockey sobre hielo").assertExists()
+        compose.onNodeWithTag("league-ALL").assertIsSelected()
+        compose.onNodeWithTag("league-2").performClick()
+        compose.onNodeWithTag("league-2").assertIsSelected()
+        compose.onNodeWithTag("event-mlb-game").assertDoesNotExist()
+        compose.onNodeWithTag("event-list").performScrollToNode(hasTestTag("event-mexico-game"))
+        compose.onNodeWithTag("event-mexico-game").assertExists()
+        assertTrue(selectedSports.isEmpty())
+        screenshot("partidos-ligas-hockey")
+    }
+    @Test fun americanFootballLeaguesUseTheSameLocalFilterAsFootball(){
+        val mlb=EventView("mlb-game",event("NFL","SCHEDULED").copy(leagueId="1",leagueName="NFL"),false)
+        val mexico=EventView("mexico-game",event("NFL","SCHEDULED").copy(leagueId="2",leagueName="NCAA",leagueCountry="USA"),false)
+        state.value=state.value.copy(selectedSport="NFL",events=listOf(mlb,mexico),sports=sports)
+        launch();compose.onNodeWithTag("nav-EVENTS").performClick()
+        compose.onNodeWithContentDescription("Fútbol americano").assertExists()
+        compose.onNodeWithTag("league-ALL").assertIsSelected()
+        compose.onNodeWithTag("league-2").performClick()
+        compose.onNodeWithTag("league-2").assertIsSelected()
+        compose.onNodeWithTag("event-mlb-game").assertDoesNotExist()
+        compose.onNodeWithTag("event-list").performScrollToNode(hasTestTag("event-mexico-game"))
+        compose.onNodeWithTag("event-mexico-game").assertExists()
+        assertTrue(selectedSports.isEmpty())
+        screenshot("partidos-ligas-american-football")
+    }
     @Test fun leagueIconsExpandTheSelectionAndFilterLocallyWithoutSportRequests() {
         val first=EventView("league-a",event("SOCCER","SCHEDULED").copy(leagueId="262",leagueName="Liga MX"),false)
         val second=EventView("league-b",event("SOCCER","SCHEDULED").copy(leagueId="39",leagueName="Premier League"),false)
@@ -74,7 +158,7 @@ class DashboardNavigationTest {
         compose.onNodeWithContentDescription("Choose date").assertIsDisplayed()
         compose.onNodeWithText("Add tracker").assertIsDisplayed()
         compose.onAllNodesWithText("En juego",substring=true).assertCountEquals(0)
-        compose.onNodeWithText("NFL · Live · Q3 05:20").assertIsDisplayed()
+        compose.onNodeWithText("American football · Live · Q3 05:20").assertIsDisplayed()
         compose.onAllNodesWithText("Partidos",substring=false).assertCountEquals(0)
         screenshot("partidos-english")
     }
@@ -142,7 +226,7 @@ class DashboardNavigationTest {
     private val openedEvents = mutableListOf<String>()
     private var fontScale = 1f
 
-    private fun launch() {
+    private fun launch(onHistory:((String)->Unit)?=null,onMore:(()->Unit)?=null) {
         restoration.setContent {
             MyBetLiveTheme {
                 CompositionLocalProvider(LocalDensity provides Density(LocalDensity.current.density, fontScale)) {
@@ -151,7 +235,7 @@ class DashboardNavigationTest {
                         events = listOf(EventView("$sport-game", event(sport, "SCHEDULED"), false))) },
                     onDate = { date -> state.value = state.value.copy(date = date) }, onOpenEvent = { openedEvents += it },
                     onDelete = { id -> deleted += id; state.value = state.value.copy(bets = state.value.bets.filter { it.id != id }) },
-                    onLogout = { loggedOut++ }, buy = {}, restore = {}, manage = {}, createdBet = created.value)
+                    onLogout = { loggedOut++ }, buy = {}, restore = {}, manage = {}, createdBet = created.value,onHistory=onHistory,onHistoryMore=onMore)
                 }
             }
         }
@@ -187,7 +271,7 @@ class DashboardNavigationTest {
         screenshot("seguimientos-activos")
         compose.onNodeWithTag("sport-MLB").performClick()
         compose.waitForIdle()
-        compose.onNodeWithText("MLB",substring=false).assertExists()
+        compose.onNodeWithText("Béisbol",substring=false).assertExists()
         compose.onAllNodesWithText("Todos",substring=false).assertCountEquals(0)
         compose.onNodeWithTag("nav-TRACKERS").assertIsSelected()
         compose.onNodeWithTag("bet-mlb-live").assertIsDisplayed()
@@ -242,7 +326,8 @@ class DashboardNavigationTest {
         compose.onNodeWithText("Mi plan").assertIsDisplayed()
         compose.onNodeWithTag("sport-NFL").assertDoesNotExist()
         screenshot("perfil")
-        compose.onNodeWithText("Configurar notificaciones").performScrollTo().performClick()
+        compose.onNodeWithTag("profile-list").performScrollToNode(hasText("Configurar notificaciones"))
+        compose.onNodeWithText("Configurar notificaciones").performClick()
         val intent = shadowOf(RuntimeEnvironment.getApplication()).nextStartedActivity
         assertEquals(Settings.ACTION_APP_NOTIFICATION_SETTINGS, intent.action)
         assertEquals(RuntimeEnvironment.getApplication().packageName, intent.getStringExtra(Settings.EXTRA_APP_PACKAGE))

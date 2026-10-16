@@ -4,7 +4,7 @@ data class Plan(val id:String,val code:String,val name:String,val description:St
 data class PlanAccess(val maxActiveTrackers:Int?,val playerProps:Boolean,val pushNotifications:Boolean)
 data class CustomerSubscription(val id:String,val plan:Plan,val source:String,val state:String,val expiresAt:String,val active:Boolean)
 data class MySubscription(val plan:Plan,val access:PlanAccess,val activeTrackers:Long,val subscriptions:List<CustomerSubscription>,
- val availablePlans:List<Plan>,val billingEnabled:Boolean,val playAccountId:String,val ads:AdsConfig?=null,val reward:RewardStatus?=null)
+ val availablePlans:List<Plan>,val billingEnabled:Boolean,val playAccountId:String,val ads:AdsConfig?=null,val reward:RewardStatus?=null,val bankAccess:BankAccess?=null)
 
 data class RewardStatus(val enabled:Boolean=false,val eligible:Boolean=false,val creditAvailable:Boolean=false,
  val activeExtra:Long=0,val creditExpiresAt:String?=null,val unitId:String="",val testAvailable:Boolean=false)

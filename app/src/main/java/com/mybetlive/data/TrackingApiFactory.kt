@@ -12,13 +12,15 @@ internal class TrackingApiFactory(
     private val transport: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(10, TimeUnit.SECONDS).readTimeout(45, TimeUnit.SECONDS).build()
 ) {
-    private val endpoints = ConcurrentHashMap<String, TrackingApi>()
+    private val endpoints = ConcurrentHashMap<String, Any>()
 
-    fun api(baseUrl: String): TrackingApi = endpoints.computeIfAbsent(baseUrl) { url ->
+    fun api(baseUrl: String): TrackingApi = client(baseUrl,TrackingApi::class.java)
+    fun <T:Any> client(baseUrl:String,type:Class<T>):T = requireNotNull(type.cast(endpoints.computeIfAbsent(baseUrl+"|"+type.name) {
+        val url=baseUrl
         val client = transport.newBuilder().addInterceptor(SessionAuthInterceptor {
             session()?.takeIf { it.baseUrl == url }?.tokens?.accessToken
         }).build()
         Retrofit.Builder().baseUrl(url).client(client).addConverterFactory(GsonConverterFactory.create())
-            .build().create(TrackingApi::class.java)
-    }
+            .build().create(type)
+    }))
 }

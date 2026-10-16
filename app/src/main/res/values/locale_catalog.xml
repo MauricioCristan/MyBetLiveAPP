@@ -489,6 +489,212 @@
     <item>"Ocultar"</item>
     <item>"Te enviaremos un enlace para crear una nueva contraseña."</item>
     <item>"Tu sesión expiró. Inicia sesión de nuevo."</item>
+    <item>"Mi bank"</item>
+    <item>"Resumen"</item>
+    <item>"Rendimiento"</item>
+    <item>"Movimientos"</item>
+    <item>"Herramientas"</item>
+    <item>"Sin conexión · consulta de datos guardados"</item>
+    <item>"Actualizado: {0}"</item>
+    <item>"Seleccionar bank"</item>
+    <item>"Privado"</item>
+    <item>"Archivado"</item>
+    <item>"Crear otro bank"</item>
+    <item>"Usar este bank con Free"</item>
+    <item>"Bank archivado · tu historial se conserva"</item>
+    <item>"Tu capital, en un solo lugar."</item>
+    <item>"Registra apuestas que ya realizaste y consulta tu rendimiento."</item>
+    <item>"Crear mi primer bank"</item>
+    <item>"‹ Resumen del bank"</item>
+    <item>"DISPONIBLE"</item>
+    <item>"En apuestas"</item>
+    <item>"Capital actual"</item>
+    <item>"Saldo negativo · revisa tus movimientos y apuestas registradas"</item>
+    <item>"Beneficio del periodo"</item>
+    <item>"ROI del periodo"</item>
+    <item>"Periodo"</item>
+    <item>"Beneficio confirmado · sin depósitos ni retiros"</item>
+    <item>"Últimas apuestas"</item>
+    <item>"Ver todas"</item>
+    <item>"Todavía no hay apuestas registradas."</item>
+    <item>"Historial por fecha de colocación de la apuesta"</item>
+    <item>"Registrar depósito o retiro"</item>
+    <item>"Comprometido: {0}"</item>
+    <item>"Corregido · conservado en el historial"</item>
+    <item>"Corregir"</item>
+    <item>"Rendimiento avanzado"</item>
+    <item>"Consulta TWR, TIR, CLV y desgloses con Premium."</item>
+    <item>"Capital y retornos por fecha de liquidación confirmada"</item>
+    <item>"TIR anualizada. — indica datos insuficientes o un cálculo no válido. TWR, TIR y progresión corresponden al bank completo; los demás resultados respetan los filtros."</item>
+    <item>"Por deporte"</item>
+    <item>"Por mercado"</item>
+    <item>"Por casino"</item>
+    <item>"{0} apuestas · ROI {1}"</item>
+    <item>"Tu bank es privado"</item>
+    <item>"Los depósitos y retiros son registros. MyBetLive no mueve dinero ni ejecuta apuestas."</item>
+    <item>"Editar bank y valores predeterminados"</item>
+    <item>"Calendario y periodo"</item>
+    <item>"Importar / exportar CSV"</item>
+    <item>"Compartir resumen como imagen"</item>
+    <item>"Premium incluye varios banks, combinadas, Lay, importación y análisis avanzado."</item>
+    <item>"Calendario · beneficio confirmado"</item>
+    <item>"Añadir apuesta"</item>
+    <item>"Eliminar movimiento"</item>
+    <item>"Su efecto se revertirá y se conservará una corrección en el historial."</item>
+    <item>"Gráfica de beneficio confirmado"</item>
+    <item>"Simple en contra"</item>
+    <item>"Combinada"</item>
+    <item>"Simple a favor"</item>
+    <item>"Liquidación parcial"</item>
+    <item>"Capital inicial"</item>
+    <item>"Reserva"</item>
+    <item>"Liquidación"</item>
+    <item>"Corrección"</item>
+    <item>"Beneficio"</item>
+    <item>"Progresión"</item>
+    <item>"TIR anualizada"</item>
+    <item>"Aciertos"</item>
+    <item>"Disponible"</item>
+    <item>"Comprometido"</item>
+    <item>"Apuestas liquidadas"</item>
+    <item>"Ganadas"</item>
+    <item>"Perdidas"</item>
+    <item>"Reembolsadas"</item>
+    <item>"En curso"</item>
+    <item>"Importe jugado"</item>
+    <item>"Depósitos"</item>
+    <item>"Retiros"</item>
+    <item>"Mayor racha ganadora"</item>
+    <item>"Mayor racha perdedora"</item>
+    <item>"Importe medio"</item>
+    <item>"Importe máximo"</item>
+    <item>"Cuota media"</item>
+    <item>"Mayor cuota ganada"</item>
+    <item>"Mayor beneficio"</item>
+    <item>"Mayor pérdida"</item>
+    <item>"Beneficio promocional"</item>
+    <item>"CLV medio"</item>
+    <item>"CLV ponderado"</item>
+    <item>"Muestras CLV"</item>
+    <item>"Crear bank"</item>
+    <item>"Editar bank"</item>
+    <item>"Nombre del bank"</item>
+    <item>"Moneda"</item>
+    <item>"Pesos mexicanos · MXN"</item>
+    <item>"Dólares · USD"</item>
+    <item>"Euros · EUR"</item>
+    <item>"Moneda: {0} · no se convierte el historial"</item>
+    <item>"Fecha de apertura · YYYY-MM-DD"</item>
+    <item>"Zona horaria"</item>
+    <item>"Notas del bank"</item>
+    <item>"Valores predeterminados"</item>
+    <item>"Casino predeterminado"</item>
+    <item>"Deporte predeterminado"</item>
+    <item>"Importe predeterminado · opcional"</item>
+    <item>"Cuota predeterminada · opcional"</item>
+    <item>"Archivar bank · conservar historial"</item>
+    <item>"Revisa nombre, importe, fecha y zona horaria."</item>
+    <item>"Guardar bank"</item>
+    <item>"Modificar apuesta"</item>
+    <item>"Formato"</item>
+    <item>"El importe es la apuesta de la contraparte. La exposición es importe × (cuota − 1)."</item>
+    <item>"Fecha · YYYY-MM-DD"</item>
+    <item>"Hora · HH:mm"</item>
+    <item>"Selección {0}"</item>
+    <item>"Título de la apuesta"</item>
+    <item>"Mercado · opcional"</item>
+    <item>"Cuota de selección · opcional"</item>
+    <item>"Vincular seguimiento"</item>
+    <item>"Registro manual"</item>
+    <item>"Quitar selección"</item>
+    <item>"Añadir selección"</item>
+    <item>"Importe en % del disponible"</item>
+    <item>"Apuesta gratuita"</item>
+    <item>"Guardar apuesta"</item>
+    <item>"Confirmar liquidación"</item>
+    <item>"Corregir liquidación"</item>
+    <item>"Exposición propia"</item>
+    <item>"Retorno total"</item>
+    <item>"Beneficio neto"</item>
+    <item>"Cuota: {0}"</item>
+    <item>"Cuota de cierre: {0}"</item>
+    <item>"Retorno potencial: {0} · no incluido en el saldo"</item>
+    <item>"Resultado propuesto: {0}"</item>
+    <item>"Detalle de apuesta"</item>
+    <item>"Copiar como apuesta nueva"</item>
+    <item>"Eliminar apuesta"</item>
+    <item>"Se revertirá su efecto financiero y se conservará la corrección en el historial."</item>
+    <item>"No se pudo guardar el archivo."</item>
+    <item>"No se pudo leer el CSV o excede 5 MB."</item>
+    <item>"Archivo"</item>
+    <item>"Depósitos y retiros"</item>
+    <item>"Plantillas versión 1 · moneda {0} · fechas ISO · hasta 1000 filas por lote"</item>
+    <item>"Descargar plantilla CSV"</item>
+    <item>"Exportar mis datos"</item>
+    <item>"Seleccionar CSV"</item>
+    <item>"Archivo cargado · {0} caracteres"</item>
+    <item>"Validar importación"</item>
+    <item>"Válidas: {0} · duplicadas: {1} · inválidas: {2}"</item>
+    <item>"Fila {0}: {1}"</item>
+    <item>"Ya importada · se omitirá"</item>
+    <item>"Confirmar importación"</item>
+    <item>"Importación disponible con Premium"</item>
+    <item>"Vista previa del resumen"</item>
+    <item>"Resumen del bank para compartir"</item>
+    <item>"Compartirás únicamente esta imagen, sin correo ni identificadores de cuenta."</item>
+    <item>"Compartir resumen"</item>
+    <item>"Compartir imagen"</item>
+    <item>"No se pudo preparar la imagen para compartir."</item>
+    <item>"CAPITAL DISPONIBLE"</item>
+    <item>"BENEFICIO DEL PERIODO"</item>
+    <item>"Rendimiento confirmado"</item>
+    <item>"Registro personal · resultados confirmados por el usuario"</item>
+    <item>"Este bank no tiene datos guardados. Conéctate para consultarlo."</item>
+    <item>"Conéctate antes de modificar el bank."</item>
+    <item>"Cambios guardados."</item>
+    <item>"El cambio se guardó. No se pudo actualizar el historial; pulsa Actualizar."</item>
+    <item>"Aplicar filtros"</item>
+    <item>"Desde · YYYY-MM-DD"</item>
+    <item>"Hasta · YYYY-MM-DD"</item>
+    <item>"Confirmar"</item>
+    <item>"Producto de cuotas: {0} · usa la cuota total real del boleto"</item>
+    <item>"Cuota total del boleto"</item>
+    <item>"Porcentaje del disponible"</item>
+    <item>"Importe · {0}"</item>
+    <item>"Cuota de cierre · CLV opcional"</item>
+    <item>"Bono sobre beneficio · %"</item>
+    <item>"Comisión sobre beneficio · %"</item>
+    <item>"Sin separador de miles. El registro no realiza ninguna apuesta ni mueve dinero."</item>
+    <item>"Revisa la fecha, el importe, la cuota y las selecciones."</item>
+    <item>"Los datos deportivos proponen un resultado. Confirma lo liquidado por tu casino."</item>
+    <item>"Retorno total recibido · {0}"</item>
+    <item>"Fecha de liquidación · YYYY-MM-DD"</item>
+    <item>"Exposición: {0}"</item>
+    <item>"Beneficio neto: {0}"</item>
+    <item>"Esta liquidación cierra el boleto completo. No queda una parte abierta."</item>
+    <item>"Revisa el retorno y la fecha."</item>
+    <item>"Confirmar retorno recibido"</item>
+    <item>"Registra movimientos que ya hiciste fuera de MyBetLive."</item>
+    <item>"Movimiento"</item>
+    <item>"Revisa importe y fecha."</item>
+    <item>"Guardar movimiento"</item>
+    <item>"Periodo del bank"</item>
+    <item>"Selecciona un periodo válido."</item>
+    <item>"Aplicar periodo"</item>
+    <item>"Filtrar apuestas"</item>
+    <item>"Deporte · código opcional"</item>
+    <item>"Mercado · código opcional"</item>
+    <item>"Desde · YYYY-MM-DD opcional"</item>
+    <item>"Hasta · YYYY-MM-DD opcional"</item>
+    <item>"Sin casino"</item>
+    <item>"SIN_MERCADO"</item>
+    <item>"MIXED"</item>
+    <item>"Bank y rendimiento básico"</item>
+    <item>"Varios banks y análisis avanzado"</item>
+    <item>"Exportar historial financiero completo"</item>
+    <item>"Bank avanzado: varios banks, combinadas y análisis."</item>
+    <item>"Bank: un bank y registro de apuestas simples."</item>
+    <item>"El servidor tardó demasiado. Actualiza el bank antes de reintentar; tu operación no se duplicará."</item>
     <item>"Bearer {0}"</item>
     <item>"alerted:{0}"</item>
     <item>"deleted:{0}"</item>
@@ -513,6 +719,81 @@
     <item>"{0}: {1}"</item>
     <item>"{0}:{1}"</item>
     <item>"{0}{1} / {2} · {3}"</item>
+    <item>"01 · Datos del boleto"</item>
+    <item>"02 · Selección"</item>
+    <item>"03 · Importe y formato"</item>
+    <item>"Detalles y promociones"</item>
+    <item>"Premium · CLV, bonos y comisión"</item>
+    <item>"Vista previa · el saldo lo confirma el servidor"</item>
+    <item>"El resultado se confirma en la liquidación"</item>
+    <item>"Expandido"</item>
+    <item>"Contraído"</item>
+    <item>"Sin especificar"</item>
+    <item>"+ Añadir casa de apuestas"</item>
+    <item>"Añadir casa de apuestas"</item>
+    <item>"Se guardará en tu cuenta para usarla en tus apuestas."</item>
+    <item>"Nombre de la casa"</item>
+    <item>"Guardar casa"</item>
+    <item>"Introduce un nombre válido de hasta 80 caracteres."</item>
+    <item>"Casa de apuestas guardada."</item>
+    <item>"Fecha"</item>
+    <item>"Hora"</item>
+    <item>"Fecha de apertura"</item>
+    <item>"Fecha de liquidación"</item>
+    <item>"Desde"</item>
+    <item>"Hasta"</item>
+    <item>"Acciones de la apuesta"</item>
+    <item>"Importe promocional"</item>
+    <item>"Importe de contraparte"</item>
+    <item>"Importe apostado"</item>
+    <item>"Retorno recibido"</item>
+    <item>"Aún no se incluye en tu saldo."</item>
+    <item>"Información del boleto"</item>
+    <item>"Fecha y hora"</item>
+    <item>"Propuesta deportiva: {0}"</item>
+    <item>"Confirma el retorno que liquidó tu casa de apuestas. El saldo cambiará cuando lo confirmes."</item>
+    <item>"Notas y detalles"</item>
+    <item>"Bono sobre beneficio"</item>
+    <item>"Comisión sobre beneficio"</item>
+    <item>"Simple · Lay"</item>
+    <item>"Simple · Back"</item>
+    <item>"Béisbol"</item>
+    <item>"Baloncesto"</item>
+    <item>"Fútbol americano"</item>
+    <item>"Hockey sobre hielo"</item>
+    <item>"Inicio"</item>
+    <item>"Estadísticas"</item>
+    <item>"Tu dinero, en un vistazo"</item>
+    <item>"Opciones del bank"</item>
+    <item>"‹ Inicio del bank"</item>
+    <item>"No hay apuestas para estos filtros."</item>
+    <item>"Evolución del beneficio"</item>
+    <item>"Tus apuestas"</item>
+    <item>"Buscar apuesta"</item>
+    <item>"Buscar"</item>
+    <item>"Filtros"</item>
+    <item>"Todas · {0}"</item>
+    <item>"Pendientes · {0}"</item>
+    <item>"Ayer"</item>
+    <item>"Has visto todas las apuestas"</item>
+    <item>"Desliza para cargar más · 10 por carga"</item>
+    <item>"Conéctate para cargar más apuestas"</item>
+    <item>"No se pudieron cargar más apuestas. Reintenta."</item>
+    <item>"Agrupar por"</item>
+    <item>"Día"</item>
+    <item>"Semana"</item>
+    <item>"Mes"</item>
+    <item>"Ganado"</item>
+    <item>"Perdido"</item>
+    <item>"Balance"</item>
+    <item>"Cargar más periodos"</item>
+    <item>"Actualiza para consultar los totales del periodo"</item>
+    <item>"{0} apuestas · {1} pendientes"</item>
+    <item>"{0} a {1}"</item>
+    <item>"Seguimiento"</item>
+    <item>"Anterior"</item>
+    <item>"Siguiente"</item>
+    <item>"Novedades"</item>
 </string-array>
 <string-array name="ui_translation">
     <item>" El resultado informativo puede diferir de la liquidación del casino."</item>
@@ -1003,6 +1284,212 @@
     <item>"Ocultar"</item>
     <item>"Te enviaremos un enlace para crear una nueva contraseña."</item>
     <item>"Tu sesión expiró. Inicia sesión de nuevo."</item>
+    <item>"Mi bank"</item>
+    <item>"Resumen"</item>
+    <item>"Rendimiento"</item>
+    <item>"Movimientos"</item>
+    <item>"Herramientas"</item>
+    <item>"Sin conexión · consulta de datos guardados"</item>
+    <item>"Actualizado: {0}"</item>
+    <item>"Seleccionar bank"</item>
+    <item>"Privado"</item>
+    <item>"Archivado"</item>
+    <item>"Crear otro bank"</item>
+    <item>"Usar este bank con Free"</item>
+    <item>"Bank archivado · tu historial se conserva"</item>
+    <item>"Tu capital, en un solo lugar."</item>
+    <item>"Registra apuestas que ya realizaste y consulta tu rendimiento."</item>
+    <item>"Crear mi primer bank"</item>
+    <item>"‹ Resumen del bank"</item>
+    <item>"DISPONIBLE"</item>
+    <item>"En apuestas"</item>
+    <item>"Capital actual"</item>
+    <item>"Saldo negativo · revisa tus movimientos y apuestas registradas"</item>
+    <item>"Beneficio del periodo"</item>
+    <item>"ROI del periodo"</item>
+    <item>"Periodo"</item>
+    <item>"Beneficio confirmado · sin depósitos ni retiros"</item>
+    <item>"Últimas apuestas"</item>
+    <item>"Ver todas"</item>
+    <item>"Todavía no hay apuestas registradas."</item>
+    <item>"Historial por fecha de colocación de la apuesta"</item>
+    <item>"Registrar depósito o retiro"</item>
+    <item>"Comprometido: {0}"</item>
+    <item>"Corregido · conservado en el historial"</item>
+    <item>"Corregir"</item>
+    <item>"Rendimiento avanzado"</item>
+    <item>"Consulta TWR, TIR, CLV y desgloses con Premium."</item>
+    <item>"Capital y retornos por fecha de liquidación confirmada"</item>
+    <item>"TIR anualizada. — indica datos insuficientes o un cálculo no válido. TWR, TIR y progresión corresponden al bank completo; los demás resultados respetan los filtros."</item>
+    <item>"Por deporte"</item>
+    <item>"Por mercado"</item>
+    <item>"Por casino"</item>
+    <item>"{0} apuestas · ROI {1}"</item>
+    <item>"Tu bank es privado"</item>
+    <item>"Los depósitos y retiros son registros. MyBetLive no mueve dinero ni ejecuta apuestas."</item>
+    <item>"Editar bank y valores predeterminados"</item>
+    <item>"Calendario y periodo"</item>
+    <item>"Importar / exportar CSV"</item>
+    <item>"Compartir resumen como imagen"</item>
+    <item>"Premium incluye varios banks, combinadas, Lay, importación y análisis avanzado."</item>
+    <item>"Calendario · beneficio confirmado"</item>
+    <item>"Añadir apuesta"</item>
+    <item>"Eliminar movimiento"</item>
+    <item>"Su efecto se revertirá y se conservará una corrección en el historial."</item>
+    <item>"Gráfica de beneficio confirmado"</item>
+    <item>"Simple en contra"</item>
+    <item>"Combinada"</item>
+    <item>"Simple a favor"</item>
+    <item>"Liquidación parcial"</item>
+    <item>"Capital inicial"</item>
+    <item>"Reserva"</item>
+    <item>"Liquidación"</item>
+    <item>"Corrección"</item>
+    <item>"Beneficio"</item>
+    <item>"Progresión"</item>
+    <item>"TIR anualizada"</item>
+    <item>"Aciertos"</item>
+    <item>"Disponible"</item>
+    <item>"Comprometido"</item>
+    <item>"Apuestas liquidadas"</item>
+    <item>"Ganadas"</item>
+    <item>"Perdidas"</item>
+    <item>"Reembolsadas"</item>
+    <item>"En curso"</item>
+    <item>"Importe jugado"</item>
+    <item>"Depósitos"</item>
+    <item>"Retiros"</item>
+    <item>"Mayor racha ganadora"</item>
+    <item>"Mayor racha perdedora"</item>
+    <item>"Importe medio"</item>
+    <item>"Importe máximo"</item>
+    <item>"Cuota media"</item>
+    <item>"Mayor cuota ganada"</item>
+    <item>"Mayor beneficio"</item>
+    <item>"Mayor pérdida"</item>
+    <item>"Beneficio promocional"</item>
+    <item>"CLV medio"</item>
+    <item>"CLV ponderado"</item>
+    <item>"Muestras CLV"</item>
+    <item>"Crear bank"</item>
+    <item>"Editar bank"</item>
+    <item>"Nombre del bank"</item>
+    <item>"Moneda"</item>
+    <item>"Pesos mexicanos · MXN"</item>
+    <item>"Dólares · USD"</item>
+    <item>"Euros · EUR"</item>
+    <item>"Moneda: {0} · no se convierte el historial"</item>
+    <item>"Fecha de apertura · YYYY-MM-DD"</item>
+    <item>"Zona horaria"</item>
+    <item>"Notas del bank"</item>
+    <item>"Valores predeterminados"</item>
+    <item>"Casino predeterminado"</item>
+    <item>"Deporte predeterminado"</item>
+    <item>"Importe predeterminado · opcional"</item>
+    <item>"Cuota predeterminada · opcional"</item>
+    <item>"Archivar bank · conservar historial"</item>
+    <item>"Revisa nombre, importe, fecha y zona horaria."</item>
+    <item>"Guardar bank"</item>
+    <item>"Modificar apuesta"</item>
+    <item>"Formato"</item>
+    <item>"El importe es la apuesta de la contraparte. La exposición es importe × (cuota − 1)."</item>
+    <item>"Fecha · YYYY-MM-DD"</item>
+    <item>"Hora · HH:mm"</item>
+    <item>"Selección {0}"</item>
+    <item>"Título de la apuesta"</item>
+    <item>"Mercado · opcional"</item>
+    <item>"Cuota de selección · opcional"</item>
+    <item>"Vincular seguimiento"</item>
+    <item>"Registro manual"</item>
+    <item>"Quitar selección"</item>
+    <item>"Añadir selección"</item>
+    <item>"Importe en % del disponible"</item>
+    <item>"Apuesta gratuita"</item>
+    <item>"Guardar apuesta"</item>
+    <item>"Confirmar liquidación"</item>
+    <item>"Corregir liquidación"</item>
+    <item>"Exposición propia"</item>
+    <item>"Retorno total"</item>
+    <item>"Beneficio neto"</item>
+    <item>"Cuota: {0}"</item>
+    <item>"Cuota de cierre: {0}"</item>
+    <item>"Retorno potencial: {0} · no incluido en el saldo"</item>
+    <item>"Resultado propuesto: {0}"</item>
+    <item>"Detalle de apuesta"</item>
+    <item>"Copiar como apuesta nueva"</item>
+    <item>"Eliminar apuesta"</item>
+    <item>"Se revertirá su efecto financiero y se conservará la corrección en el historial."</item>
+    <item>"No se pudo guardar el archivo."</item>
+    <item>"No se pudo leer el CSV o excede 5 MB."</item>
+    <item>"Archivo"</item>
+    <item>"Depósitos y retiros"</item>
+    <item>"Plantillas versión 1 · moneda {0} · fechas ISO · hasta 1000 filas por lote"</item>
+    <item>"Descargar plantilla CSV"</item>
+    <item>"Exportar mis datos"</item>
+    <item>"Seleccionar CSV"</item>
+    <item>"Archivo cargado · {0} caracteres"</item>
+    <item>"Validar importación"</item>
+    <item>"Válidas: {0} · duplicadas: {1} · inválidas: {2}"</item>
+    <item>"Fila {0}: {1}"</item>
+    <item>"Ya importada · se omitirá"</item>
+    <item>"Confirmar importación"</item>
+    <item>"Importación disponible con Premium"</item>
+    <item>"Vista previa del resumen"</item>
+    <item>"Resumen del bank para compartir"</item>
+    <item>"Compartirás únicamente esta imagen, sin correo ni identificadores de cuenta."</item>
+    <item>"Compartir resumen"</item>
+    <item>"Compartir imagen"</item>
+    <item>"No se pudo preparar la imagen para compartir."</item>
+    <item>"CAPITAL DISPONIBLE"</item>
+    <item>"BENEFICIO DEL PERIODO"</item>
+    <item>"Rendimiento confirmado"</item>
+    <item>"Registro personal · resultados confirmados por el usuario"</item>
+    <item>"Este bank no tiene datos guardados. Conéctate para consultarlo."</item>
+    <item>"Conéctate antes de modificar el bank."</item>
+    <item>"Cambios guardados."</item>
+    <item>"El cambio se guardó. No se pudo actualizar el historial; pulsa Actualizar."</item>
+    <item>"Aplicar filtros"</item>
+    <item>"Desde · YYYY-MM-DD"</item>
+    <item>"Hasta · YYYY-MM-DD"</item>
+    <item>"Confirmar"</item>
+    <item>"Producto de cuotas: {0} · usa la cuota total real del boleto"</item>
+    <item>"Cuota total del boleto"</item>
+    <item>"Porcentaje del disponible"</item>
+    <item>"Importe · {0}"</item>
+    <item>"Cuota de cierre · CLV opcional"</item>
+    <item>"Bono sobre beneficio · %"</item>
+    <item>"Comisión sobre beneficio · %"</item>
+    <item>"Sin separador de miles. El registro no realiza ninguna apuesta ni mueve dinero."</item>
+    <item>"Revisa la fecha, el importe, la cuota y las selecciones."</item>
+    <item>"Los datos deportivos proponen un resultado. Confirma lo liquidado por tu casino."</item>
+    <item>"Retorno total recibido · {0}"</item>
+    <item>"Fecha de liquidación · YYYY-MM-DD"</item>
+    <item>"Exposición: {0}"</item>
+    <item>"Beneficio neto: {0}"</item>
+    <item>"Esta liquidación cierra el boleto completo. No queda una parte abierta."</item>
+    <item>"Revisa el retorno y la fecha."</item>
+    <item>"Confirmar retorno recibido"</item>
+    <item>"Registra movimientos que ya hiciste fuera de MyBetLive."</item>
+    <item>"Movimiento"</item>
+    <item>"Revisa importe y fecha."</item>
+    <item>"Guardar movimiento"</item>
+    <item>"Periodo del bank"</item>
+    <item>"Selecciona un periodo válido."</item>
+    <item>"Aplicar periodo"</item>
+    <item>"Filtrar apuestas"</item>
+    <item>"Deporte · código opcional"</item>
+    <item>"Mercado · código opcional"</item>
+    <item>"Desde · YYYY-MM-DD opcional"</item>
+    <item>"Hasta · YYYY-MM-DD opcional"</item>
+    <item>"Sin casino"</item>
+    <item>"SIN_MERCADO"</item>
+    <item>"MIXED"</item>
+    <item>"Bank y rendimiento básico"</item>
+    <item>"Varios banks y análisis avanzado"</item>
+    <item>"Exportar historial financiero completo"</item>
+    <item>"Bank avanzado: varios banks, combinadas y análisis."</item>
+    <item>"Bank: un bank y registro de apuestas simples."</item>
+    <item>"El servidor tardó demasiado. Actualiza el bank antes de reintentar; tu operación no se duplicará."</item>
     <item>"Bearer {0}"</item>
     <item>"alerted:{0}"</item>
     <item>"deleted:{0}"</item>
@@ -1027,5 +1514,80 @@
     <item>"{0}: {1}"</item>
     <item>"{0}:{1}"</item>
     <item>"{0}{1} / {2} · {3}"</item>
+    <item>"01 · Datos del boleto"</item>
+    <item>"02 · Selección"</item>
+    <item>"03 · Importe y formato"</item>
+    <item>"Detalles y promociones"</item>
+    <item>"Premium · CLV, bonos y comisión"</item>
+    <item>"Vista previa · el saldo lo confirma el servidor"</item>
+    <item>"El resultado se confirma en la liquidación"</item>
+    <item>"Expandido"</item>
+    <item>"Contraído"</item>
+    <item>"Sin especificar"</item>
+    <item>"+ Añadir casa de apuestas"</item>
+    <item>"Añadir casa de apuestas"</item>
+    <item>"Se guardará en tu cuenta para usarla en tus apuestas."</item>
+    <item>"Nombre de la casa"</item>
+    <item>"Guardar casa"</item>
+    <item>"Introduce un nombre válido de hasta 80 caracteres."</item>
+    <item>"Casa de apuestas guardada."</item>
+    <item>"Fecha"</item>
+    <item>"Hora"</item>
+    <item>"Fecha de apertura"</item>
+    <item>"Fecha de liquidación"</item>
+    <item>"Desde"</item>
+    <item>"Hasta"</item>
+    <item>"Acciones de la apuesta"</item>
+    <item>"Importe promocional"</item>
+    <item>"Importe de contraparte"</item>
+    <item>"Importe apostado"</item>
+    <item>"Retorno recibido"</item>
+    <item>"Aún no se incluye en tu saldo."</item>
+    <item>"Información del boleto"</item>
+    <item>"Fecha y hora"</item>
+    <item>"Propuesta deportiva: {0}"</item>
+    <item>"Confirma el retorno que liquidó tu casa de apuestas. El saldo cambiará cuando lo confirmes."</item>
+    <item>"Notas y detalles"</item>
+    <item>"Bono sobre beneficio"</item>
+    <item>"Comisión sobre beneficio"</item>
+    <item>"Simple · Lay"</item>
+    <item>"Simple · Back"</item>
+    <item>"Béisbol"</item>
+    <item>"Baloncesto"</item>
+    <item>"Fútbol americano"</item>
+    <item>"Hockey sobre hielo"</item>
+    <item>"Inicio"</item>
+    <item>"Estadísticas"</item>
+    <item>"Tu dinero, en un vistazo"</item>
+    <item>"Opciones del bank"</item>
+    <item>"‹ Inicio del bank"</item>
+    <item>"No hay apuestas para estos filtros."</item>
+    <item>"Evolución del beneficio"</item>
+    <item>"Tus apuestas"</item>
+    <item>"Buscar apuesta"</item>
+    <item>"Buscar"</item>
+    <item>"Filtros"</item>
+    <item>"Todas · {0}"</item>
+    <item>"Pendientes · {0}"</item>
+    <item>"Ayer"</item>
+    <item>"Has visto todas las apuestas"</item>
+    <item>"Desliza para cargar más · 10 por carga"</item>
+    <item>"Conéctate para cargar más apuestas"</item>
+    <item>"No se pudieron cargar más apuestas. Reintenta."</item>
+    <item>"Agrupar por"</item>
+    <item>"Día"</item>
+    <item>"Semana"</item>
+    <item>"Mes"</item>
+    <item>"Ganado"</item>
+    <item>"Perdido"</item>
+    <item>"Balance"</item>
+    <item>"Cargar más periodos"</item>
+    <item>"Actualiza para consultar los totales del periodo"</item>
+    <item>"{0} apuestas · {1} pendientes"</item>
+    <item>"{0} a {1}"</item>
+    <item>"Seguimiento"</item>
+    <item>"Anterior"</item>
+    <item>"Siguiente"</item>
+    <item>"Novedades"</item>
 </string-array>
 </resources>

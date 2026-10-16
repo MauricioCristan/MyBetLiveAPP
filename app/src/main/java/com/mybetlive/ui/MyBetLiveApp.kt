@@ -96,9 +96,13 @@ fun MyBetLiveApp(state: AppState, model: TrackingViewModel, prices: Map<String,S
     var eventId by rememberSaveable { mutableStateOf<String?>(null) }
     var createdBet by remember { mutableStateOf<BetView?>(null) }
     var savedMessage by remember { mutableStateOf(false) }
+    val context=LocalContext.current
+    val bankEnabled=state.subscription?.bankAccess!=null || state.subscription==null && runCatching{com.mybetlive.composition.ClientDependencies.bankRepository(context).cached().banks.isNotEmpty()}.getOrDefault(false)
     DashboardScreen(state, prices, onRefresh = model::refresh, onSport = model::selectSport,
         onDate = model::date, onOpenEvent = { eventId = it }, onDelete = model::delete,
-        onLogout = model::logout, buy = buy, restore = restore, manage = manage, createdBet = createdBet)
+        onLogout = model::logout, buy = buy, restore = restore, manage = manage, createdBet = createdBet,
+        bankContent=if(bankEnabled){{refresh,onPlans->BankRoute(state.bets,refresh,onPlans,state.subscription?.bankAccess)}}else null,
+        onHistory=model::loadHistory,onHistoryMore=model::loadMoreHistory)
     LaunchedEffect(eventId, state.events) {
         if(eventId != null && state.events.none { it.id == eventId && it.event.canStartTracking() }) eventId = null
     }

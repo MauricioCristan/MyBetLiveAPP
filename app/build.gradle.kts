@@ -7,6 +7,9 @@ plugins {
 }
 if (file("google-services.json").exists()) apply(plugin = "com.google.gms.google-services")
 val productionAdmobAppId = providers.gradleProperty("MYBET_ADMOB_APP_ID").orElse("").get()
+val debugBackendUrl = providers.gradleProperty("MYBET_DEBUG_BACKEND_URL")
+    .orElse("https://mybetlivebackend-production.up.railway.app").get().trimEnd('/')
+require(debugBackendUrl.matches(Regex("https?://[^\\s\"\\\\]+"))) { "Invalid MYBET_DEBUG_BACKEND_URL" }
 val signingPropertiesFile = rootProject.file(".local/signing/release-signing.properties")
 val releaseSigning = Properties().apply {
     if (signingPropertiesFile.exists()) signingPropertiesFile.inputStream().use { load(it) }
@@ -21,9 +24,11 @@ android {
         applicationId = "com.mybetlive"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.2.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "AUTH_BACKEND_URL", "\"https://mybetlivebackend-production.up.railway.app\"")
+        buildConfigField("boolean", "DEBUG_BACKEND_OVERRIDE", "false")
         manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"
         buildConfigField("String", "ADMOB_APP_ID", "\"ca-app-pub-3940256099942544~3347511713\"")
     }
@@ -37,7 +42,11 @@ android {
         }
     }
     buildTypes {
-        debug { /* Always Google's demo app ID, regardless of production properties. */ }
+        debug {
+            // Backend override is limited to debug; release always uses production.
+            buildConfigField("String", "AUTH_BACKEND_URL", "\"$debugBackendUrl\"")
+            buildConfigField("boolean", "DEBUG_BACKEND_OVERRIDE", providers.gradleProperty("MYBET_DEBUG_BACKEND_URL").isPresent.toString())
+        }
         release {
             isMinifyEnabled = false
             if (signingPropertiesFile.exists()) signingConfig = signingConfigs.getByName("production")
@@ -78,6 +87,10 @@ tasks.configureEach {
     if (name == "preReleaseBuild") dependsOn(validateProductionConfig)
 }
 dependencies {
+    androidTestImplementation(platform("androidx.compose:compose-bom:2025.09.01"))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    androidTestImplementation("androidx.test:runner:1.7.0")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
     implementation("com.google.android.gms:play-services-ads:25.5.0")
     implementation("com.google.android.ump:user-messaging-platform:4.0.0")
     testImplementation("junit:junit:4.13.2")

@@ -12,6 +12,15 @@ class FloatingPickRegistryTest {
         r.activate("a",rows);r.activate("b",rows)
         assertEquals(listOf("a","b"),r.ids)
     }
+    @Test fun carouselPreservesSelectionAcrossUpdatesAndRestoresFinals(){
+        val r=FloatingPickRegistry();val rows=listOf(bet("a"),bet("b"),bet("c"))
+        r.activate("a",rows);r.navigate(1);assertEquals("b",r.selectedId)
+        r.sync(rows+bet("d"));assertEquals("b",r.selectedId)
+        r.navigate(-1);r.navigate(-1);assertEquals("d",r.selectedId)
+        val restored=FloatingPickRegistry();restored.restore(r.ids,"b",listOf(bet("a"),bet("b","WON"),bet("c"),bet("d")))
+        assertEquals("b",restored.selectedId);assertEquals(listOf("a","b","c","d"),restored.ids)
+        restored.sync(listOf(bet("a"),bet("c")));assertEquals("a",restored.selectedId)
+    }
     @Test fun closingOneDoesNotAffectOthersOrReopenOnUpdates() {
         val r=FloatingPickRegistry();val rows=listOf(bet("a"),bet("b"))
         r.activate("a",rows);r.close("a");r.sync(rows+bet("c"))

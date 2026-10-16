@@ -17,10 +17,10 @@ import com.mybetlive.data.*
 import java.time.*
 import java.time.format.DateTimeFormatter
 @Composable internal fun ProfileScreen(state:AppState,prices:Map<String,StorePrice>,buy:(Plan)->Unit,restore:()->Unit,manage:()->Unit,
- onLogout:()->Unit,onNotifications:()->Unit){
+ onLogout:()->Unit,onNotifications:()->Unit,initialPage:String="profile"){
  val subscription=state.subscription
  val advertising=com.mybetlive.ads.LocalAdsController.current
- var page by rememberSaveable { mutableStateOf("profile") }
+ var page by rememberSaveable(initialPage) { mutableStateOf(initialPage) }
  val listState=rememberLazyListState()
  LaunchedEffect(page) { listState.scrollToItem(0) }
  BackHandler(page != "profile") { page="profile" }

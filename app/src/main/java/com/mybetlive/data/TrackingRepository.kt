@@ -33,6 +33,8 @@ interface TrackingApi {
     @GET("api/v1/tracking/bets") suspend fun bets(@Query("timezone") timezone: String = "UTC"): List<BetView>
     @GET("api/v1/tracking/bets") suspend fun activeBets(@Query("activeOnly") activeOnly: Boolean = true,
         @Query("includeBetIds") includeBetIds: String?, @Query("timezone") timezone: String = "UTC"): List<BetView>
+    @GET("api/v1/tracking/bets/history") suspend fun history(@Query("sport") sport:String?,@Query("page") page:Int,@Query("size") size:Int=10,@Query("timezone") timezone:String="UTC"):TrackingHistoryPage
+    @GET("api/v1/tracking/bets/{id}") suspend fun bet(@Path("id") id:String,@Query("timezone") timezone:String="UTC"):BetView
     @POST("api/v1/tracking/bets") suspend fun create(@Body bet: CreateBet,@Query("timezone") timezone: String = "UTC"): BetView
     @DELETE("api/v1/tracking/bets/{id}") suspend fun delete(@Path("id") id: String)
     @PUT("api/v1/tracking/devices/{id}") suspend fun device(@Path("id") id: String, @Body token: DeviceToken)
@@ -45,6 +47,10 @@ class TrackingRepository(context: Context,private val deviceTokens:DeviceTokenSo
     override suspend fun rewardIntent()=authorized {it.rewardIntent(PrepareReward(BuildConfig.DEBUG))}
     override suspend fun rewardTestComplete(id:String)=authorized {it.rewardTestComplete(id)}
     val vault = SessionVault(context)
+    init {
+        if(BackendSessionPolicy.needsReset(BuildConfig.DEBUG,BuildConfig.DEBUG_BACKEND_OVERRIDE,
+                vault.session?.baseUrl,BuildConfig.AUTH_BACKEND_URL)) vault.clear()
+    }
     override val session get() = vault.session
     override val cachedBets get() = vault.cachedBets
     private val endpoints = TrackingApiFactory(session = { vault.session })
@@ -63,6 +69,7 @@ class TrackingRepository(context: Context,private val deviceTokens:DeviceTokenSo
         }
     }
     private fun api(baseUrl: String): TrackingApi = endpoints.api(baseUrl)
+    internal suspend fun <A:Any,T> authorizedClient(type:Class<A>,action:suspend(A)->T):T = calls.executeApi({url->endpoints.client(url,type)},action)
     override suspend fun login(url: String, username: String, password: String) {
         val baseUrl = baseUrl(url)
         val tokens = api(baseUrl).login(Login(username.trim(), password))
@@ -98,7 +105,23 @@ class TrackingRepository(context: Context,private val deviceTokens:DeviceTokenSo
         val owner = session?.trackingOwner() ?: error("Inicia sesión")
         val live = com.mybetlive.composition.ClientDependencies.live
         live.bind(owner,vault.cachedBets)
-        authorized { it.bets(ZoneId.systemDefault().id) }.let { rows -> live.accept(owner,rows); live.state.value.bets.also { vault.cachedBets=it } }
+        authorized { it.activeBets(includeBetIds=live.state.value.bets.filter{b->b.status !in settledStatuses}.joinToString(","){b->b.id}.takeIf{v->v.isNotEmpty()},timezone=ZoneId.systemDefault().id) }.let { rows -> live.accept(owner,rows,partial=true); live.state.value.bets.also { vault.cachedBets=it } }
+    }
+    override suspend fun history(sport:String?,page:Int):TrackingHistoryPage=com.mybetlive.composition.ClientDependencies.sync.read {
+        val started=session ?: error("Inicia sesión")
+        val rows=authorized{it.history(sport,page,timezone=ZoneId.systemDefault().id)}
+        if(!started.sameOwner(session))throw IllegalStateException("La cuenta cambió durante la consulta")
+        val live=com.mybetlive.composition.ClientDependencies.live
+        live.bind(started.trackingOwner(),vault.cachedBets);live.mergeHistory(started.trackingOwner(),rows.items);vault.cachedBets=live.state.value.bets
+        rows
+    }
+    override suspend fun bet(id:String):BetView=com.mybetlive.composition.ClientDependencies.sync.read {
+        val started=session ?: error("Inicia sesión")
+        val row=authorized{it.bet(id,ZoneId.systemDefault().id)}
+        if(!started.sameOwner(session))throw IllegalStateException("La cuenta cambió durante la consulta")
+        val live=com.mybetlive.composition.ClientDependencies.live
+        live.bind(started.trackingOwner(),vault.cachedBets);live.mergeHistory(started.trackingOwner(),listOf(row));vault.cachedBets=live.state.value.bets
+        row
     }
     suspend fun activeBets(includeIds: List<String>): List<BetView> {
         val owner=session?.trackingOwner() ?: error("Inicia sesión")

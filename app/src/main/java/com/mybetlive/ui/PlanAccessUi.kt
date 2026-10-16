@@ -27,6 +27,7 @@ import com.mybetlive.data.*
 
 @Composable internal fun PlanBenefits(subscription: MySubscription) {
     val access = subscription.access
+    subscription.bankAccess?.let{LocalizedText(if(it.advanced)"Bank avanzado: varios banks, combinadas y análisis." else "Bank: un bank y registro de apuestas simples.",fontSize=14.sp)}
     listOf("${access.maxActiveTrackers?.toString() ?: "Sin límite de"} seguimientos activos",
         "ML, totales y hándicap de equipos incluidos",
         "Props de jugadores: ${if(access.playerProps) "incluidos" else "no incluidos"}",

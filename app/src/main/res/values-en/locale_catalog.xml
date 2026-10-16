@@ -489,6 +489,212 @@
     <item>"Hide"</item>
     <item>"We\'ll send you a link to create a new password."</item>
     <item>"Your session has expired. Sign in again."</item>
+    <item>"My bank"</item>
+    <item>"Overview"</item>
+    <item>"Performance"</item>
+    <item>"Transactions"</item>
+    <item>"Tools"</item>
+    <item>"Offline · viewing saved data"</item>
+    <item>"Updated: {0}"</item>
+    <item>"Select bank"</item>
+    <item>"Private"</item>
+    <item>"Archived"</item>
+    <item>"Create another bank"</item>
+    <item>"Use this bank with Free"</item>
+    <item>"Archived bank · your history is preserved"</item>
+    <item>"Your capital, in one place."</item>
+    <item>"Record bets you have already placed and review your performance."</item>
+    <item>"Create my first bank"</item>
+    <item>"‹ Bank overview"</item>
+    <item>"AVAILABLE"</item>
+    <item>"Committed to bets"</item>
+    <item>"Current capital"</item>
+    <item>"Negative balance · review your recorded transactions and bets"</item>
+    <item>"Period profit"</item>
+    <item>"Period ROI"</item>
+    <item>"Period"</item>
+    <item>"Confirmed profit · excluding deposits and withdrawals"</item>
+    <item>"Recent bets"</item>
+    <item>"See all"</item>
+    <item>"No bets recorded yet."</item>
+    <item>"History by bet placement date"</item>
+    <item>"Record deposit or withdrawal"</item>
+    <item>"Committed: {0}"</item>
+    <item>"Corrected · preserved in history"</item>
+    <item>"Correct"</item>
+    <item>"Advanced performance"</item>
+    <item>"View TWR, IRR, CLV and breakdowns with Premium."</item>
+    <item>"Capital and returns by confirmed settlement date"</item>
+    <item>"Annualized IRR. — means insufficient data or no valid calculation. TWR, IRR and growth cover the whole bank; other results respect your filters."</item>
+    <item>"By sport"</item>
+    <item>"By market"</item>
+    <item>"By bookmaker"</item>
+    <item>"{0} bets · ROI {1}"</item>
+    <item>"Your bank is private"</item>
+    <item>"Deposits and withdrawals are records. MyBetLive does not transfer money or place bets."</item>
+    <item>"Edit bank and defaults"</item>
+    <item>"Calendar and period"</item>
+    <item>"Import / export CSV"</item>
+    <item>"Share overview as an image"</item>
+    <item>"Premium includes multiple banks, accumulators, Lay, imports and advanced analytics."</item>
+    <item>"Calendar · confirmed profit"</item>
+    <item>"Add bet"</item>
+    <item>"Delete transaction"</item>
+    <item>"Its effect will be reversed and a correction kept in the history."</item>
+    <item>"Confirmed profit chart"</item>
+    <item>"Simple Lay"</item>
+    <item>"Accumulator"</item>
+    <item>"Simple Back"</item>
+    <item>"Partial settlement"</item>
+    <item>"Initial capital"</item>
+    <item>"Reservation"</item>
+    <item>"Settlement"</item>
+    <item>"Correction"</item>
+    <item>"Profit"</item>
+    <item>"Growth"</item>
+    <item>"Annualized IRR"</item>
+    <item>"Win rate"</item>
+    <item>"Available"</item>
+    <item>"Committed"</item>
+    <item>"Settled bets"</item>
+    <item>"Won"</item>
+    <item>"Lost"</item>
+    <item>"Refunded"</item>
+    <item>"Pending"</item>
+    <item>"Own exposure settled"</item>
+    <item>"Deposits"</item>
+    <item>"Withdrawals"</item>
+    <item>"Longest winning streak"</item>
+    <item>"Longest losing streak"</item>
+    <item>"Average stake"</item>
+    <item>"Maximum stake"</item>
+    <item>"Average odds"</item>
+    <item>"Highest winning odds"</item>
+    <item>"Largest profit"</item>
+    <item>"Largest loss"</item>
+    <item>"Promotional profit"</item>
+    <item>"Average CLV"</item>
+    <item>"Weighted CLV"</item>
+    <item>"CLV samples"</item>
+    <item>"Create bank"</item>
+    <item>"Edit bank"</item>
+    <item>"Bank name"</item>
+    <item>"Currency"</item>
+    <item>"Mexican pesos · MXN"</item>
+    <item>"US dollars · USD"</item>
+    <item>"Euros · EUR"</item>
+    <item>"Currency: {0} · history is not converted"</item>
+    <item>"Opening date · YYYY-MM-DD"</item>
+    <item>"Time zone"</item>
+    <item>"Bank notes"</item>
+    <item>"Defaults"</item>
+    <item>"Default bookmaker"</item>
+    <item>"Default sport"</item>
+    <item>"Default stake · optional"</item>
+    <item>"Default odds · optional"</item>
+    <item>"Archive bank · preserve history"</item>
+    <item>"Check name, amount, date and time zone."</item>
+    <item>"Save bank"</item>
+    <item>"Edit bet"</item>
+    <item>"Format"</item>
+    <item>"The stake is the opposing bet. Exposure is stake × (odds − 1)."</item>
+    <item>"Date · YYYY-MM-DD"</item>
+    <item>"Time · HH:mm"</item>
+    <item>"Selection {0}"</item>
+    <item>"Bet title"</item>
+    <item>"Market · optional"</item>
+    <item>"Selection odds · optional"</item>
+    <item>"Link tracking"</item>
+    <item>"Manual entry"</item>
+    <item>"Remove selection"</item>
+    <item>"Add selection"</item>
+    <item>"Stake as % of available capital"</item>
+    <item>"Free bet"</item>
+    <item>"Save bet"</item>
+    <item>"Confirm settlement"</item>
+    <item>"Correct settlement"</item>
+    <item>"Own exposure"</item>
+    <item>"Total return"</item>
+    <item>"Net profit"</item>
+    <item>"Odds: {0}"</item>
+    <item>"Closing odds: {0}"</item>
+    <item>"Potential return: {0} · excluded from balance"</item>
+    <item>"Suggested result: {0}"</item>
+    <item>"Bet details"</item>
+    <item>"Copy as a new bet"</item>
+    <item>"Delete bet"</item>
+    <item>"Its financial effect will be reversed and the correction kept in history."</item>
+    <item>"Could not save the file."</item>
+    <item>"Could not read the CSV or it exceeds 5 MB."</item>
+    <item>"File"</item>
+    <item>"Deposits and withdrawals"</item>
+    <item>"Version 1 templates · currency {0} · ISO dates · up to 1000 rows per batch"</item>
+    <item>"Download CSV template"</item>
+    <item>"Export my data"</item>
+    <item>"Select CSV"</item>
+    <item>"File loaded · {0} characters"</item>
+    <item>"Validate import"</item>
+    <item>"Valid: {0} · duplicates: {1} · invalid: {2}"</item>
+    <item>"Row {0}: {1}"</item>
+    <item>"Already imported · will be skipped"</item>
+    <item>"Confirm import"</item>
+    <item>"Import available with Premium"</item>
+    <item>"Overview preview"</item>
+    <item>"Bank overview to share"</item>
+    <item>"You will share only this image, without email or account identifiers."</item>
+    <item>"Share overview"</item>
+    <item>"Share image"</item>
+    <item>"Could not prepare the image to share."</item>
+    <item>"AVAILABLE CAPITAL"</item>
+    <item>"PERIOD PROFIT"</item>
+    <item>"Confirmed performance"</item>
+    <item>"Personal record · results confirmed by the user"</item>
+    <item>"This bank has no saved data. Connect to view it."</item>
+    <item>"Connect before editing the bank."</item>
+    <item>"Changes saved."</item>
+    <item>"Your change was saved. History could not be refreshed; tap Refresh."</item>
+    <item>"Apply filters"</item>
+    <item>"From · YYYY-MM-DD"</item>
+    <item>"To · YYYY-MM-DD"</item>
+    <item>"Confirm"</item>
+    <item>"Odds product: {0} · use the actual ticket odds"</item>
+    <item>"Total ticket odds"</item>
+    <item>"Percentage of available capital"</item>
+    <item>"Stake · {0}"</item>
+    <item>"Closing odds · optional CLV"</item>
+    <item>"Profit bonus · %"</item>
+    <item>"Profit commission · %"</item>
+    <item>"No thousands separator. Recording does not place bets or transfer money."</item>
+    <item>"Check the date, stake, odds and selections."</item>
+    <item>"Sports data suggests a result. Confirm the payout settled by your bookmaker."</item>
+    <item>"Total payout received · {0}"</item>
+    <item>"Settlement date · YYYY-MM-DD"</item>
+    <item>"Exposure: {0}"</item>
+    <item>"Net profit: {0}"</item>
+    <item>"This settlement closes the entire ticket. No part remains open."</item>
+    <item>"Check payout and date."</item>
+    <item>"Confirm payout received"</item>
+    <item>"Record transactions you already made outside MyBetLive."</item>
+    <item>"Transaction"</item>
+    <item>"Check amount and date."</item>
+    <item>"Save transaction"</item>
+    <item>"Bank period"</item>
+    <item>"Select a valid period."</item>
+    <item>"Apply period"</item>
+    <item>"Filter bets"</item>
+    <item>"Sport · optional code"</item>
+    <item>"Market · optional code"</item>
+    <item>"From · YYYY-MM-DD optional"</item>
+    <item>"To · YYYY-MM-DD optional"</item>
+    <item>"No bookmaker"</item>
+    <item>"No market"</item>
+    <item>"Mixed"</item>
+    <item>"Bank and basic performance"</item>
+    <item>"Multiple banks and advanced analytics"</item>
+    <item>"Export complete financial history"</item>
+    <item>"Advanced bank: multiple banks, accumulators and analytics."</item>
+    <item>"Bank: one bank and simple bet records."</item>
+    <item>"The server took too long. Refresh the bank before retrying; your operation will not be duplicated."</item>
     <item>"Bearer {0}"</item>
     <item>"alerted:{0}"</item>
     <item>"deleted:{0}"</item>
@@ -513,5 +719,80 @@
     <item>"{0}: {1}"</item>
     <item>"{0}:{1}"</item>
     <item>"{0}{1} / {2} · {3}"</item>
+    <item>"01 · Ticket details"</item>
+    <item>"02 · Selection"</item>
+    <item>"03 · Stake and format"</item>
+    <item>"Details and promotions"</item>
+    <item>"Premium · CLV, bonuses and commission"</item>
+    <item>"Preview · the server confirms your balance"</item>
+    <item>"Confirm the result when settling"</item>
+    <item>"Expanded"</item>
+    <item>"Collapsed"</item>
+    <item>"Unspecified"</item>
+    <item>"+ Add bookmaker"</item>
+    <item>"Add bookmaker"</item>
+    <item>"Saved to your account to use on your bets."</item>
+    <item>"Bookmaker name"</item>
+    <item>"Save bookmaker"</item>
+    <item>"Enter a valid name of up to 80 characters."</item>
+    <item>"Bookmaker saved."</item>
+    <item>"Date"</item>
+    <item>"Time"</item>
+    <item>"Opening date"</item>
+    <item>"Settlement date"</item>
+    <item>"From"</item>
+    <item>"To"</item>
+    <item>"Bet actions"</item>
+    <item>"Promotional stake"</item>
+    <item>"Counterparty stake"</item>
+    <item>"Stake placed"</item>
+    <item>"Return received"</item>
+    <item>"Not included in your balance yet."</item>
+    <item>"Ticket information"</item>
+    <item>"Date and time"</item>
+    <item>"Sports suggestion: {0}"</item>
+    <item>"Confirm the return settled by your bookmaker. Your balance changes after confirmation."</item>
+    <item>"Notes and details"</item>
+    <item>"Profit bonus"</item>
+    <item>"Profit commission"</item>
+    <item>"Single · Lay"</item>
+    <item>"Single · Back"</item>
+    <item>"Baseball"</item>
+    <item>"Basketball"</item>
+    <item>"American football"</item>
+    <item>"Ice hockey"</item>
+    <item>"Home"</item>
+    <item>"Statistics"</item>
+    <item>"Your money at a glance"</item>
+    <item>"Bank options"</item>
+    <item>"‹ Bank home"</item>
+    <item>"No bets match these filters."</item>
+    <item>"Profit over time"</item>
+    <item>"Your bets"</item>
+    <item>"Search bets"</item>
+    <item>"Search"</item>
+    <item>"Filters"</item>
+    <item>"All · {0}"</item>
+    <item>"Pending · {0}"</item>
+    <item>"Yesterday"</item>
+    <item>"You have seen all bets"</item>
+    <item>"Scroll to load more · 10 at a time"</item>
+    <item>"Connect to load more bets"</item>
+    <item>"Could not load more bets. Try again."</item>
+    <item>"Group by"</item>
+    <item>"Day"</item>
+    <item>"Week"</item>
+    <item>"Month"</item>
+    <item>"Won"</item>
+    <item>"Lost"</item>
+    <item>"Net profit"</item>
+    <item>"Load more periods"</item>
+    <item>"Refresh to see period totals"</item>
+    <item>"{0} bets · {1} pending"</item>
+    <item>"{0} to {1}"</item>
+    <item>"Tracker"</item>
+    <item>"Previous"</item>
+    <item>"Next"</item>
+    <item>"Updates"</item>
 </string-array>
 </resources>

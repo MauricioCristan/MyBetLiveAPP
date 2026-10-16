@@ -4,8 +4,13 @@ import android.content.Intent
 import android.provider.Settings
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import kotlinx.coroutines.flow.distinctUntilChanged
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -36,6 +41,7 @@ import java.time.format.DateTimeFormatter
 private enum class Section(val label: String, val icon: Int) {
     TRACKERS("Seguimientos", R.drawable.ic_nav_trackers),
     EVENTS("Partidos", R.drawable.ic_nav_games),
+    BANK("Bank", R.drawable.ic_nav_bank),
     PROFILE("Perfil", R.drawable.ic_nav_profile)
 }
 private val finalStatuses = setOf("WON", "LOST", "PUSH", "VOID")
@@ -49,12 +55,20 @@ private enum class TrackerTab { ACTIVE, PINNED, HISTORY }
     state: AppState, prices: Map<String, StorePrice>, onRefresh: () -> Unit,
     onSport: (String) -> Unit, onDate: (LocalDate) -> Unit, onOpenEvent: (String) -> Unit,
     onDelete: (String) -> Unit, onLogout: () -> Unit, buy: (Plan) -> Unit,
-    restore: () -> Unit, manage: () -> Unit, createdBet: BetView? = null
+    restore: () -> Unit, manage: () -> Unit, createdBet: BetView? = null,
+    bankContent: (@Composable (Int,()->Unit)->Unit)? = null,
+    onHistory:((String)->Unit)?=null,onHistoryMore:(()->Unit)?=null
 ) {
     var section by rememberSaveable { mutableStateOf(Section.TRACKERS) }
+    var bankRefresh by remember { mutableIntStateOf(0) }
+    var bankPlansRequested by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(bankContent==null){if(bankContent==null&&section==Section.BANK)section=Section.TRACKERS}
     var trackerTab by rememberSaveable { mutableStateOf(TrackerTab.ACTIVE) }
     LaunchedEffect(trackerTab){if(trackerTab==TrackerTab.PINNED)trackerTab=TrackerTab.ACTIVE}
     var trackerSport by rememberSaveable { mutableStateOf("ALL") }
+    LaunchedEffect(section,trackerTab,trackerSport){
+        if(section==Section.TRACKERS&&trackerTab==TrackerTab.HISTORY)onHistory?.invoke(trackerSport)
+    }
     var selectedBetId by rememberSaveable { mutableStateOf<String?>(null) }
     val selectedBet = state.bets.find { it.id == selectedBetId }
     var handledNotification by rememberSaveable { mutableLongStateOf(-1) }
@@ -86,31 +100,38 @@ private enum class TrackerTab { ACTIVE, PINNED, HISTORY }
                     LocalizedText("Detalle del seguimiento", fontWeight = FontWeight.SemiBold, fontSize = 17.sp,
                         modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
+            } else if(section==Section.BANK){
+                Row(verticalAlignment=Alignment.CenterVertically){
+                    IconButton(onClick={section=Section.TRACKERS}){AppIcon(R.drawable.ic_back,"Volver a seguimientos")}
+                    BrandLogo()
+                }
             } else BrandLogo()
-            IconButton(onClick = onRefresh, enabled = !state.busy) { AppIcon(R.drawable.ic_refresh, "Actualizar datos") }
+            IconButton(onClick = {if(section==Section.BANK)bankRefresh++ else onRefresh()}, enabled = section==Section.BANK||!state.busy) { AppIcon(R.drawable.ic_refresh, "Actualizar datos") }
         }
     }, bottomBar = {
-        BoxWithConstraints(Modifier.fillMaxWidth()) {
-        val compactLabels = maxWidth < 360.dp && LocalDensity.current.fontScale > 1.1f
-        NavigationBar(containerColor = Ink, tonalElevation = 0.dp) {
-            Section.entries.forEach { destination ->
-                NavigationBarItem(selected = section == destination,
-                    onClick = { section = destination; selectedBetId = null },
-                    icon = { AppIcon(destination.icon) }, label = { LocalizedText(destination.label, maxLines = 1,
-                        fontSize = if (compactLabels) 11.sp else 12.sp, overflow = TextOverflow.Ellipsis) },
-                    modifier = Modifier.testTag("nav-${destination.name}"),
-                    colors = NavigationBarItemDefaults.colors(selectedIconColor = Green, selectedTextColor = Green,
-                        indicatorColor = Green.copy(alpha = .13f), unselectedIconColor = Muted, unselectedTextColor = Muted))
+        if(section!=Section.BANK)BoxWithConstraints(Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal=12.dp,vertical=10.dp)) {
+            val compactLabels=maxWidth<340.dp&&LocalDensity.current.fontScale>1.1f
+            Surface(Modifier.fillMaxWidth().testTag("main-floating-navigation"),shape=RoundedCornerShape(26.dp),color=Color(0xFF20333D),shadowElevation=8.dp){
+                Row(Modifier.selectableGroup().padding(horizontal=4.dp,vertical=8.dp),verticalAlignment=Alignment.CenterVertically){
+                    Section.entries.filter{it!=Section.BANK||bankContent!=null}.forEach{destination->
+                        val active=section==destination
+                        Column(Modifier.weight(1f).selectable(selected=active,role=Role.Tab,onClick={section=destination;selectedBetId=null;bankPlansRequested=false})
+                            .testTag("nav-${destination.name}").padding(vertical=4.dp),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(4.dp)){
+                            Icon(painterResource(destination.icon),contentDescription=null,tint=if(active)Green else Muted,modifier=Modifier.size(24.dp))
+                            LocalizedText(destination.label,fontSize=if(compactLabels)10.sp else 11.sp,lineHeight=16.sp,maxLines=1,overflow=TextOverflow.Ellipsis,
+                                color=if(active)Green else Muted,fontWeight=if(active)FontWeight.Bold else FontWeight.Normal)
+                        }
+                    }
+                }
             }
-        }
         }
     }) { padding ->
         Column(Modifier.fillMaxSize().padding(padding)) {
-            if (state.offline) Notice("Sin conexión · mostrando la última actualización guardada", Muted)
-            state.error?.let { Notice(it, Red) }
+            if (state.offline&&section!=Section.BANK) Notice("Sin conexión · mostrando la última actualización guardada", Muted)
+            if(section!=Section.BANK)state.error?.let { Notice(it, Red) }
             if (state.events.any { it.event.provider.startsWith("DEMO") } || state.bets.any { it.event.provider.startsWith("DEMO") })
                 Notice("Demo · datos deportivos simulados", Green)
-            PullToRefreshBox(isRefreshing = state.busy, onRefresh = { if (!state.busy) onRefresh() },
+            PullToRefreshBox(isRefreshing = state.busy&&section!=Section.BANK, onRefresh = { if(section==Section.BANK)bankRefresh++ else if (!state.busy) onRefresh() },
                 modifier = Modifier.weight(1f).fillMaxWidth().testTag("refresh-content")) {
                 when {
                     selectedBet != null -> BetDetail(selectedBet, state.offline, state.busy,
@@ -118,9 +139,10 @@ private enum class TrackerTab { ACTIVE, PINNED, HISTORY }
                         onDelete = { onDelete(selectedBet.id); selectedBetId = null })
                     section == Section.TRACKERS -> TrackersScreen(state, trackerTab, trackerSport,
                         onTab = { trackerTab = it }, onFilter = { trackerSport = it },
-                        onAdd = { section = Section.EVENTS }, onOpen = { selectedBetId = it }, onSettings=notificationSettings)
+                        onAdd = { section = Section.EVENTS }, onOpen = { selectedBetId = it }, onSettings=notificationSettings,onHistory=onHistory,onMore=onHistoryMore)
                     section == Section.EVENTS -> EventsScreen(state, onSport, onDate, onOpenEvent)
-                    else -> ProfileScreen(state, prices, buy, restore, manage, onLogout, onNotifications = notificationSettings)
+                    section == Section.BANK -> bankContent?.invoke(bankRefresh){bankPlansRequested=true;section=Section.PROFILE}
+                    else -> ProfileScreen(state, prices, buy, restore, manage, onLogout, onNotifications = notificationSettings,initialPage=if(bankPlansRequested)"plans" else "profile")
                 }
             }
         }
@@ -151,7 +173,7 @@ private enum class TrackerTab { ACTIVE, PINNED, HISTORY }
         val options=(if(all)listOf("ALL" to "Todos") else emptyList())+sports.map {it to sportLabel(it)}
         ExpandableFilters(selected,options,onSelected,enabled,"sport") {sport ->
             if(sport=="ALL")Icon(painterResource(R.drawable.ic_all_leagues),contentDescription=null,tint=Color.Unspecified,modifier=Modifier.size(26.dp))
-            else if(sport=="SOCCER")LocalizedText("⚽",color=Color.White,fontSize=22.sp,lineHeight=22.sp,modifier=Modifier.clearAndSetSemantics {})
+            else if(sport in listOf("SOCCER","MLB","NBA","NFL","NHL"))LocalizedText(when(sport){"SOCCER"->"⚽";"NBA"->"🏀";"NFL"->"🏈";"NHL"->"🏒";else->"⚾"},color=Color.White,fontSize=22.sp,lineHeight=22.sp,modifier=Modifier.clearAndSetSemantics {})
             else Icon(painterResource(when(sport){"NFL"->R.drawable.league_nfl;"MLB"->R.drawable.league_mlb;"NBA"->R.drawable.league_nba;"NHL"->R.drawable.league_nhl;else->com.mybetlive.presentation.ProgressTrackRenderer.sportIcon(sport)}),contentDescription=null,tint=Color.Unspecified,modifier=Modifier.size(26.dp))
         }
         return
@@ -168,13 +190,22 @@ private enum class TrackerTab { ACTIVE, PINNED, HISTORY }
 }
 
 @Composable private fun TrackersScreen(state: AppState, tab: TrackerTab, sport: String,
-    onTab: (TrackerTab) -> Unit, onFilter: (String) -> Unit, onAdd: () -> Unit, onOpen: (String) -> Unit, onSettings: () -> Unit) {
+    onTab: (TrackerTab) -> Unit, onFilter: (String) -> Unit, onAdd: () -> Unit, onOpen: (String) -> Unit, onSettings: () -> Unit,onHistory:((String)->Unit)?=null,onMore:(()->Unit)?=null) {
     val bySport = state.bets.filter { sport == "ALL" || it.event.sport == sport }
     val activeCount = bySport.count { !it.settled() }
-    val visible = bySport.filter { if(tab==TrackerTab.HISTORY)it.settled() else !it.settled() }
-        .let { if(tab == TrackerTab.HISTORY) it.sortedByDescending { bet -> bet.updatedAt } else it }
-    val sports = (state.sports.filter { it.enabled }.map { it.sport } + state.bets.map { it.event.sport }).distinct()
-    LazyColumn(Modifier.fillMaxSize().testTag("tracker-list"), contentPadding = PaddingValues(20.dp),
+    val visible = if(tab==TrackerTab.HISTORY&&state.history!=null&&state.historySport==sport)state.history.filter{it.settled()}
+        else bySport.filter{if(tab==TrackerTab.HISTORY)it.settled() else !it.settled()}.let{if(tab==TrackerTab.HISTORY)it.sortedByDescending{bet->bet.updatedAt}else it}
+    val historyCount=if(state.historyTotal!=null&&state.historySport==sport)state.historyTotal else if(onHistory==null)bySport.count{it.settled()}.toLong() else null
+    val listState=rememberLazyListState()
+    LaunchedEffect(tab,sport,state.historyPage<0){if(tab==TrackerTab.HISTORY)listState.scrollToItem(0)}
+    LaunchedEffect(tab,sport,state.history?.size,state.historyLoading,state.historyHasMore,state.historyError,state.offline){
+        if(tab==TrackerTab.HISTORY&&state.historyHasMore&&!state.historyLoading&&state.historyError==null&&!state.offline){
+            snapshotFlow{listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index?.let{it>=listState.layoutInfo.totalItemsCount-3}==true}
+                .distinctUntilChanged().collect{nearEnd->if(nearEnd)onMore?.invoke()}
+        }
+    }
+    val sports = (state.sports.filter { tab==TrackerTab.HISTORY || it.enabled }.map { it.sport } + state.bets.map { it.event.sport }).distinct()
+    LazyColumn(Modifier.fillMaxSize().testTag("tracker-list"),state=listState, contentPadding = PaddingValues(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
             SectionHeading("Seguimientos", "El avance de tus selecciones", action = {
@@ -185,14 +216,14 @@ private enum class TrackerTab { ACTIVE, PINNED, HISTORY }
         item {
             PrimaryTabRow(selectedTabIndex = if(tab==TrackerTab.HISTORY)1 else 0, containerColor = Ink, contentColor = Green) {
                 listOf(TrackerTab.ACTIVE to "Activos ($activeCount)",
-                    TrackerTab.HISTORY to "Historial (${bySport.size-activeCount})").forEach { (destination, label) ->
+                    TrackerTab.HISTORY to (historyCount?.let{"Historial ($it)"}?:"Historial")).forEach { (destination, label) ->
                     Tab(selected=tab==destination, onClick={onTab(destination)}, text={LocalizedText(label,fontSize=12.sp,maxLines=2)},
                         selectedContentColor=Green, unselectedContentColor=Muted, modifier=Modifier.testTag("${destination.name.lowercase()}-tab"))
                 }
             }
             SportFilters(sport, sports, onFilter, all = true,compact=true)
         }
-        if (visible.isEmpty()) item {
+        if (visible.isEmpty()&&!(tab==TrackerTab.HISTORY&&state.historyLoading)&&!(tab==TrackerTab.HISTORY&&state.historyError!=null)) item {
             Card(colors = CardDefaults.cardColors(containerColor = Panel), shape = RoundedCornerShape(18.dp)) {
                 Column(Modifier.fillMaxWidth().padding(22.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     LocalizedText(if(tab==TrackerTab.HISTORY) "Aún no hay resultados aquí" else "No tienes seguimientos activos", fontSize = 20.sp, fontWeight = FontWeight.Bold)
@@ -210,6 +241,13 @@ private enum class TrackerTab { ACTIVE, PINNED, HISTORY }
         visible.forEachIndexed { index, bet ->
             item(key=bet.id) { CompactBetCard(bet, state.offline) { onOpen(bet.id) } }
             if(index+1 in adPositions) item(key="tracker-ad-${tab.name}-$index") { NativeAdCard(state.subscription,state.offline) }
+        }
+        if(tab==TrackerTab.HISTORY){
+            if(state.historyLoading)item(key="history-loading"){Row(Modifier.fillMaxWidth().testTag("history-loading"),horizontalArrangement=Arrangement.Center){CircularProgressIndicator(Modifier.size(24.dp),color=Green)}}
+            state.historyError?.let{message->item(key="history-error"){Column(Modifier.fillMaxWidth()){
+                LocalizedText(message,color=Red,fontSize=12.sp)
+                TextButton(onClick={if(state.historyPage<0)onHistory?.invoke(sport)else onMore?.invoke()},modifier=Modifier.testTag("history-retry")){LocalizedText("Reintentar")}
+            }}}
         }
         if (visible.isNotEmpty()) item {
             LocalizedText(if (tab==TrackerTab.HISTORY) "Resultados informativos según los datos deportivos. Toca una tarjeta para consultar el detalle."
@@ -314,7 +352,7 @@ private fun shortStatus(status: String) = when (status) {
                 IconButton(onClick = { onDate(state.date.plusDays(1)) }, enabled = !state.busy && state.date < today.plusDays(14)) { AppIcon(R.drawable.ic_next, "Jornada siguiente") }
             }
             LocalizedText("Horarios de ${state.timeZone.substringAfterLast('/').replace('_',' ')}",color=Muted,fontSize=11.sp)
-            if (state.selectedSport == "SOCCER" && leagues.size > 1) {
+            if (state.selectedSport in listOf("SOCCER","MLB","NBA","NFL","NHL") && leagues.size > 1) {
                 ExpandableFilters(selectedLeague,listOf("ALL" to "Todas las ligas")+leagues,{league=it},!state.busy,"league") {id ->
                     if(id=="ALL")Icon(painterResource(R.drawable.ic_all_leagues),contentDescription=null,tint=Color.Unspecified,modifier=Modifier.size(26.dp))
                     else LeagueLogo(leagueEvents[id]?.firstNotNullOfOrNull {it.event.leagueLogoUrl})

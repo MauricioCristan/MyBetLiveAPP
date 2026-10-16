@@ -18,6 +18,8 @@ data class AppState(
     val error: String? = null, val bets: List<BetView> = emptyList(), val events: List<EventView> = emptyList(),
     val sports: List<SportInfo> = emptyList(), val players: List<Player> = emptyList(), val offline: Boolean = false,
     val playersEventId: String? = null,
+    val history:List<BetView>?=null,val historyPage:Int=-1,val historyTotal:Long?=null,val historySport:String="ALL",
+    val historyHasMore:Boolean=false,val historyLoading:Boolean=false,val historyError:String?=null,
     val date: LocalDate = LocalDate.now(), val selectedSport: String = "NFL",
     val today: LocalDate = LocalDate.now(), val timeZone: String = ZoneId.systemDefault().id, val followingToday: Boolean = true,
     val subscription: MySubscription? = null, val billingMessage: String? = null,val rewardMessage:String?=null,
@@ -35,6 +37,8 @@ class TrackingViewModel(app: Application,
         username = account.session?.username.orEmpty(), bets = tracking.cachedBets,
         offline = account.session != null))
     val ui = state.asStateFlow()
+    private var historyJob:Job?=null
+    private var historyRequest=0L
     private var pollJob: Job? = null
     private val workLock = Mutex()
     private var notificationSyncJob: Job? = null
@@ -48,7 +52,7 @@ class TrackingViewModel(app: Application,
                     state.value=AppState(error="Tu sesión expiró. Inicia sesión de nuevo.")
                 }
                 if(state.value.loggedIn && live.owner==account.session?.trackingOwner())
-                    state.update { it.copy(bets=live.bets,offline=live.offline) }
+                    state.update { val byId=live.bets.associateBy{b->b.id};it.copy(bets=live.bets,history=it.history?.mapNotNull{b->byId[b.id]},offline=live.offline) }
             }
         }
     }
@@ -94,7 +98,7 @@ class TrackingViewModel(app: Application,
     }
     fun login(url: String, username: String, password: String) = action {
         account.login(url, username, password)
-        state.update { it.copy(loggedIn = true, username = username, bets = emptyList(), offline = false) }
+        state.update { it.copy(loggedIn = true, username = username, bets = emptyList(), offline = false,history=null,historyTotal=null,historyPage=-1,historyLoading=false,historyHasMore=false,historyError=null) }
         load()
     }
     private fun emailAccounts()=account as? EmailAccountOperations ?: error("El registro por correo no está disponible.")
@@ -128,7 +132,7 @@ class TrackingViewModel(app: Application,
         val challenge = account.googleChallenge(url)
         val token = credential(challenge)
         account.googleLogin(url, token, challenge.nonce)
-        state.update { it.copy(loggedIn = true, username = account.session?.username.orEmpty(), bets = emptyList(), offline = false) }
+        state.update { it.copy(loggedIn = true, username = account.session?.username.orEmpty(), bets = emptyList(), offline = false,history=null,historyTotal=null,historyPage=-1,historyLoading=false,historyHasMore=false,historyError=null) }
         load()
     }
     private suspend fun load() {
@@ -139,12 +143,43 @@ class TrackingViewModel(app: Application,
         val bets = tracking.bets()
         state.update { it.copy(bets = bets, offline = false) }
         if (subscription.access.pushNotifications) publishNotifications() else syncNotificationState()
+        loadHistory(state.value.historySport)
         val sports = tracking.sports()
         state.update { it.copy(sports = sports) }
         // Device registration must not depend on the sporting provider's quota/catalog.
         runCatching { devices.registerDevice() }
         val events = tracking.events(state.value.selectedSport, state.value.date)
         state.update { it.copy(events = events) }
+    }
+    fun loadHistory(sport:String){
+        historyJob?.cancel();historyRequest++
+        state.update{it.copy(historySport=sport,historyPage=-1,historyTotal=null,historyHasMore=false,historyLoading=false,historyError=null,history=if(it.historySport==sport)it.history else emptyList())}
+        fetchHistory(0)
+    }
+    fun loadMoreHistory(){
+        val current=state.value
+        if(current.historyLoading||!current.historyHasMore)return
+        fetchHistory(current.historyPage+1)
+    }
+    private fun fetchHistory(page:Int){
+        val started=account.session?:return
+        val sport=state.value.historySport
+        val request=++historyRequest
+        state.update{it.copy(historyLoading=true,historyError=null)}
+        historyJob=viewModelScope.launch{
+            try{
+                val result=tracking.history(sport.takeUnless{it=="ALL"},page)
+                if(request!=historyRequest||!started.sameOwner(account.session))return@launch
+                state.update{current->current.copy(history=(if(page==0)result.items else current.history.orEmpty()+result.items).distinctBy{it.id},
+                    historyPage=result.page,historyTotal=result.total,historyHasMore=result.hasMore,historyLoading=false,historyError=null,offline=false)}
+            }catch(error:Exception){
+                if(error is CancellationException)throw error
+                if(request!=historyRequest||!started.sameOwner(account.session))return@launch
+                state.update{it.copy(historyLoading=false,historyError=failures.message(error),offline=it.offline||error is java.io.IOException)}
+            }finally{
+                if(request==historyRequest&&started.sameOwner(account.session))state.update{it.copy(historyLoading=false)}
+            }
+        }
     }
     fun refresh() = action { load() }
     private suspend fun updateCalendar(): Boolean {
@@ -228,10 +263,11 @@ class TrackingViewModel(app: Application,
     }
     fun delete(id: String) = action {
         tracking.delete(id); notifications.remove(id)
-        state.update { it.copy(bets = it.bets.filterNot { b -> b.id == id }, pinnedBets=it.pinnedBets-id) }
+        state.update { it.copy(bets = it.bets.filterNot { b -> b.id == id }, history=it.history?.filterNot{b->b.id==id}, pinnedBets=it.pinnedBets-id) }
         refreshAfterMutation()
     }
     private suspend fun refreshAfterMutation() {
+        if(state.value.history!=null)loadHistory(state.value.historySport)
         // A successful write must stay successful even if a later read loses connectivity.
         state.update { it.copy(subscription = it.subscription?.copy(activeTrackers = it.bets.count { b -> b.status !in settledStatuses }.toLong())) }
         try {
@@ -243,8 +279,16 @@ class TrackingViewModel(app: Application,
             state.update { it.copy(offline = true, error = "El cambio se guardó. No se pudo actualizar la consulta; pulsa Actualizar para reintentar.") }
         }
     }
-    fun openNotification(id: String) { state.update { it.copy(notificationBetId = id, notificationRequest = it.notificationRequest+1) } }
+    fun openNotification(id: String) {
+        state.update{it.copy(notificationBetId=id,notificationRequest=it.notificationRequest+1)}
+        if(state.value.bets.none{it.id==id}){
+            val started=account.session?:return
+            viewModelScope.launch{try{val row=tracking.bet(id);if(started.sameOwner(account.session))state.update{it.copy(bets=(it.bets+row).distinctBy{b->b.id})}}
+                catch(error:Exception){if(error is CancellationException)throw error;if(started.sameOwner(account.session))state.update{it.copy(error=failures.message(error))}}}
+        }
+    }
     fun logout() = action {
+        historyRequest++;historyJob?.cancel()
         account.logout(); notifications.clear()
         state.value = AppState()
     }

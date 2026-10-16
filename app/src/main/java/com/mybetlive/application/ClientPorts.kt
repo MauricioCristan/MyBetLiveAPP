@@ -17,6 +17,8 @@ interface TrackingOperations {
     suspend fun events(sport: String, date: LocalDate): List<EventView>
     suspend fun players(id: String): List<Player>
     suspend fun bets(): List<BetView>
+    suspend fun history(sport:String?,page:Int):TrackingHistoryPage
+    suspend fun bet(id:String):BetView
     suspend fun create(bet: CreateBet): BetView
     suspend fun delete(id: String)
 }

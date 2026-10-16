@@ -31,10 +31,14 @@
                 <data android:path="/verify-email" />
             </intent-filter>
         </activity>
+        <provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.bankfiles" android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/bank_file_paths" />
+        </provider>
+        <receiver android:name=".notifications.TrackingNotificationReceiver" android:exported="false" />
         <service android:name=".notifications.TrackingMessagingService" android:exported="false">
             <intent-filter><action android:name="com.google.firebase.MESSAGING_EVENT" /></intent-filter>
         </service>
-        <service android:name=".floating.FloatingTrackingService" android:exported="false" android:foregroundServiceType="specialUse">
+        <service android:name=".floating.FloatingTrackingService" android:exported="false" android:stopWithTask="false" android:foregroundServiceType="specialUse">
             <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="User-started interactive floating sports pick monitor, visible over other apps until explicitly closed. No betting transactions." />
         </service>

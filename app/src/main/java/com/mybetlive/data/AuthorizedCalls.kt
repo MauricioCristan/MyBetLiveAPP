@@ -13,10 +13,13 @@ internal class AuthorizedCalls(private val session: () -> Session?,private val s
     private val refreshLock=Mutex()
     private fun ensureOwner(started:Session){if(!started.sameOwner(session()))throw CancellationException("La cuenta cambió durante la consulta")}
     suspend fun <T> execute(action:suspend (TrackingApi)->T):T {
+        return executeApi(api,action)
+    }
+    suspend fun <A,T> executeApi(factory:(String)->A,action:suspend(A)->T):T {
         val started=session() ?: error("Inicia sesión")
         if(accessTokenNeedsRenewal(started.tokens.accessToken))renew(started)
         val sentAccess=session()?.tokens?.accessToken ?: started.tokens.accessToken
-        try {val value=action(api(started.baseUrl));ensureOwner(started);return value;}
+        try {val value=action(factory(started.baseUrl));ensureOwner(started);return value;}
         catch(error:Exception) {
             ensureOwner(started)
             if(error !is HttpException||error.code()!=401)throw error
@@ -24,7 +27,7 @@ internal class AuthorizedCalls(private val session: () -> Session?,private val s
             val failedAccess=error.response()?.raw()?.request?.header("Authorization")?.removePrefix("Bearer ") ?: sentAccess
             renew(started,failedAccess)
             val retried=session() ?: throw error
-            try {val value=action(api(started.baseUrl));ensureOwner(started);return value}
+            try {val value=action(factory(started.baseUrl));ensureOwner(started);return value}
             catch(retry:HttpException) {
                 ensureOwner(started)
                 if(retry.code()==401 && session()?.tokens?.accessToken==retried.tokens.accessToken)expired(started)

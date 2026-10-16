@@ -9,6 +9,13 @@ class LiveTrackingStoreTest {
     private fun bet(id:String="a",status:String="LIVE_WINNING",time:String="2026-10-10T20:00:00Z")=BetView(id,"event",
         EventSnapshot("NBA","fake","event","",Team("h","Home"),Team("a","Away"),20,18,"LIVE","Q1",null,time),
         "TOTAL","OVER",40.5,null,null,null,null,null,null,status,38.0,null,time,false)
+    @Test fun historyPagesPreserveActiveRecordsAndRejectLateDeletedOrOtherAccountRows(){
+        val store=LiveTrackingStore();store.bind("one");store.accept("one",listOf(bet("active")))
+        store.mergeHistory("one",listOf(bet("history","WON")));assertEquals(setOf("active","history"),store.state.value.bets.map{it.id}.toSet())
+        store.mergeHistory("one",listOf(bet("history","WON")));assertEquals(2,store.state.value.bets.size)
+        store.remove("history");store.mergeHistory("one",listOf(bet("history","WON")));assertEquals(listOf("active"),store.state.value.bets.map{it.id})
+        store.bind("two");store.mergeHistory("one",listOf(bet("old","WON")));assertTrue(store.state.value.bets.isEmpty())
+    }
     @Test fun partialResponsesKeepHistoryAndSelectedFinalButRemoveMissingActive() {
         val s=LiveTrackingStore();s.bind("one");s.accept("one",listOf(bet(),bet("b"),bet("history","WON")))
         s.accept("one",listOf(bet(status="WON",time="2026-10-10T20:01:00Z")),partial=true)

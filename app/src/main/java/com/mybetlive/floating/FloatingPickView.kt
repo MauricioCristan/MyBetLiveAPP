@@ -25,15 +25,20 @@ import com.mybetlive.ui.*
 
 @Composable internal fun FloatingPickView(bet:BetView,offline:Boolean,expanded:Boolean,maxHeight:Float,
     expand:()->Unit,minimize:()->Unit,close:()->Unit,open:()->Unit,
-    dragStart:()->Unit,drag:(Float,Float)->Unit,dragEnd:()->Unit) {
+    dragStart:()->Unit,drag:(Float,Float)->Unit,dragEnd:()->Unit,
+    index:Int=0,total:Int=1,previous:()->Unit={},next:()->Unit={}) {
     MaterialTheme(colorScheme=darkColorScheme(primary=Green,surface=Panel,onSurface=Color(0xFFE8F0F4))) {
         CompositionLocalProvider(LocalContentColor provides Color(0xFFE8F0F4)) {
         val p=bet.presentation(offline)
         val tone=if(offline && bet.status !in settledStatuses)Color(0xFFF2BD5B) else Color(p.tone.argb)
         if(!expanded) {
+            Box {
             CompactFloatingPick(bet,offline,Modifier.testTag("floating-bubble").pointerInput(Unit){detectDragGestures(
                 onDragStart={dragStart()},onDragEnd=dragEnd,onDragCancel=dragEnd,
                 onDrag={change,amount->change.consume();drag(amount.x,amount.y)})}.clickable(onClick=expand))
+                if(total>1)LocalizedText("${index+1}/$total",color=Color(0xFFE8F0F4),fontSize=9.sp,lineHeight=10.sp,maxLines=1,fontWeight=FontWeight.Medium,
+                    modifier=Modifier.align(Alignment.TopEnd).background(Color(0xFF20313E),RoundedCornerShape(5.dp)).padding(horizontal=3.dp,vertical=1.dp).testTag("floating-counter"))
+            }
         } else {
             Column(Modifier.fillMaxWidth().heightIn(max=maxHeight.dp).background(Panel,RoundedCornerShape(24.dp))
                 .border(1.dp,Color(0xFF2C414F),RoundedCornerShape(24.dp)).padding(16.dp)
@@ -42,6 +47,11 @@ import com.mybetlive.ui.*
                     Box(Modifier.weight(1f)){BrandLogo(height=22.dp)}
                     TextButton(onClick=minimize,modifier=Modifier.size(48.dp).testTag("floating-minimize")){LocalizedText("−",fontSize=24.sp)}
                     TextButton(onClick=close,modifier=Modifier.size(48.dp).testTag("floating-close")){LocalizedText("×",fontSize=24.sp)}
+                }
+                if(total>1)Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically){
+                    TextButton(onClick=previous,modifier=Modifier.weight(1f).heightIn(min=48.dp).testTag("floating-previous")){LocalizedText("Anterior",fontSize=12.sp)}
+                    LocalizedText("${index+1} / $total",color=Muted,fontSize=10.sp,lineHeight=12.sp,maxLines=1,fontWeight=FontWeight.Medium,modifier=Modifier.padding(horizontal=4.dp).testTag("floating-counter"))
+                    TextButton(onClick=next,modifier=Modifier.weight(1f).heightIn(min=48.dp).testTag("floating-next")){LocalizedText("Siguiente",fontSize=12.sp)}
                 }
                 Column(Modifier.weight(1f,fill=false).verticalScroll(rememberScrollState()).testTag("floating-content"),verticalArrangement=Arrangement.spacedBy(10.dp)) {
                     LocalizedText(bet.title(),fontSize=15.sp,fontWeight=FontWeight.SemiBold)

@@ -21,10 +21,17 @@ import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 class BetNotifications(private val context: Context) : com.mybetlive.application.TrackerNotifications {
-    companion object { private val stateLock = Any() }
+    companion object {
+        private val stateLock = Any()
+        internal const val SUMMARY_TAG="tracking-summary"
+        internal const val PREVIOUS="com.mybetlive.notifications.PREVIOUS"
+        internal const val NEXT="com.mybetlive.notifications.NEXT"
+        internal const val DISMISS="com.mybetlive.notifications.DISMISS"
+    }
     private val manager = context.getSystemService(NotificationManager::class.java)
     private val prefs = context.getSharedPreferences("notification-state", Context.MODE_PRIVATE)
     init {
+        manager.activeNotifications.filter { it.id==1 && it.tag!=SUMMARY_TAG && it.notification.channelId in setOf("tracking-live","tracking-results") }.forEach { manager.cancel(it.tag,it.id) }
         // Previous per-tracker unpin choices no longer define a separate category.
         val legacy=prefs.all.keys.filter{it.startsWith("unpinned:")}
         if(legacy.isNotEmpty())prefs.edit().apply{legacy.forEach{remove(it)}}.apply()
@@ -50,22 +57,76 @@ class BetNotifications(private val context: Context) : com.mybetlive.application
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED && android.os.Build.VERSION.SDK_INT >= 33) return
         val id = data["betId"] ?: return
         if (prefs.getBoolean("deleted:$id", false)) return
-        val existing=if(data["artworkRefresh"]=="true") manager.activeNotifications.find { it.tag==id && it.id==1 } else null
+        val existing=if(data["artworkRefresh"]=="true") manager.activeNotifications.find { it.tag==SUMMARY_TAG && it.id==1 } else null
         // A late portrait/logo must never resurrect an alert the user already dismissed.
         if(data["artworkRefresh"]=="true" && existing==null) return
         val updated = runCatching { java.time.Instant.parse(data["updatedAt"]).toEpochMilli() }.getOrDefault(0L)
         if (updated < prefs.getLong("version:$id", 0)) return
-        if (data["final"] == "true" && updated == prefs.getLong("version:$id", -1) &&
+        if (isFinal(data) && updated == prefs.getLong("version:$id", -1) &&
             prefs.getString("status:$id", null) in settledStatuses && data["artworkRefresh"] != "true") return
         prefs.edit().putLong("version:$id", updated).apply()
-        val final = data["final"] == "true"
+        val final = isFinal(data)
         val previousStatus = prefs.getString("status:$id", null)
         val important = (data["important"] == "true" || final && previousStatus != null && previousStatus !in settledStatuses) &&
             prefs.getLong("alerted:$id", -1) != updated
         prefs.edit().putString("status:$id", data["status"]).apply()
         if (important) prefs.edit().putLong("alerted:$id", updated).apply()
         if (!final && !liveEnabled()) return
-        val status = statusLabels[data["status"]] ?: data["status"].orEmpty()
+        val rows=snapshots().toMutableMap()
+        rows[id]=data.filterKeys{it!="artworkRefresh"&&it!="important"}
+        saveSnapshots(rows)
+        if(important && prefs.getString("selected",null)!=id){
+            prefs.edit().putStringSet("unread",prefs.getStringSet("unread",emptySet()).orEmpty()+id).apply()
+        }
+        renderCurrent(important,data["artworkRefresh"]=="true")
+    } }
+    private fun snapshots():LinkedHashMap<String,Map<String,String>> = runCatching {
+        val array=org.json.JSONArray(prefs.getString("snapshots","[]"))
+        linkedMapOf<String,Map<String,String>>().apply {
+            for(i in 0 until array.length()){
+                val row=array.getJSONObject(i)
+                val values=row.keys().asSequence().associateWith{row.getString(it)}
+                values["betId"]?.let{put(it,values)}
+            }
+        }
+    }.getOrDefault(linkedMapOf())
+    private fun saveSnapshots(rows:Map<String,Map<String,String>>){
+        prefs.edit().putString("snapshots",org.json.JSONArray(rows.values.map{org.json.JSONObject(it)}).toString()).apply()
+    }
+    private fun isFinal(data:Map<String,String>)=data["final"]=="true"||data["status"] in settledStatuses
+    private fun navigation(action:String):PendingIntent {
+        val epoch=prefs.getLong("epoch",0)
+        val intent=Intent(context,TrackingNotificationReceiver::class.java).setAction(action)
+            .setData(android.net.Uri.parse("mybetlive://notification/$action/$epoch")).putExtra("epoch",epoch)
+        return PendingIntent.getBroadcast(context,0,intent,PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+    }
+    internal fun navigate(direction:Int,epoch:Long){synchronized(stateLock){
+        if(epoch!=prefs.getLong("epoch",0)||manager.activeNotifications.none{it.tag==SUMMARY_TAG&&it.id==1})return
+        val rows=snapshots().values.filter{isFinal(it)||liveEnabled()}
+        if(rows.isEmpty())return
+        val index=rows.indexOfFirst{it["betId"]==prefs.getString("selected",null)}.coerceAtLeast(0)
+        val next=rows[Math.floorMod(index+direction,rows.size)]["betId"]!!
+        prefs.edit().putString("selected",next).putStringSet("unread",prefs.getStringSet("unread",emptySet()).orEmpty()-next).apply()
+        renderCurrent(false,true)
+    }}
+    internal fun dismissed(epoch:Long){synchronized(stateLock){
+        if(epoch!=prefs.getLong("epoch",0))return
+        prefs.edit().remove("snapshots").remove("selected").remove("unread").apply();changed()
+    }}
+    private fun renderCurrent(important:Boolean=false,preserveChannel:Boolean=true){
+        if(!NotificationManagerCompat.from(context).areNotificationsEnabled() || Build.VERSION.SDK_INT>=33 && ContextCompat.checkSelfPermission(context,Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)return
+        val rows=snapshots().values.filter{isFinal(it)||liveEnabled()}
+        if(rows.isEmpty()){manager.cancel(SUMMARY_TAG,1);changed();return}
+        val data=rows.find{it["betId"]==prefs.getString("selected",null)}?:rows.first()
+        val id=data["betId"]!!
+        prefs.edit().putString("selected",id).apply()
+        val final=isFinal(data)
+        val ongoing=rows.any{!isFinal(it)}
+        val updated=runCatching{Instant.parse(data["updatedAt"]).toEpochMilli()}.getOrDefault(0L)
+        val existing=if(preserveChannel)manager.activeNotifications.find{it.tag==SUMMARY_TAG&&it.id==1}else null
+        val counter=com.mybetlive.i18n.AppStrings.translate("Seguimiento")+" ${rows.indexOf(data)+1} / ${rows.size}"
+        val unread=prefs.getStringSet("unread",emptySet()).orEmpty().count{key->rows.any{it["betId"]==key}}
+        val overview=counter+if(unread>0)" · "+com.mybetlive.i18n.AppStrings.translate("Novedades")+": $unread" else ""
         val body = data["body"].orEmpty()
         val presentation = marketPresentation(data["sport"] ?: "NFL",data["market"].orEmpty(),data["selection"].orEmpty(),
             data["line"]?.toDoubleOrNull(),data["currentValue"]?.toDoubleOrNull(),data["status"].orEmpty(),
@@ -89,17 +150,21 @@ class BetNotifications(private val context: Context) : com.mybetlive.application
         val builder = NotificationCompat.Builder(context, channel)
             .setSmallIcon(R.drawable.ic_mybet_notification).setContentTitle(com.mybetlive.i18n.AppStrings.translate(title))
             .setContentText(com.mybetlive.i18n.AppStrings.translate(presentation.status)).setStyle(NotificationCompat.BigTextStyle().bigText(com.mybetlive.i18n.AppStrings.translate(details)))
-            .setContentIntent(pending).setOnlyAlertOnce(!important).setOngoing(!final).setAutoCancel(final)
-            .setSubText(com.mybetlive.i18n.AppStrings.translate(listOf(data["sport"] ?: "NFL",data["period"].orEmpty(),data["clock"].orEmpty(),
-                if(final) "Resultado final" else "Provisional").filter { it.isNotBlank() }.joinToString(" · ")))
+            .setContentIntent(pending).setOnlyAlertOnce(!important).setOngoing(ongoing).setAutoCancel(!ongoing)
+            .setSubText(overview)
+            .setDeleteIntent(navigation(DISMISS))
             .setWhen(updated.takeIf { it > 0 } ?: System.currentTimeMillis()).setShowWhen(true)
             .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
             .setPublicVersion(NotificationCompat.Builder(context, channel)
                 .setSmallIcon(R.drawable.ic_mybet_notification).setContentTitle(com.mybetlive.i18n.AppStrings.translate("MyBetLive"))
                 .setContentText(com.mybetlive.i18n.AppStrings.translate("Contenido oculto · desbloquea para ver tu seguimiento"))
-                .setContentIntent(pending).setOngoing(!final).setAutoCancel(final)
+                .setContentIntent(pending).setOngoing(ongoing).setAutoCancel(!ongoing)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).build())
-            .addAction(0,com.mybetlive.i18n.AppStrings.translate( if(final) "Ver resultado" else "Ver seguimiento"), pending)
+        if(rows.size>1){
+            builder.addAction(0,com.mybetlive.i18n.AppStrings.translate("Anterior"),navigation(PREVIOUS))
+                .addAction(0,com.mybetlive.i18n.AppStrings.translate("Siguiente"),navigation(NEXT))
+        }
+        builder.addAction(0,com.mybetlive.i18n.AppStrings.translate(if(final) "Ver resultado" else "Ver seguimiento"),pending)
         if(data["market"]?.startsWith("PLAYER_")==true)
             NotificationArtwork.cached(data["playerImageUrl"])?.let { builder.setLargeIcon(it) }
         if(isMoneyline && data.containsKey("homeScore") && (Build.VERSION.SDK_INT < 36 || final)){
@@ -172,21 +237,21 @@ class BetNotifications(private val context: Context) : com.mybetlive.application
             playerAvatar(large,data)
             builder.setStyle(NotificationCompat.DecoratedCustomViewStyle()).setCustomContentView(small).setCustomBigContentView(large)
         }
-        if (!final) {
+        if (!final && rows.size==1) {
             builder.setShortCriticalText(if(isMoneyline) presentation.value.replace(" : ",":").take(7) else data["currentValue"]?.take(7))
             if (Build.VERSION.SDK_INT >= 36) builder.setRequestPromotedOngoing(true)
         }
-        manager.notify(id, 1, builder.build())
+        manager.notify(SUMMARY_TAG, 1, builder.build())
         changed()
         val epoch=prefs.getLong("epoch",0)
         val artworkKeys = if(isMoneyline) listOf("homeLogoUrl","awayLogoUrl") else if(data["market"]?.startsWith("PLAYER_")==true) listOf("playerImageUrl") else emptyList()
         for(key in artworkKeys) NotificationArtwork.request(data[key]) {
             synchronized(stateLock) {
-                if(prefs.getLong("epoch",0)==epoch && prefs.getLong("version:$id",0)==updated)
-                    show(data + mapOf("important" to "false", "artworkRefresh" to "true"))
+                if(prefs.getLong("epoch",0)==epoch && prefs.getLong("version:$id",0)==updated && prefs.getString("selected",null)==id && manager.activeNotifications.any{it.tag==SUMMARY_TAG&&it.id==1})
+                    renderCurrent(false,true)
             }
         }
-    } }
+    }
     private fun playerAvatar(view: RemoteViews, data: Map<String,String>) {
         if(data["market"]?.startsWith("PLAYER_")!=true) return
         view.setViewVisibility(R.id.progress_avatar,View.VISIBLE)
@@ -198,9 +263,10 @@ class BetNotifications(private val context: Context) : com.mybetlive.application
     override fun liveEnabled(): Boolean = NotificationManagerCompat.from(context).areNotificationsEnabled() &&
         (Build.VERSION.SDK_INT < 33 || ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) &&
         manager.getNotificationChannel("tracking-live")?.importance != NotificationManager.IMPORTANCE_NONE
-    override fun activeIds(): Set<String> = if(!liveEnabled()) emptySet() else manager.activeNotifications
-        .filter { it.id == 1 && it.notification.flags and Notification.FLAG_ONGOING_EVENT != 0 }
-        .mapNotNull { it.tag }.toSet()
+    override fun activeIds():Set<String> = synchronized(stateLock){
+        if(!liveEnabled()||manager.activeNotifications.none{it.tag==SUMMARY_TAG&&it.id==1})emptySet()
+        else snapshots().filterValues{!isFinal(it)}.keys.toSet()
+    }
     override fun observe(listener: () -> Unit): () -> Unit {
         val observer=SharedPreferences.OnSharedPreferenceChangeListener { _, key -> if(key=="revision") listener() }
         prefs.registerOnSharedPreferenceChangeListener(observer)
@@ -209,10 +275,11 @@ class BetNotifications(private val context: Context) : com.mybetlive.application
     private fun changed() { prefs.edit().putLong("revision",prefs.getLong("revision",0)+1).apply() }
     override fun remove(id: String) { synchronized(stateLock) {
         prefs.edit().putBoolean("deleted:$id", true).apply()
-        manager.cancel(id, 1)
-        changed()
+        val rows=snapshots().toMutableMap();rows.remove(id);saveSnapshots(rows)
+        prefs.edit().putStringSet("unread",prefs.getStringSet("unread",emptySet()).orEmpty()-id).apply()
+        if(manager.activeNotifications.any{it.tag==SUMMARY_TAG&&it.id==1})renderCurrent()else changed()
     } }
-    override fun dismissAll() { synchronized(stateLock) { manager.cancelAll(); changed() } }
+    override fun dismissAll() { synchronized(stateLock) { manager.cancelAll(); prefs.edit().remove("snapshots").remove("selected").remove("unread").apply();changed() } }
     override fun clear() { synchronized(stateLock) { manager.cancelAll(); val next=prefs.getLong("epoch",0)+1
         val revision=prefs.getLong("revision",0)+1; prefs.edit().clear().putLong("epoch",next).putLong("revision",revision).apply() } }
 }

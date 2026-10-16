@@ -7,6 +7,17 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 
 class AuthorizedCallsTest {
+    @Test fun banksAndTrackingShareTheSameRefreshCoordinator() = runBlocking {
+        val server=MockWebServer();val rotations=java.util.concurrent.atomic.AtomicInteger();val both=java.util.concurrent.CountDownLatch(2)
+        server.dispatcher=object:Dispatcher(){override fun dispatch(request:RecordedRequest):MockResponse {
+            if(request.path=="/api/v1/auth/refresh"){rotations.incrementAndGet();return MockResponse().setBody("{\"accessToken\":\"new\",\"refreshToken\":\"rotated\"}")}
+            if(request.getHeader("Authorization")=="Bearer old"){both.countDown();both.await(3,TimeUnit.SECONDS);return MockResponse().setResponseCode(401)}
+            return MockResponse().setBody("[]")
+        }};server.start()
+        try{val url=server.url("/").toString();val current=AtomicReference<Session?>(Session(url,"one",Tokens("old","r")));val factory=TrackingApiFactory(session={current.get()});val calls=AuthorizedCalls({current.get()},{current.set(it)},factory::api)
+            coroutineScope{val tracking=async(Dispatchers.IO){calls.execute{it.sports()}};val banks=async(Dispatchers.IO){calls.executeApi({factory.client(it,BankApi::class.java)}){it.list()}};tracking.await();banks.await()};assertEquals(1,rotations.get())
+        }finally{server.shutdown()}
+    }
     @Test fun renewsBeforeSendingAnExpiredJwt() = runBlocking {
         val server=MockWebServer();server.start()
         try {

@@ -19,5 +19,5 @@ class FloatingTrackingController(private val context: Context) : FloatingTrackin
         check(pick.status !in settledStatuses) { "Este seguimiento ya finalizó." }
         ContextCompat.startForegroundService(context,Intent(context,FloatingTrackingService::class.java).putExtra("betId",id).putExtra("owner",owner))
     }
-    override fun stop() { context.stopService(Intent(context,FloatingTrackingService::class.java)) }
+    override fun stop() { FloatingSessionStore(context).clear();context.stopService(Intent(context,FloatingTrackingService::class.java)) }
 }

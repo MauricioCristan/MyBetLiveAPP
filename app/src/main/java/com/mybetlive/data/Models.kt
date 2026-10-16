@@ -62,7 +62,7 @@ val marketLabels = mapOf(
     "PLAYER_THREE_POINTERS_MADE" to "Triples", "PLAYER_THREES" to "Triples",
     "PLAYER_POINTS_REBOUNDS_ASSISTS" to "Puntos + rebotes + asistencias", "PLAYER_PRA" to "Puntos + rebotes + asistencias"
 )
-fun sportLabel(sport: String) = when(sport) { "SOCCER" -> "Fútbol"; else -> sport }
+fun sportLabel(sport: String) = when(sport) { "SOCCER" -> "Fútbol"; "MLB" -> "Béisbol"; "NBA" -> "Baloncesto"; "NFL" -> "Fútbol americano"; "NHL" -> "Hockey sobre hielo"; else -> sport }
 fun marketLabel(market: String, sport: String) = when(sport) {
     "NHL" -> when(market) {"MONEYLINE" -> "Ganador · incluye prórroga y shootout";"SPREAD" -> "Puck Line";"TOTAL" -> "Total de goles";"TEAM_TOTAL" -> "Goles del equipo";else -> marketLabels[market] ?: market}
     "NBA" -> when(market) {
@@ -98,3 +98,5 @@ internal fun selectionTitle(market: String, selection: String, line: Double?, te
 }
 // The backend accounts for its configured feed interval; callers add the device's offline state.
 fun BetView.isStale(): Boolean = stale
+
+data class TrackingHistoryPage(val items:List<BetView>,val page:Int,val total:Long,val hasMore:Boolean)

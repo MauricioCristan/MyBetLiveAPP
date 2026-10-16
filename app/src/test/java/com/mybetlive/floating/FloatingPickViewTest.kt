@@ -31,6 +31,15 @@ class FloatingPickViewTest {
         compose.onNodeWithTag("floating-minimize").assertIsDisplayed().performClick();assertTrue(minimized)
         compose.onNodeWithTag("floating-close").performClick();assertTrue(closed)
     }
+    @Test fun oneExpandedBubbleCanNavigateWithoutOpeningTheApp(){
+        var index by mutableStateOf(0);var opened=false
+        compose.setContent{FloatingPickView(bet().copy(playerName=if(index==0)"LeBron James" else "Anthony Davis"),false,true,520f,{},{},{},{opened=true},{},{_,_->},{},index=index,total=2,previous={index=(index+1)%2},next={index=(index+1)%2})}
+        compose.onNodeWithTag("floating-counter").assertTextEquals("1 / 2")
+        compose.onNodeWithTag("floating-next").assertIsDisplayed().performClick()
+        compose.onNodeWithTag("floating-counter").assertTextEquals("2 / 2");assertFalse(opened)
+        compose.onNodeWithTag("floating-previous").performClick()
+        compose.onNodeWithTag("floating-counter").assertTextEquals("1 / 2")
+    }
     @Test fun compactBubblePreservesMissingZeroAndFinal() {
         val row=mutableStateOf(bet("AWAITING_DATA",null));var expanded=false
         compose.setContent{FloatingPickView(row.value,false,false,520f,{expanded=true},{},{},{},{},{_,_->},{})}

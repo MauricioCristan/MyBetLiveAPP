@@ -28,6 +28,12 @@ class LiveTrackingStore {
         val history = if (partial) mutable.value.bets.filter { it.status in settledStatuses && rows.none { n -> n.id == it.id } } else emptyList()
         mutable.value = mutable.value.copy(bets = rows + history, offline = false)
     }
+    @Synchronized fun mergeHistory(owner:String,incoming:List<BetView>){
+        if(owner!=mutable.value.owner)return
+        val rows=mutable.value.bets.associateBy{it.id}.toMutableMap()
+        incoming.filter{it.id !in deleted}.forEach{rows[it.id]=newer(it,rows[it.id])}
+        mutable.value=mutable.value.copy(bets=rows.values.toList(),offline=false)
+    }
     @Synchronized fun remove(id: String) {
         deleted.add(id); mutable.value = mutable.value.copy(bets = mutable.value.bets.filterNot { it.id == id })
     }
