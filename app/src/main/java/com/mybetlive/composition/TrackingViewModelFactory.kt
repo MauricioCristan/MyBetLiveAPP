@@ -19,6 +19,6 @@ class TrackingViewModelFactory(private val app: Application) : ViewModelProvider
         val repository=ClientDependencies.repository(app)
         @Suppress("UNCHECKED_CAST")
         return TrackingViewModel(app,repository,repository,repository,repository,repository,
-            preparedNotifications ?: BetNotifications(app),ClientErrorMessages()) as T
+            preparedNotifications ?: BetNotifications(app),ClientErrorMessages(),ClientDependencies.bankRepository(app)) as T
     }
 }

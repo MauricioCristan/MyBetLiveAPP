@@ -23,6 +23,7 @@ data class AppState(
     val date: LocalDate = LocalDate.now(), val selectedSport: String = "NFL",
     val today: LocalDate = LocalDate.now(), val timeZone: String = ZoneId.systemDefault().id, val followingToday: Boolean = true,
     val subscription: MySubscription? = null, val billingMessage: String? = null,val rewardMessage:String?=null,
+    val trackingBanks:List<BankView> = emptyList(),val trackingBanksLoading:Boolean=false,val trackingBanksError:String?=null,
     val notificationBetId: String? = null, val notificationRequest: Long = 0,
     val pinnedBets: Set<String> = emptySet(), val deviceNotificationsEnabled: Boolean = true
 )
@@ -31,7 +32,7 @@ class TrackingViewModel(app: Application,
     private val account: SessionOperations, private val tracking: TrackingOperations,
     private val subscriptions: SubscriptionOperations, private val rewards: RewardOperations,
     private val devices: DeviceOperations, private val notifications: TrackerNotifications,
-    private val failures: FailureMessages
+    private val failures: FailureMessages, private val banks:BankOperations
 ) : AndroidViewModel(app) {
     private val state = MutableStateFlow(AppState(loggedIn = account.session != null,
         username = account.session?.username.orEmpty(), bets = tracking.cachedBets,
@@ -253,7 +254,24 @@ class TrackingViewModel(app: Application,
         val players = tracking.players(eventId)
         state.update { it.copy(players = players, playersEventId = eventId) }
     }
+    private var bankDestinationsJob:Job?=null
+    fun loadTrackingBanks(){
+        val started=account.session?:return
+        bankDestinationsJob?.cancel()
+        state.update{it.copy(trackingBanks=emptyList(),trackingBanksLoading=true,trackingBanksError=null)}
+        bankDestinationsJob=viewModelScope.launch {
+            try {
+                val rows=banks.call{it.list()}
+                if(started.sameOwner(account.session))state.update{it.copy(trackingBanks=rows,trackingBanksLoading=false)}
+            } catch(error:Exception) {
+                if(error is CancellationException)throw error
+                if(started.sameOwner(account.session))state.update{it.copy(trackingBanksLoading=false,trackingBanksError=failures.message(error))}
+            }
+        }
+    }
     fun create(bet: CreateBet, onSaved: (BetView) -> Unit) = action {
+        if(bet.bankId!=null && (bet.stake==null||bet.decimalOdds==null||bet.operationId==null||bet.bankVersion==null))
+            throw IllegalArgumentException("Selecciona un bank y revisa importe y momio.")
         val created = tracking.create(bet)
         state.update { it.copy(bets = listOf(created) + it.bets.filterNot { b -> b.id == created.id },rewardMessage=null) }
         onSaved(created)

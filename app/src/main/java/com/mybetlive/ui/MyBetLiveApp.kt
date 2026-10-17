@@ -196,6 +196,10 @@ fun MyBetLiveApp(state: AppState, model: TrackingViewModel, prices: Map<String,S
     val parsedLine = line.replace(',', '.').toDoubleOrNull()?.takeIf { it.isFinite() }
     val parsedStake = stake.replace(',', '.').toDoubleOrNull()?.takeIf { it.isFinite() }
     val parsedOdds = odds.replace(',', '.').toDoubleOrNull()?.takeIf { it.isFinite() }
+    val addToBank=parsedStake!=null&&parsedStake>0&&parsedOdds!=null&&parsedOdds>1&&state.subscription?.bankAccess!=null
+    var selectedBankId by rememberSaveable(event.id){mutableStateOf<String?>(null)}
+    LaunchedEffect(addToBank,event.id){if(addToBank)model.loadTrackingBanks()}
+    val destination=trackingBankDestination(state.trackingBanks,selectedBankId)
     val lineRule=state.sports.find { it.sport==event.event.sport }?.lineRules?.get(market)
     val needsLine=needsMarketLine(market)
     val lineError=if(needsLine&&line.isNotBlank())propLineError(line,lineRule) else null
@@ -302,8 +306,14 @@ fun MyBetLiveApp(state: AppState, model: TrackingViewModel, prices: Map<String,S
                     OutlinedTextField(odds, { odds = it }, label = { LocalizedText("Momio decimal · opcional (1.72)") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal), singleLine = true, modifier = Modifier.fillMaxWidth())
                     OutlinedTextField(bookmaker, { if (it.length <= 80) bookmaker = it }, label = { LocalizedText("Casino · opcional") }, singleLine = true, modifier = Modifier.fillMaxWidth())
                 }
-                Button(onClick = { model.create(draft, onSaved) },
-                    enabled = valid && !state.busy, modifier = Modifier.fillMaxWidth().height(54.dp)) { LocalizedText(if (state.busy) "Guardando…" else "Guardar seguimiento") }
+                if(addToBank)TrackingBankDestination(state.trackingBanks,selectedBankId,state.trackingBanksLoading,state.trackingBanksError,!state.busy,
+                    onSelected={selectedBankId=it},onReload=model::loadTrackingBanks)
+                val financialDraft=if(addToBank&&destination!=null)draft.copy(bankId=destination.id,bankVersion=destination.version)else draft
+                val operationId=rememberSaveable(financialDraft){java.util.UUID.randomUUID().toString()}
+                Button(onClick = { model.create(if(addToBank)financialDraft.copy(operationId=operationId)else draft, onSaved) },
+                    enabled = valid && !state.busy && (!addToBank||destination!=null&&!state.trackingBanksLoading&&state.trackingBanksError==null), modifier = Modifier.fillMaxWidth().height(54.dp)) {
+                    LocalizedText(if(state.busy)"Guardando…" else if(addToBank)"Guardar seguimiento y apuesta" else "Guardar seguimiento") }
+
                 LocalizedText(when(event.event.sport) {
                     "NHL" -> "${hockeyScopeLabel(scope)}. El partido completo usa el marcador oficial, incluido el gol decisivo del shootout. Los períodos y los 60 minutos excluyen prórroga y shootout. Revisa las reglas de tu apuesta."
                     "SOCCER" -> "Se evalúan 90 minutos más compensación, sin prórroga ni penales. Se admiten líneas enteras o medias; revisa las reglas de tu apuesta."

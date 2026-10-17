@@ -35,7 +35,8 @@ data class BetView(
 data class CreateBet(
     val eventId: String, val market: String, val selection: String, val line: Double?,
     val team: String?, val playerId: String?, val stake: Double?, val decimalOdds: Double?, val bookmaker: String?,
-    val scope:String = "MATCH",val targetScore:String? = null
+    val scope:String = "MATCH",val targetScore:String? = null,
+    val bankId:String? = null,val operationId:String? = null,val bankVersion:Long? = null
 )
 data class Login(val username: String, val password: String)
 data class GoogleChallenge(val serverClientId: String, val nonce: String)
