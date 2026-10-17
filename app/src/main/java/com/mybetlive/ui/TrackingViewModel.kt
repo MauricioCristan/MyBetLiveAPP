@@ -269,10 +269,17 @@ class TrackingViewModel(app: Application,
             }
         }
     }
+    private val pendingRegistrations=PendingTrackingRegistrations()
     fun create(bet: CreateBet, onSaved: (BetView) -> Unit) = action {
         if(bet.bankId!=null && (bet.stake==null||bet.decimalOdds==null||bet.operationId==null||bet.bankVersion==null))
             throw IllegalArgumentException("Selecciona un bank y revisa importe y momio.")
-        val created = tracking.create(bet)
+        val request=if(bet.bankId==null)bet else pendingRegistrations.request(requireNotNull(banks.owner()),bet)
+        val created = try { tracking.create(request) }
+        catch(error:retrofit2.HttpException){
+            if(error.code() in 400..499&&error.code()!=408)pendingRegistrations.forget(request.operationId)
+            throw error
+        }
+        pendingRegistrations.forget(request.operationId)
         state.update { it.copy(bets = listOf(created) + it.bets.filterNot { b -> b.id == created.id },rewardMessage=null) }
         onSaved(created)
         refreshAfterMutation()

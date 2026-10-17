@@ -309,7 +309,7 @@ fun MyBetLiveApp(state: AppState, model: TrackingViewModel, prices: Map<String,S
                 if(addToBank)TrackingBankDestination(state.trackingBanks,selectedBankId,state.trackingBanksLoading,state.trackingBanksError,!state.busy,
                     onSelected={selectedBankId=it},onReload=model::loadTrackingBanks)
                 val financialDraft=if(addToBank&&destination!=null)draft.copy(bankId=destination.id,bankVersion=destination.version)else draft
-                val operationId=rememberSaveable(financialDraft){java.util.UUID.randomUUID().toString()}
+                val operationId=rememberSaveable(financialDraft.copy(bankVersion=null)){java.util.UUID.randomUUID().toString()}
                 Button(onClick = { model.create(if(addToBank)financialDraft.copy(operationId=operationId)else draft, onSaved) },
                     enabled = valid && !state.busy && (!addToBank||destination!=null&&!state.trackingBanksLoading&&state.trackingBanksError==null), modifier = Modifier.fillMaxWidth().height(54.dp)) {
                     LocalizedText(if(state.busy)"Guardando…" else if(addToBank)"Guardar seguimiento y apuesta" else "Guardar seguimiento") }
