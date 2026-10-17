@@ -41,9 +41,9 @@ class BetNotifications(private val context: Context) : com.mybetlive.application
     override fun show(bet: BetView) {
         val (home,away)=bet.scopedScores()
         show(mapOf("betId" to bet.id, "title" to bet.title(), "body" to "${bet.event.home.name} ${home ?: "—"} - ${away ?: "—"} ${bet.event.away.name} · ${bet.event.period} ${bet.event.clock.orEmpty()}",
-            "status" to bet.status, "currentValue" to (bet.currentValue?.display() ?: ""), "line" to (bet.line?.display() ?: ""),
+            "status" to bet.status, "currentValue" to (bet.currentValue?.display() ?: ""), "line" to (if(!bet.builderSelections.isNullOrEmpty())bet.builderSelections.size.toString()else bet.line?.display() ?: ""),
             "remaining" to (bet.remaining?.display() ?: ""), "updatedAt" to bet.updatedAt,
-            "sport" to bet.event.sport, "market" to bet.market, "selection" to bet.selection, "stale" to bet.stale.toString(),
+            "sport" to bet.event.sport, "market" to if(bet.builderSelections.isNullOrEmpty())bet.market else "BET_BUILDER", "selection" to bet.selection, "stale" to bet.stale.toString(),
             "scope" to (bet.scope ?: "MATCH"),"targetScore" to bet.targetScore.orEmpty(),
             "scopeHomeScore" to (bet.scopedScores().first?.toString()?:""),"scopeAwayScore" to (bet.scopedScores().second?.toString()?:""),
             "homeName" to bet.event.home.name, "awayName" to bet.event.away.name,
@@ -136,7 +136,7 @@ class BetNotifications(private val context: Context) : com.mybetlive.application
             data["line"]?.toDoubleOrNull(),data["currentValue"]?.toDoubleOrNull(),data["status"].orEmpty(),
             data["homeScore"]?.toIntOrNull(),data["awayScore"]?.toIntOrNull(),data["stale"] == "true")
         val value = if(isMoneyline) presentation.value else progress?.valueLabel ?: "${presentation.value} ${presentation.unit}"
-        val title = if(data["homeName"].isNullOrBlank()) data["title"] ?: "MyBetLive" else {
+        val title = if(data["market"]=="BET_BUILDER")"Creador de apuestas · ${data["line"]?.toDoubleOrNull().display()} selecciones" else if(data["homeName"].isNullOrBlank()) data["title"] ?: "MyBetLive" else {
             val event=EventSnapshot(data["sport"]?:"NFL","PUSH","", "", Team("home",data["homeName"].orEmpty()),Team("away",data["awayName"].orEmpty()),
                 null,null,data["eventStatus"].orEmpty(),data["period"].orEmpty(),data["clock"],data["updatedAt"].orEmpty())
             selectionTitle(data["market"].orEmpty(),data["selection"].orEmpty(),data["line"]?.toDoubleOrNull(),data["team"],data["playerName"]?.takeIf{it.isNotBlank()},event,data["scope"]?:"MATCH",data["targetScore"]?.takeIf{it.isNotBlank()})

@@ -94,3 +94,16 @@ El menú de tres puntos incluye Compartir imagen: abre la vista previa existente
 
 Registro desde Seguimientos (0.2.1): al completar importe y momio decimal, el formulario carga los banks de la cuenta. Un único bank activo y editable se selecciona automáticamente mostrando nombre y moneda; con varios, se exige elegir uno. Los banks archivados o de solo lectura no pueden recibir apuestas nuevas. Sin bank editable se solicita crear uno antes de guardar los datos financieros. Sin ambos datos se conserva el seguimiento informativo.
 El servidor recibe bankId, bankVersion y operationId opcionales en POST /tracking/bets y guarda seguimiento, apuesta BACK pendiente, vínculo y reserva en una misma transacción. El libro de operaciones existente evita duplicados, también con reintentos concurrentes; cambiar datos con el mismo identificador devuelve conflicto. Un error financiero revierte el alta del seguimiento. El resultado deportivo no confirma la liquidación. Los clientes anteriores sin destino Bank conservan su contrato. No se importan seguimientos previos automáticamente.
+
+
+## Ambos anotan y creador del mismo partido (0.3.0)
+
+Fútbol incorpora Ambos anotan Sí/No, para 90 minutos más compensación. Se conserva la lectura de hockey y no se usan marcadores de prórroga para inferir BTTS de fútbol.
+
+El creador Premium registra de 2 a 8 selecciones de equipo de un mismo partido de fútbol. No admite props ni mezcla partidos. Cada selección conserva mercado, lado, línea, alcance y progreso; el boleto consume un solo seguimiento. Duplicados exactos y líneas inválidas se rechazan. Se introduce el momio total real del casino, sin multiplicar cuotas correlacionadas.
+
+Con importe y momio completos usa el selector de Bank existente: una apuesta financiera BUILDER vinculada, una reserva, una cuota y una liquidación. El detalle completo de las selecciones se conserva en notas financieras aun si se elimina el seguimiento. Los resultados del proveedor y sus correcciones actualizan propuestas; no cambian dinero confirmado. Una selección reembolsada dentro de un boleto final requiere revisar la cuota/retorno del casino.
+
+La migración V19 agrega únicamente dos columnas de texto con [] por defecto a tracked_bet. La prueba PostgreSQL migra primero V18, inserta un seguimiento anterior y verifica que V19 conserve su importe, cuota y datos. No se modifica ninguna migración publicada. Los fingerprints de operaciones de clientes anteriores conservan compatibilidad al omitir la lista vacía de creador.
+
+Tarjetas, detalle, burbuja y notificación distinguen el boleto agregado del avance individual. El push transporta progreso compacto por selección y reutiliza la consulta de estadísticas por evento, no una llamada por selección.

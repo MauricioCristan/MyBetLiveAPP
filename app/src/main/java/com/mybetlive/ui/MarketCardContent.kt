@@ -38,6 +38,13 @@ import com.mybetlive.data.*
         bet.visualProgress(offline)?.let { BetProgressTrack(it, compact) }
             ?: LocalizedText("${p.value} ${p.unit}", color = tone, fontSize = 26.sp, fontWeight = FontWeight.Bold)
     }
+    if(!compact&&!bet.builderSelections.isNullOrEmpty())bet.builderSelections.forEachIndexed{index,leg->
+        val child=leg.asBet(bet);val detail=child.presentation(offline)
+        Column(Modifier.fillMaxWidth().background(Panel,RoundedCornerShape(10.dp)).padding(10.dp),verticalArrangement=Arrangement.spacedBy(4.dp)){
+            LocalizedText("${index+1}. "+leg.title(bet.event),fontSize=13.sp,fontWeight=FontWeight.SemiBold)
+            LocalizedText(detail.status+" · "+detail.value+" "+detail.unit,color=Color(detail.tone.argb),fontSize=12.sp)
+        }
+    }
     LocalizedText(p.caption, color = if (offline || bet.stale) Muted else tone, fontSize = 12.sp)
     val phase = when { !p.provisional -> "Resultado final"; bet.status == "PENDING" -> "Por comenzar"
         bet.status == "AWAITING_DATA" -> "Esperando datos"; offline || bet.stale -> "Dato guardado"; else -> "En vivo · provisional" }

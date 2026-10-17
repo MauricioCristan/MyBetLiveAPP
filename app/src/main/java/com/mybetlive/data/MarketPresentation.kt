@@ -16,14 +16,19 @@ data class MarketPresentation(
 
 fun marketPresentation(sport: String, market: String, selection: String, line: Double?, value: Double?,
     status: String, homeScore: Int?, awayScore: Int?, stale: Boolean = false,scope:String="MATCH",targetScore:String?=null): MarketPresentation {
-    if(sport=="NHL" && market in listOf("RESULT_3WAY","DOUBLE_CHANCE","BOTH_TEAMS_SCORE","CORRECT_SCORE","OVERTIME")) {
+    if(market=="BET_BUILDER"){
+        val final=status in settledStatuses;val muted=stale&&!final||status in listOf("PENDING","AWAITING_DATA","VOID")
+        val tone=if(muted)ProgressTone.MUTED else if(status in listOf("WON","LIVE_WINNING"))ProgressTone.GREEN else if(status in listOf("LOST","LIVE_LOSING"))ProgressTone.RED else ProgressTone.AMBER
+        return MarketPresentation(MarketVisual.OUTCOME,tone,statusLabels[status]?:status,"${if(muted)"—" else value.display()} / ${line.display()}","Selecciones favorables · liquidación por confirmar","selecciones",!final)
+    }
+    if((sport=="SOCCER"&&market=="BOTH_TEAMS_SCORE")||sport=="NHL" && market in listOf("RESULT_3WAY","DOUBLE_CHANCE","BOTH_TEAMS_SCORE","CORRECT_SCORE","OVERTIME")) {
         if(market=="RESULT_3WAY")return marketPresentation("SOCCER","MONEYLINE",selection,null,value,status,homeScore,awayScore,stale).copy(caption=hockeyScopeLabel(scope),unit="goles")
         val final=status in settledStatuses
         val muted=stale&&!final || status in listOf("PENDING","AWAITING_DATA","VOID")
         val tone=if(muted)ProgressTone.MUTED else when(status){"WON","LIVE_WINNING"->ProgressTone.GREEN;"LOST","LIVE_LOSING"->ProgressTone.RED;else->ProgressTone.AMBER}
         val text=when { muted->"—";market=="OVERTIME"->if(value==1.0)"Sí" else "No";market=="BOTH_TEAMS_SCORE"->if(value==2.0)"Sí" else "No";else->"${homeScore?:"—"} : ${awayScore?:"—"}" }
         return MarketPresentation(MarketVisual.OUTCOME,tone,statusLabels[status]?:"Esperando datos",text,
-            listOf(hockeyScopeLabel(scope),targetScore?.let {"Objetivo $it"}.orEmpty()).filter {it.isNotBlank()}.joinToString(" · "),"",!final)
+            listOf(if(sport=="SOCCER")"90 minutos más compensación" else hockeyScopeLabel(scope),targetScore?.let {"Objetivo $it"}.orEmpty()).filter {it.isNotBlank()}.joinToString(" · "),"",!final)
     }
     val visual = when { market == "MONEYLINE" -> MarketVisual.MONEYLINE; market == "SPREAD" -> MarketVisual.MARGIN
         market.startsWith("PLAYER_") -> MarketVisual.PLAYER; else -> MarketVisual.TOTAL }
@@ -105,6 +110,15 @@ fun marketPresentation(sport: String, market: String, selection: String, line: D
         if (visual == MarketVisual.MONEYLINE) team(true) else null, if (visual == MarketVisual.MONEYLINE) team(false) else null)
 }
 fun BetView.presentation(offline: Boolean = false):MarketPresentation {
+    if(!builderSelections.isNullOrEmpty()){
+        val final=status in settledStatuses
+        val outdated=(offline||stale)&&!final
+        val tone=if(outdated||status in listOf("PENDING","AWAITING_DATA","VOID"))ProgressTone.MUTED else when(status){"WON","LIVE_WINNING","THRESHOLD_REACHED"->ProgressTone.GREEN;"LOST","LIVE_LOSING"->ProgressTone.RED;else->ProgressTone.AMBER}
+        val value=if(outdated||currentValue==null)"— / ${builderSelections.size}" else "${currentValue.display()} / ${builderSelections.size}"
+        val review=builderSelections.all{it.status in settledStatuses}&&builderSelections.any{it.status in listOf("PUSH","VOID")}&&status=="AWAITING_DATA"
+        return MarketPresentation(MarketVisual.OUTCOME,tone,if(review)"Liquidación por revisar" else statusLabels[status]?:status,value,
+            if(review)"Hay una selección reembolsada. Confirma la cuota y el retorno con tu casino." else "Selecciones favorables · confirma la liquidación de tu casino","selecciones",!final)
+    }
     val (home,away)=scopedScores()
     val effectiveScope=scope ?: "MATCH"
     val p=marketPresentation(event.sport,market,selection,line,currentValue,status,home,away,(stale||offline)&&status !in settledStatuses,effectiveScope,targetScore)
@@ -113,6 +127,7 @@ fun BetView.presentation(offline: Boolean = false):MarketPresentation {
 
 /** Spread uses the adjusted margin with the coverage boundary at zero. ML uses a scoreboard. */
 fun BetView.visualProgress(offline: Boolean = false): BetProgress? {
+    if(!builderSelections.isNullOrEmpty())return null
     val (home,away)=scopedScores()
     return marketProgress(event.sport,market,selection,line,currentValue,status,home,away,
         (stale || offline) && status !in settledStatuses)
@@ -121,7 +136,7 @@ fun BetView.visualProgress(offline: Boolean = false): BetProgress? {
 /** One scale and visual policy for cards, previews and RemoteViews notifications. */
 fun marketProgress(sport: String, market: String, selection: String, line: Double?, value: Double?, status: String,
     homeScore: Int?, awayScore: Int?, stale: Boolean = false): BetProgress? {
-    if (market == "MONEYLINE") return null
+    if (market in listOf("MONEYLINE","BET_BUILDER")) return null
     val original = betProgress(sport,market,selection,value,line,status,stale) ?: return null
     val p = marketPresentation(sport,market,selection,line,value,status,homeScore,awayScore,stale)
     if (market != "SPREAD") {

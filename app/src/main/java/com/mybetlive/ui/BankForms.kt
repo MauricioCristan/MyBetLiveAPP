@@ -90,7 +90,7 @@ private data class LegDraft(val title:String="",val sport:String="SOCCER",val ma
  var dataExpanded by rememberSaveable{mutableStateOf(false)}
  var selectionExpanded by rememberSaveable{mutableStateOf(true)}
  var amountExpanded by rememberSaveable{mutableStateOf(false)}
- val formats=if(advanced)listOf("BACK","COMBINED","LAY")else listOf("BACK")+(bet?.format?.takeIf{it!="BACK"}?.let{listOf(it)}?:emptyList())
+ val formats=if(advanced)listOf("BACK","COMBINED","LAY")+(if(bet?.format=="BUILDER")listOf("BUILDER")else emptyList())else listOf("BACK")+(bet?.format?.takeIf{it!="BACK"}?.let{listOf(it)}?:emptyList())
  val parsedStake=bankDecimal(stake)?.toBigDecimalOrNull()
  val ownStake=if(percentage)parsedStake?.let{bank.available.toBigDecimalOrNull()?.multiply(it)?.divide(java.math.BigDecimal("100"))}else parsedStake
  val exposure=if(freeBet&&format!="LAY")java.math.BigDecimal.ZERO else if(format=="LAY")ownStake?.let{amount->bankDecimal(odds)?.toBigDecimalOrNull()?.let{amount*(it-java.math.BigDecimal.ONE)}}else ownStake

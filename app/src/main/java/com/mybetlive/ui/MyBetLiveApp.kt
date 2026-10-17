@@ -170,6 +170,10 @@ fun MyBetLiveApp(state: AppState, model: TrackingViewModel, prices: Map<String,S
 }
 
 @Composable private fun CreateBetDialog(event: EventView, state: AppState, model: TrackingViewModel, onDismiss: () -> Unit, onSaved: (BetView) -> Unit) {
+    var builder by rememberSaveable(event.id){mutableStateOf(false)}
+    var builderJson by rememberSaveable(event.id){mutableStateOf("[]")}
+    val builderLegs=remember(builderJson){runCatching{com.google.gson.Gson().fromJson(builderJson,Array<TrackingBuilderSelection>::class.java).toList()}.getOrDefault(emptyList())}
+    fun updateBuilder(legs:List<TrackingBuilderSelection>){builderJson=com.google.gson.Gson().toJson(legs)}
     var market by rememberSaveable(event.id) { mutableStateOf("MONEYLINE") }
     var selection by rememberSaveable(event.id, market) { mutableStateOf(when(market){"MONEYLINE","SPREAD","RESULT_3WAY"->"HOME";"DOUBLE_CHANCE"->"HOME_DRAW";"BOTH_TEAMS_SCORE","CORRECT_SCORE","OVERTIME"->"YES";else->"OVER"}) }
     var scope by rememberSaveable(event.id,market) { mutableStateOf(if(event.event.sport=="NHL")hockeyScopes(market).first() else "MATCH") }
@@ -190,7 +194,7 @@ fun MyBetLiveApp(state: AppState, model: TrackingViewModel, prices: Map<String,S
     val reachedLimit = subscription?.access?.maxActiveTrackers?.let { subscription.activeTrackers >= it } == true
     val isPlayer = market.startsWith("PLAYER_")
     val markets = (state.sports.find { it.sport == event.event.sport }?.markets ?: listOf("MONEYLINE"))
-        .filter { !it.startsWith("PLAYER_") || state.subscription?.access?.playerProps != false }
+        .filter { (!it.startsWith("PLAYER_") || state.subscription?.access?.playerProps != false)&&(!builder||!it.startsWith("PLAYER_")) }
     val players = if (state.playersEventId == event.id) state.players.filter { it.supports(market) } else emptyList()
     LaunchedEffect(isPlayer, event.id) { if (isPlayer) model.players(event.id) }
     val parsedLine = line.replace(',', '.').toDoubleOrNull()?.takeIf { it.isFinite() }
@@ -245,8 +249,16 @@ fun MyBetLiveApp(state: AppState, model: TrackingViewModel, prices: Map<String,S
                     AccessGate("Props de jugadores", "Tu plan no incluye nuevas props. Puedes seguir ML, totales y hándicap del equipo.",
                         onPlans={showPlans=true},onContinue={showLockedProps=false})
                 } else {
+                if(event.event.sport=="SOCCER"){
+                    LocalizedText("Formato del seguimiento",fontWeight=FontWeight.SemiBold)
+                    ScrollableChoices(if(builder)"BUILDER" else "SIMPLE",listOf("SIMPLE" to "Simple","BUILDER" to "Creador de apuestas · Premium"),{type->
+                        if(type=="BUILDER"&&subscription?.bankAccess?.advanced!=true)showPlans=true
+                        else {builder=type=="BUILDER";market="MONEYLINE";selection="HOME";line=""}
+                    },enabled=!state.busy,tagPrefix="tracking-format")
+                }
+                if(builder)TrackingBuilderSelections(builderLegs,event.event,!state.busy){index->updateBuilder(builderLegs.filterIndexed{i,_->i!=index})}
                 LocalizedText("¿Qué quieres seguir?", fontWeight = FontWeight.SemiBold)
-                val propsLocked = subscription?.access?.playerProps==false &&
+                val propsLocked = !builder && subscription?.access?.playerProps==false &&
                     state.sports.find{it.sport==event.event.sport}?.markets?.any{it.startsWith("PLAYER_")}==true
                 val groups = listOf("RESULT" to "Resultado", "TOTAL" to "Totales", "PLAYER" to "Jugadores")
                     .filter { (group, _) -> markets.any { marketGroup(it)==group } || group=="PLAYER" && propsLocked }
@@ -300,19 +312,31 @@ fun MyBetLiveApp(state: AppState, model: TrackingViewModel, prices: Map<String,S
                         if(market!="MONEYLINE"&&market!="SPREAD"&&lineError==null&&line.isNotBlank())propCondition(line,selection)?.let {LocalizedText(it,color=Muted,fontSize=12.sp)}
                     }
                 }
+                if(builder){
+                    OutlinedButton(onClick={
+                        val leg=TrackingBuilderSelection(market,selection,if(needsLine)parsedLine else null,if(market=="TEAM_TOTAL")team else null)
+                        if(leg !in builderLegs){updateBuilder(builderLegs+leg);line=""}
+                    },enabled=valid&&!state.busy&&builderLegs.size<8&&TrackingBuilderSelection(market,selection,if(needsLine)parsedLine else null,if(market=="TEAM_TOTAL")team else null) !in builderLegs,modifier=Modifier.fillMaxWidth()){
+                        LocalizedText("Añadir esta selección al boleto")
+                    }
+                    LocalizedText("Añade entre 2 y 8 selecciones. Usa el momio total de tu casino; las cuotas de mercados del mismo partido no se multiplican.",color=Muted,fontSize=12.sp)
+                }
                 TextButton(onClick = { showDetails = !showDetails }) { LocalizedText(if (showDetails) "Ocultar datos opcionales" else "Añadir monto, momio o casino") }
                 if (showDetails) {
                     OutlinedTextField(stake, { stake = it }, label = { LocalizedText("Monto · opcional") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal), singleLine = true, modifier = Modifier.fillMaxWidth())
-                    OutlinedTextField(odds, { odds = it }, label = { LocalizedText("Momio decimal · opcional (1.72)") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal), singleLine = true, modifier = Modifier.fillMaxWidth())
+                    OutlinedTextField(odds, { odds = it }, label = { LocalizedText(if(builder)"Momio decimal total del boleto" else "Momio decimal · opcional (1.72)") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal), singleLine = true, modifier = Modifier.fillMaxWidth())
                     OutlinedTextField(bookmaker, { if (it.length <= 80) bookmaker = it }, label = { LocalizedText("Casino · opcional") }, singleLine = true, modifier = Modifier.fillMaxWidth())
                 }
                 if(addToBank)TrackingBankDestination(state.trackingBanks,selectedBankId,state.trackingBanksLoading,state.trackingBanksError,!state.busy,
                     onSelected={selectedBankId=it},onReload=model::loadTrackingBanks)
-                val financialDraft=if(addToBank&&destination!=null)draft.copy(bankId=destination.id,bankVersion=destination.version)else draft
+                val first=builderLegs.firstOrNull()
+                val ticket=if(builder&&first!=null)draft.copy(market=first.market,selection=first.selection,line=first.line,team=first.team,playerId=null,scope=first.scope,targetScore=first.targetScore,builderSelections=builderLegs)else draft
+                val ticketValid=if(builder)builderLegs.size in 2..8&&(stake.isBlank()||parsedStake!=null&&parsedStake>0)&&(odds.isBlank()||parsedOdds!=null&&parsedOdds>1)&&subscription?.bankAccess?.advanced==true else valid
+                val financialDraft=if(addToBank&&destination!=null)ticket.copy(bankId=destination.id,bankVersion=destination.version)else ticket
                 val operationId=rememberSaveable(financialDraft.copy(bankVersion=null)){java.util.UUID.randomUUID().toString()}
-                Button(onClick = { model.create(if(addToBank)financialDraft.copy(operationId=operationId)else draft, onSaved) },
-                    enabled = valid && !state.busy && (!addToBank||destination!=null&&!state.trackingBanksLoading&&state.trackingBanksError==null), modifier = Modifier.fillMaxWidth().height(54.dp)) {
-                    LocalizedText(if(state.busy)"Guardando…" else if(addToBank)"Guardar seguimiento y apuesta" else "Guardar seguimiento") }
+                Button(onClick = { model.create(if(addToBank)financialDraft.copy(operationId=operationId)else ticket, onSaved) },
+                    enabled = ticketValid && !state.busy && (!addToBank||destination!=null&&!state.trackingBanksLoading&&state.trackingBanksError==null), modifier = Modifier.fillMaxWidth().height(54.dp)) {
+                    LocalizedText(if(state.busy)"Guardando…" else if(builder&&addToBank)"Guardar creador y apuesta" else if(builder)"Guardar creador" else if(addToBank)"Guardar seguimiento y apuesta" else "Guardar seguimiento") }
 
                 LocalizedText(when(event.event.sport) {
                     "NHL" -> "${hockeyScopeLabel(scope)}. El partido completo usa el marcador oficial, incluido el gol decisivo del shootout. Los períodos y los 60 minutos excluyen prórroga y shootout. Revisa las reglas de tu apuesta."

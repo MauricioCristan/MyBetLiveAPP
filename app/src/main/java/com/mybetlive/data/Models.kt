@@ -30,13 +30,15 @@ data class BetView(
     val currentValue: Double?, val remaining: Double?, val updatedAt: String, val stale: Boolean,
     val playerImageUrl: String? = null, val localStartsAt: String? = null, val localUpdatedAt: String? = null,
     val scope:String? = null,val targetScore:String? = null,
-    val liveScopeScores:PeriodScore? = null,val liveScopeScoresPresent:Boolean = false
+    val liveScopeScores:PeriodScore? = null,val liveScopeScoresPresent:Boolean = false,
+    val builderSelections:List<TrackingBuilderSelection>?=null
 )
 data class CreateBet(
     val eventId: String, val market: String, val selection: String, val line: Double?,
     val team: String?, val playerId: String?, val stake: Double?, val decimalOdds: Double?, val bookmaker: String?,
     val scope:String = "MATCH",val targetScore:String? = null,
-    val bankId:String? = null,val operationId:String? = null,val bankVersion:Long? = null
+    val bankId:String? = null,val operationId:String? = null,val bankVersion:Long? = null,
+    val builderSelections:List<TrackingBuilderSelection>?=null
 )
 data class Login(val username: String, val password: String)
 data class GoogleChallenge(val serverClientId: String, val nonce: String)
@@ -90,7 +92,7 @@ val statusLabels = mapOf(
     "LOST" to "Perdida según los datos", "PUSH" to "Push · empate en la línea", "VOID" to "Evento cancelado"
 )
 fun Double?.display(): String = this?.let { if (it % 1.0 == 0.0) it.toLong().toString() else it.toString() } ?: "—"
-fun BetView.title(): String = selectionTitle(market, selection, line, team, playerName, event,scope ?: "MATCH",targetScore)
+fun BetView.title(): String = if(!builderSelections.isNullOrEmpty())"Creador · "+builderSelections.joinToString(" + "){it.title(event)} else selectionTitle(market, selection, line, team, playerName, event,scope ?: "MATCH",targetScore)
 fun CreateBet.title(event: EventSnapshot, playerName: String?): String = selectionTitle(market, selection, line, team, playerName, event,scope,targetScore)
 internal fun selectionTitle(market: String, selection: String, line: Double?, team: String?, playerName: String?, event: EventSnapshot,scope:String="MATCH",targetScore:String?=null): String {
     val target = playerName ?: when (if (market == "TEAM_TOTAL") team else selection) { "HOME" -> event.home.name; "AWAY" -> event.away.name; "DRAW" -> "Empate"; else -> "" }

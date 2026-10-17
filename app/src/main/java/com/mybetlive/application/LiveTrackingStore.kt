@@ -44,7 +44,7 @@ class LiveTrackingStore {
         if (old.id in deleted) return
         val scopePresent = old.event.sport == "NHL" && old.scope != null && old.scope != "MATCH"
         val scoped = if (scopePresent) data["scopeHomeScore"]?.toIntOrNull()?.let { h -> data["scopeAwayScore"]?.toIntOrNull()?.let { PeriodScore(h,it) } } else null
-        val row = old.copy(status = data["status"] ?: old.status, currentValue = data["currentValue"]?.toDoubleOrNull(),
+        val row = old.copy(builderSelections=old.builderPush(data["builderProgress"]),status = data["status"] ?: old.status, currentValue = data["currentValue"]?.toDoubleOrNull(),
             remaining = data["remaining"]?.toDoubleOrNull(), updatedAt = data["updatedAt"] ?: old.updatedAt,
             localUpdatedAt = null, stale = data["stale"] == "true", liveScopeScores = scoped, liveScopeScoresPresent = scopePresent,
             event = old.event.copy(homeScore = data["homeScore"]?.toIntOrNull(), awayScore = data["awayScore"]?.toIntOrNull(),

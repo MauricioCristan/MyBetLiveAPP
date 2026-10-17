@@ -65,7 +65,7 @@ import com.mybetlive.data.*
                         if(subtitle.isNotBlank())LocalizedText(subtitle,color=Muted,fontSize=14.sp,lineHeight=20.sp)
                         Row(horizontalArrangement=Arrangement.spacedBy(8.dp),verticalAlignment=Alignment.CenterVertically) {
                             BankDetailBadge(bankResultLabel(bet.result),resultColor)
-                            BankDetailBadge(when(bet.format){"LAY"->"Simple · Lay";"COMBINED"->"Combinada";else->"Simple · Back"},Muted)
+                            BankDetailBadge(when(bet.format){"LAY"->"Simple · Lay";"COMBINED"->"Combinada";"BUILDER"->"Creador de apuestas";else->"Simple · Back"},Muted)
                             Spacer(Modifier.weight(1f))
                             if(single!=null)LocalizedText(sportLabel(single.sport),fontSize=11.sp,color=Muted)
                         }

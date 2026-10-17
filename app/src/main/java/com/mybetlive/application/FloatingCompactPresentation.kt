@@ -21,6 +21,7 @@ fun BetView.compactFloating(offline:Boolean=false):FloatingCompactPresentation {
         else->null
     }
     val label=when {
+        !builderSelections.isNullOrEmpty()->"Creador · ${builderSelections.size} selecciones"
         market in listOf("MONEYLINE","RESULT_3WAY")->if(selection=="DRAW")"Empate" else "Ganador"
         market=="SPREAD"->"Hándicap ${line.display()}"
         market=="DOUBLE_CHANCE"->when(selection){"HOME_DRAW"->"1X";"AWAY_DRAW"->"X2";else->"12"}

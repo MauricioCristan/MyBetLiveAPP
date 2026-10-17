@@ -380,7 +380,7 @@ internal fun bankHistoryDay(day:LocalDate,timezone:String):String{
 }
 internal fun bankDate(value:String,timezone:String):String=runCatching{Instant.parse(value).atZone(ZoneId.of(timezone)).format(DateTimeFormatter.ofPattern("dd MMM · HH:mm",java.util.Locale.getDefault()))}.getOrDefault(value)
 internal fun bankTone(value:String?):Color=when(value?.toBigDecimalOrNull()?.signum()){1->Color(0xFF40C983);-1->Red;else->Muted}
-internal fun bankFormatLabel(format:String)=when(format){"LAY"->"Simple en contra";"COMBINED"->"Combinada";else->"Simple a favor"}
+internal fun bankFormatLabel(format:String)=when(format){"LAY"->"Simple en contra";"COMBINED"->"Combinada";"BUILDER"->"Creador de apuestas";else->"Simple a favor"}
 internal fun bankResultLabel(result:String)=when(result){"WON"->"Ganada";"LOST"->"Perdida";"VOID"->"Anulada";"PUSH"->"Reembolsada";"CASHOUT"->"Cashout";"PARTIAL"->"Liquidación parcial";else->"Pendiente"}
 internal val moneyMetricKeys=setOf("benefit","capital","initialCapital","reserved","available","volume","deposits","withdrawals","drawdown","averageStake","maxStake","biggestProfit","biggestLoss","promotionalProfit")
 internal val percentageMetricKeys=setOf("roi","successPercent","progression","twr","irr","clv","weightedClv")

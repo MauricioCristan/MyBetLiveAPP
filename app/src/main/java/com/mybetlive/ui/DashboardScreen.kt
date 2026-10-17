@@ -303,7 +303,7 @@ private fun shortStatus(status: String) = when (status) {
         }
         item { FloatingTrackingControls(bet,busy) }
         item { TrackingNotificationControls(bet,state,onSettings) }
-        if(bet.market=="TOTAL_CARDS")item {LocalizedText("Amarilla = 1 · roja directa = 2 · doble amarilla = 2 en total. Amarilla y roja directa = 3. Solo jugadores en cancha durante 90 minutos más compensación; se excluyen banca y cuerpo técnico.",color=Muted,fontSize=12.sp)}
+        if(bet.market=="TOTAL_CARDS"||bet.builderSelections.orEmpty().any{it.market=="TOTAL_CARDS"})item {LocalizedText("Amarilla = 1 · roja directa = 2 · doble amarilla = 2 en total. Amarilla y roja directa = 3. Solo jugadores en cancha durante 90 minutos más compensación; se excluyen banca y cuerpo técnico.",color=Muted,fontSize=12.sp)}
         item { Card { Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) { Scoreboard(bet.event); LocalizedText(kickoff(bet.event.startsAt,bet.localStartsAt), color = Muted, fontSize = 12.sp) } } }
         if (bet.stake != null || bet.decimalOdds != null || bet.bookmaker != null) item {
             Card { Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
